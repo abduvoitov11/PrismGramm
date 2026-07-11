@@ -1,0 +1,19 @@
+# Krypton — shaxsiy sozlamalar namunasi
+#
+# Bu faylni "local.properties" deb nusxalab, quyidagi qiymatlarni
+# https://my.telegram.org saytidan olingan shaxsiy api_id/api_hash bilan
+# to'ldiring. "local.properties" fayli .gitignore orqali repo'ga HECH QACHON
+# qo'shilmaydi — shuning uchun kalitlaringiz xavfsiz qoladi, hatto repo
+# public bo'lsa ham.
+#
+# Qadamlar:
+#   1) Ushbu faylni nusxalang:  cp local.properties.example local.properties
+#   2) local.properties faylini oching va haqiqiy qiymatlarni kiriting
+#   3) Android Studio: File -> Sync Project with Gradle Files
+#
+# local.properties fayli, odatdagidek, Android SDK yo'lini ham o'z ichiga
+# oladi (sdk.dir=...) — buni Android Studio avtomatik qo'shadi, qo'lda
+# yozish shart emas.
+
+KRYPTON_APP_ID=YOUR_API_ID_HERE
+KRYPTON_APP_HASH=YOUR_API_HASH_HERE
