@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Krypton — O'zbekcha tarjima (asosiy, eng ko'p ko'rinadigan matnlar).
+  Bu — to'liq emas, qisman tarjima: bu yerda bo'lmagan har qanday kalit
+  Android tomonidan avtomatik ravishda values/strings.xml (ingliz tili)
+  dan olinadi, shuning uchun bu xavfsiz va ilovani buzmaydi.
+-->
+<resources>
+    <string name="AppName">Krypton</string>
+    <string name="Chats">Chatlar</string>
+    <string name="Calls">Qo\'ng\'iroqlar</string>
+    <string name="Contacts">Kontaktlar</string>
+    <string name="Settings">Sozlamalar</string>
+    <string name="Search">Qidirish</string>
+    <string name="Cancel">Bekor qilish</string>
+    <string name="Save">Saqlash</string>
+    <string name="Delete">O\'chirish</string>
+    <string name="Send">Yuborish</string>
+    <string name="Back">Orqaga</string>
+    <string name="Done">Tayyor</string>
+    <string name="OK">OK</string>
+    <string name="Edit">Tahrirlash</string>
+    <string name="Next">Keyingi</string>
+    <string name="Loading">Yuklanmoqda...</string>
+    <string name="Message">Xabar</string>
+    <string name="TypeMessage">Xabar</string>
+    <string name="NewGroup">Yangi guruh</string>
+    <string name="NewChannel">Yangi kanal</string>
+    <string name="NewMessageTitle">Yangi xabar</string>
+    <string name="NewSecretChat">Yangi maxfiy chat</string>
+    <string name="AccountSettings">Hisob sozlamalari</string>
+    <string name="EditName">Ismni tahrirlash</string>
+    <string name="PhoneNumber">Telefon raqami</string>
+    <string name="Username">Foydalanuvchi nomi</string>
+    <string name="UserBio">Bio</string>
+    <string name="Notifications">Bildirishnomalar</string>
+    <string name="PrivacySettings">Maxfiylik va xavfsizlik</string>
+    <string name="DataSettings">Ma\'lumot va xotira</string>
+    <string name="ChatSettings">Chat sozlamalari</string>
+    <string name="Language">Til</string>
+    <string name="LogOut">Chiqish</string>
+    <string name="AreYouSureSessions">Boshqa barcha sessiyalarni yakunlamoqchimisiz?</string>
+    <string name="Online">onlayn</string>
+    <string name="LastSeen">oxirgi marta ko\'rilgan</string>
+    <string name="Lately">yaqinda kirgan</string>
+    <string name="AttachPhoto">Rasm</string>
+    <string name="AttachVideo">Video</string>
+    <string name="AttachDocument">Fayl</string>
+    <string name="AttachAudio">Ovozli xabar</string>
+    <string name="AttachSticker">Stiker</string>
+    <string name="AttachGif">GIF</string>
+    <string name="AttachLocation">Joylashuv</string>
+    <string name="AttachContact">Kontakt</string>
+    <string name="Reply">Javob berish</string>
+    <string name="Forward">Boshqasiga yuborish</string>
+    <string name="Copy">Nusxa olish</string>
+    <string name="PinMessage">Qadash</string>
+    <string name="UnpinMessage">Qadashni bekor qilish</string>
+    <string name="Mute">Ovozsiz</string>
+    <string name="UnmuteNotifications">Ovozni yoqish</string>
+    <string name="Archive">Arxivlash</string>
+    <string name="Unarchive">Arxivdan chiqarish</string>
+    <string name="BlockContact">Foydalanuvchini bloklash</string>
+    <string name="AddContact">Kontaktga qo\'shish</string>
+    <string name="GroupName">Guruh nomi</string>
+    <string name="ChannelAdministrators">Adminlar</string>
+    <string name="AddMember">A\'zo qo\'shish</string>
+    <string name="LeaveChannel">Kanaldan chiqish</string>
+    <string name="DeleteChat">O\'chirish va chiqish</string>
+    <string name="ClearHistory">Tarixni tozalash</string>
+    <string name="AreYouSureClearHistory">Bu chatdagi barcha xabarlarni o\'chirishni xohlaysizmi?</string>
+    <string name="AreYouSureDeleteAndExit">Guruhni o\'chirib, undan chiqishni xohlaysizmi?</string>
+    <string name="YouWereKicked">siz olib tashlandingiz</string>
+    <string name="Retry">Qayta urinish</string>
+    <string name="Select">Tanlash</string>
+    <string name="SelectChat">Chatni tanlash</string>
+    <string name="Info">Ma\'lumot</string>
+    <string name="Files">Fayllar</string>
+    <string name="Music">Musiqa</string>
+    <string name="GroupType">Guruh turi</string>
+    <string name="StartMessaging">Yozishmani boshlash</string>
+    <string name="InviteFriends">Do\'stlarni taklif qilish</string>
+    <string name="ShareMyContactInfo">Kontaktimni ulashish</string>
+    <string name="YouHaveNewMessage">Sizda yangi xabar bor</string>
+    <string name="MarkAsRead">O\'qilgan deb belgilash</string>
+    <string name="MarkAsUnread">O\'qilmagan deb belgilash</string>
+    <string name="AutoNightTheme">Avto-tungi rejim</string>
+    <string name="TextSizeHeader">Xabar matni o\'lchami</string>
+    <string name="StickersName">Stikerlar</string>
+    <string name="EmojiSuggestions">Emoji takliflari</string>
+    <string name="SendByEnter">Enter orqali yuborish</string>
+    <string name="ChangeChatBackground">Chat fonini o\'zgartirish</string>
+    <string name="ClearCache">Keshni tozalash</string>
+    <string name="StorageUsage">Xotiradan foydalanish</string>
+    <string name="NetworkUsage">Trafikdan foydalanish</string>
+    <string name="AutomaticMediaDownload">Avtomatik media yuklash</string>
+    <string name="SaveToGallery">Galereyaga saqlash</string>
+    <string name="AskAQuestion">Savol berish</string>
+    <string name="TelegramFaq">Ko\'p so\'raladigan savollar</string>
+    <string name="PrivacyPolicy">Maxfiylik siyosati</string>
+    <string name="TermsOfService">Foydalanish shartlari</string>
+</resources>
