@@ -26,6 +26,18 @@ Yangi, butunlay mustaqil klass. Asosiy Telegram kodiga faqat **2 ta joyda, bitta
    ```
    Bu funksiyani biror chat ekraniga (masalan uzoq bosilganda chiqadigan menyuga "O'chirilgan xabarlar" bandi sifatida) ulash — keyingi bosqich.
 
+## ⚠️ Push-bildirishnomalar haqida muhim eslatma
+
+Build xatosini oldini olish uchun `google-services.json` fayllariga `app.krypton.messenger` paket nomlari uchun texnik yozuvlar qo'shildi (build muvaffaqiyatli o'tishi uchun). **Lekin bu — Telegram'ning o'z Firebase loyihasi**, biz uni boshqarmaymiz.
+
+**Natija:** Ilova ochiq turganda hammasi (xabar kelishi, real vaqtda yangilanish) odatdagidek ishlaydi — chunki bu doimiy MTProto ulanishi orqali amalga oshadi. Lekin **ilova butunlay yopiq/background'da bo'lganda push-bildirishnoma** kelishi ishonchli bo'lmasligi mumkin, chunki Google'ning FCM serverlari bizning paket nomimizni **haqiqiy** Firebase loyihasida tan olmaydi.
+
+**To'liq ishonchli push uchun keyingi qadam:**
+1. https://console.firebase.google.com da yangi (bepul) loyiha yarating
+2. Android ilova sifatida `app.krypton.messenger` (va xohlasangiz `app.krypton.messenger.beta`) qo'shing
+3. U yerdan yangi `google-services.json` yuklab oling
+4. Uni `TMessagesProj_App/google-services.json` va `TMessagesProj_AppStandalone/google-services.json` bilan almashtiring
+
 ## Qanday tekshirish mumkin (compile qilingandan keyin)
 
 1. Ikki qurilma/akkauntdan test chat oching
