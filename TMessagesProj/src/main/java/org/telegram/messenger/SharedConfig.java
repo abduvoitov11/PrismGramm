@@ -348,6 +348,8 @@ public class SharedConfig {
     public static int storiesColumnsCount = 3;
     public static int fastScrollHintCount = 3;
     public static boolean dontAskManageStorage;
+    // Krypton: Ghost Mode — boshqalarga "onlayn/yozyapti/o'qidi" holatini ko'rsatmaslik
+    public static boolean ghostModeEnabled;
     public static boolean multipleReactionsPromoShowed;
 
     public static boolean isFloatingDebugActive;
@@ -659,6 +661,7 @@ public class SharedConfig {
             storiesColumnsCount = preferences.getInt("storiesColumnsCount", 3);
             fastScrollHintCount = preferences.getInt("fastScrollHintCount", 3);
             dontAskManageStorage = preferences.getBoolean("dontAskManageStorage", false);
+            ghostModeEnabled = preferences.getBoolean("krypton_ghostMode", false);
             hasEmailLogin = preferences.getBoolean("hasEmailLogin", false);
             isFloatingDebugActive = preferences.getBoolean("floatingDebugActive", false);
             updateStickersOrderOnSend = preferences.getBoolean("updateStickersOrderOnSend", true);
@@ -1744,6 +1747,19 @@ public class SharedConfig {
     public static void setDontAskManageStorage(boolean b) {
         dontAskManageStorage = b;
         ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE).edit().putBoolean("dontAskManageStorage", dontAskManageStorage).apply();
+    }
+
+    // Krypton: Ghost Mode yoqilsa — "onlayn", "yozyapti..." va "o'qildi" holatlari
+    // boshqa foydalanuvchilarga hech qachon yuborilmaydi (lekin foydalanuvchining
+    // o'z ilovasida hammasi odatdagidek, mahalliy ravishda ishlayveradi).
+    public static void setGhostModeEnabled(boolean b) {
+        ghostModeEnabled = b;
+        ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE).edit().putBoolean("krypton_ghostMode", ghostModeEnabled).apply();
+        for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
+            if (UserConfig.getInstance(a).isClientActivated()) {
+                MessagesController.getInstance(a).ignoreSetOnline = b;
+            }
+        }
     }
 
     public static boolean canBlurChat() {

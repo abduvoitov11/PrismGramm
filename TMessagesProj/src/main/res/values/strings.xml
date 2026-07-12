@@ -3109,6 +3109,8 @@
     <string name="FilterAddToAlertFullText">Sorry, you can\'t exlude more than 100 chats from a folder.</string>
     <!--passcode view-->
     <string name="Passcode">Passcode Lock</string>
+    <string name="KryptonGhostMode">Ghost Mode</string>
+    <string name="KryptonGhostModeInfo">When enabled, others won\'t see that you\'re online, typing, or that you\'ve read their messages. Your own chat experience stays completely normal.</string>
     <string name="ChangePasscode">Change Passcode</string>
     <string name="ChangePasscodeInfo">When you set up an additional passcode, a lock icon will appear on the chats page. Tap it to lock and unlock your Telegram app.\n\nNote: if you forget the passcode, you\'ll need to delete and reinstall the app. All secret chats will be lost.</string>
     <string name="ChangePasscodeInfoShort">When you set up a passcode, a lock icon will apear on the chats page. Tap it to lock and unlock the app.</string>
