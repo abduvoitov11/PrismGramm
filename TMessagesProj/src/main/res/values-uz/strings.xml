@@ -99,6 +99,8 @@
     <string name="TelegramFaq">Ko\'p so\'raladigan savollar</string>
     <string name="PrivacyPolicy">Maxfiylik siyosati</string>
     <string name="TermsOfService">Foydalanish shartlari</string>
+    <string name="KryptonSettings">Krypton Sozlamalari</string>
+    <string name="KryptonSettingsInfo">Ghost Mode, media yuklovchi, arxiv</string>
     <string name="KryptonGhostMode">Ghost Mode</string>
     <string name="KryptonGhostModeInfo">Yoqilsa, boshqalar sizning onlayn ekaningizni, yozayotganingizni yoki xabarlarini o\'qiganingizni ko\'rmaydi. Sizning o\'z ilovangizdagi tajribangiz esa odatdagidek qoladi.</string>
 </resources>

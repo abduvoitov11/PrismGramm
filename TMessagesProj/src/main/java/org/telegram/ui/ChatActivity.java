@@ -1242,6 +1242,7 @@ public class ChatActivity extends BaseFragment implements
     public final static int OPTION_SUGGESTION_ADD_OFFER = 114;
 
     public final static int OPTION_VIEW_STATISTICS = 115;
+    public final static int OPTION_KRYPTON_DOWNLOAD_MEDIA = 200; // Krypton: Media Downloader
 
     private final static int[] allowedNotificationsDuringChatListAnimations = new int[]{
             NotificationCenter.messagesRead,
@@ -33053,6 +33054,15 @@ public class ChatActivity extends BaseFragment implements
                 undoView.showWithAction(0, UndoView.ACTION_MESSAGE_COPIED, null);
                 break;
             }
+            case OPTION_KRYPTON_DOWNLOAD_MEDIA: {
+                if (selectedObject.messageOwner != null && getParentActivity() != null) {
+                    String url = org.telegram.messenger.KryptonMediaDownloader.findSupportedUrl(selectedObject.messageOwner.message);
+                    if (url != null) {
+                        org.telegram.messenger.KryptonMediaDownloader.download(getParentActivity(), url);
+                    }
+                }
+                break;
+            }
             case OPTION_SAVE_TO_GALLERY: {
                 if (Build.VERSION.SDK_INT >= 23 && (Build.VERSION.SDK_INT <= 28 || BuildVars.NO_SCOPED_STORAGE) && getParentActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                     getParentActivity().requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 4);
@@ -45364,6 +45374,13 @@ public class ChatActivity extends BaseFragment implements
                     items.add(LocaleController.getString(R.string.Copy));
                     options.add(OPTION_COPY);
                     icons.add(R.drawable.msg_copy);
+                }
+                // Krypton: Media Downloader — Instagram/TikTok/YouTube havolasi bo'lsa, yuklab olish bandini ko'rsatish
+                if (SharedConfig.mediaDownloaderEnabled && selectedObject.messageOwner != null
+                        && org.telegram.messenger.KryptonMediaDownloader.isSupportedUrl(selectedObject.messageOwner.message)) {
+                    items.add(org.telegram.messenger.KryptonMediaDownloader.platformName(selectedObject.messageOwner.message) + " — yuklab olish");
+                    options.add(OPTION_KRYPTON_DOWNLOAD_MEDIA);
+                    icons.add(R.drawable.msg_gallery);
                 }
                 if (!isThreadChat() && chatMode != MODE_SCHEDULED && currentChat != null && primaryMessage != null && (currentChat.has_link || primaryMessage.hasReplies()) && currentChat.megagroup && primaryMessage.canViewThread()) {
                     if (primaryMessage.hasReplies()) {

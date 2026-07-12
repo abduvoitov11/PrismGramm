@@ -124,7 +124,6 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
     private int sessionsRow;
     @Keep
     private int passcodeRow;
-    private int ghostModeRow; // Krypton: Ghost Mode
     @Keep
     private int autoDeleteMesages;
     @Keep
@@ -497,11 +496,6 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                 }
             } else if (position == passcodeRow) {
                 presentFragment(PasscodeActivity.determineOpenFragment());
-            } else if (position == ghostModeRow) {
-                SharedConfig.setGhostModeEnabled(!SharedConfig.ghostModeEnabled);
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(SharedConfig.ghostModeEnabled);
-                }
             } else if (position == secretWebpageRow) {
                 if (getMessagesController().secretWebpagePreview == 1) {
                     getMessagesController().secretWebpagePreview = 0;
@@ -719,7 +713,6 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
         passwordRow = rowCount++;
         autoDeleteMesages = rowCount++;
         passcodeRow = rowCount++;
-        ghostModeRow = rowCount++; // Krypton: Ghost Mode
         if (getMessagesController().config.settingsDisplayPasskeys.get() && Build.VERSION.SDK_INT >= 28 && BuildVars.SUPPORTS_PASSKEYS) {
             passkeysRow = rowCount++;
         }
@@ -1027,7 +1020,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
         @Override
         public boolean isEnabled(RecyclerView.ViewHolder holder) {
             int position = holder.getAdapterPosition();
-            return position == passcodeRow || position == ghostModeRow || position == passwordRow || position == passkeysRow || position == blockedRow || position == sessionsRow || position == secretWebpageRow || position == webSessionsRow ||
+            return position == passcodeRow || position == passwordRow || position == passkeysRow || position == blockedRow || position == sessionsRow || position == secretWebpageRow || position == webSessionsRow ||
                     position == groupsRow && !getContactsController().getLoadingPrivacyInfo(ContactsController.PRIVACY_RULES_TYPE_INVITE) ||
                     position == lastSeenRow && !getContactsController().getLoadingPrivacyInfo(ContactsController.PRIVACY_RULES_TYPE_LASTSEEN) ||
                     position == callsRow && !getContactsController().getLoadingPrivacyInfo(ContactsController.PRIVACY_RULES_TYPE_CALLS) ||
@@ -1291,8 +1284,6 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                         textCheckCell.setTextAndCheck(getString("SuggestContacts", R.string.SuggestContacts), newSuggest, false);
                     } else if (position == newChatsRow) {
                         textCheckCell.setTextAndCheck(getString("ArchiveAndMute", R.string.ArchiveAndMute), archiveChats, false);
-                    } else if (position == ghostModeRow) {
-                        textCheckCell.setTextAndCheck(getString("KryptonGhostMode", R.string.KryptonGhostMode), SharedConfig.ghostModeEnabled, false);
                     }
                     break;
                 case 5:
@@ -1406,7 +1397,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                 return 1;
             } else if (position == securitySectionRow || position == advancedSectionRow || position == privacySectionRow || position == secretSectionRow || position == botsSectionRow || position == contactsSectionRow || position == newChatsHeaderRow) {
                 return 2;
-            } else if (position == secretWebpageRow || position == contactsSyncRow || position == contactsSuggestRow || position == newChatsRow || position == ghostModeRow) {
+            } else if (position == secretWebpageRow || position == contactsSyncRow || position == contactsSuggestRow || position == newChatsRow) {
                 return 3;
             } else if (position == botsAndWebsitesShadowRow) {
                 return 4;

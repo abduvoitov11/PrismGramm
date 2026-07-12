@@ -350,6 +350,8 @@ public class SharedConfig {
     public static boolean dontAskManageStorage;
     // Krypton: Ghost Mode — boshqalarga "onlayn/yozyapti/o'qidi" holatini ko'rsatmaslik
     public static boolean ghostModeEnabled;
+    // Krypton: Media Downloader — Instagram/TikTok/YouTube havolalarini yuklab olish
+    public static boolean mediaDownloaderEnabled;
     public static boolean multipleReactionsPromoShowed;
 
     public static boolean isFloatingDebugActive;
@@ -662,6 +664,7 @@ public class SharedConfig {
             fastScrollHintCount = preferences.getInt("fastScrollHintCount", 3);
             dontAskManageStorage = preferences.getBoolean("dontAskManageStorage", false);
             ghostModeEnabled = preferences.getBoolean("krypton_ghostMode", false);
+            mediaDownloaderEnabled = preferences.getBoolean("krypton_mediaDownloader", true);
             hasEmailLogin = preferences.getBoolean("hasEmailLogin", false);
             isFloatingDebugActive = preferences.getBoolean("floatingDebugActive", false);
             updateStickersOrderOnSend = preferences.getBoolean("updateStickersOrderOnSend", true);
@@ -1760,6 +1763,11 @@ public class SharedConfig {
                 MessagesController.getInstance(a).ignoreSetOnline = b;
             }
         }
+    }
+
+    public static void setMediaDownloaderEnabled(boolean b) {
+        mediaDownloaderEnabled = b;
+        ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE).edit().putBoolean("krypton_mediaDownloader", mediaDownloaderEnabled).apply();
     }
 
     public static boolean canBlurChat() {

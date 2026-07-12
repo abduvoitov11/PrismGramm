@@ -101,6 +101,7 @@ public class KryptonArchive {
 
     public static class Entry {
         public int mid;
+        public long uid;
         public long senderId;
         public int kind;
         public String text;
@@ -120,6 +121,7 @@ public class KryptonArchive {
             while (cursor.next()) {
                 Entry entry = new Entry();
                 entry.mid = cursor.intValue(0);
+                entry.uid = uid;
                 entry.senderId = cursor.longValue(1);
                 entry.kind = cursor.intValue(2);
                 entry.text = cursor.stringValue(3);
@@ -133,5 +135,42 @@ public class KryptonArchive {
             FileLog.e(e);
         }
         return result;
+    }
+
+    /** Barcha chatlar bo'yicha, eng yangisidan boshlab, arxivlangan yozuvlar ro'yxati. */
+    public static ArrayList<Entry> getAllRecent(SQLiteDatabase database, int limit) {
+        ArrayList<Entry> result = new ArrayList<>();
+        if (database == null) return result;
+        try {
+            SQLiteCursor cursor = database.queryFinalized(
+                "SELECT mid, uid, sender_id, kind, message_text, media_label, orig_date, event_date FROM krypton_archive ORDER BY event_date DESC LIMIT " + limit
+            );
+            while (cursor.next()) {
+                Entry entry = new Entry();
+                entry.mid = cursor.intValue(0);
+                entry.uid = cursor.longValue(1);
+                entry.senderId = cursor.longValue(2);
+                entry.kind = cursor.intValue(3);
+                entry.text = cursor.stringValue(4);
+                entry.mediaLabel = cursor.isNull(5) ? null : cursor.stringValue(5);
+                entry.origDate = cursor.intValue(6);
+                entry.eventDate = cursor.intValue(7);
+                result.add(entry);
+            }
+            cursor.dispose();
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+        return result;
+    }
+
+    /** Arxivdagi barcha yozuvlarni tozalaydi. */
+    public static void clearAll(SQLiteDatabase database) {
+        if (database == null) return;
+        try {
+            database.executeFast("DELETE FROM krypton_archive").stepThis().dispose();
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
     }
 }
