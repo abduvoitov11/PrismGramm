@@ -38,6 +38,7 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationsController;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SendMessagesHelper;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.Timer;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
@@ -1297,10 +1298,13 @@ public class StoriesController {
             if (!profile) {
                 storiesStorage.updateMaxReadId(dialogId, newReadId);
             }
-            TL_stories.TL_stories_readStories req = new TL_stories.TL_stories_readStories();
-            req.peer = MessagesController.getInstance(currentAccount).getInputPeer(dialogId);
-            req.max_id = storyItem.id;
-            ConnectionsManager.getInstance(currentAccount).sendRequest(req, null);
+            if (!SharedConfig.ghostModeEnabled) {
+                // Krypton: Ghost Mode — story "o'qilgan" holati serverga yuborilmaydi
+                TL_stories.TL_stories_readStories req = new TL_stories.TL_stories_readStories();
+                req.peer = MessagesController.getInstance(currentAccount).getInputPeer(dialogId);
+                req.max_id = storyItem.id;
+                ConnectionsManager.getInstance(currentAccount).sendRequest(req, null);
+            }
             NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.storiesReadUpdated);
             return true;
         }
@@ -3725,6 +3729,13 @@ public class StoriesController {
             if (seenStories.contains(storyId)) return false;
             seenStories.add(storyId);
             saveCache();
+            if (SharedConfig.ghostModeEnabled) {
+                // Krypton: Ghost Mode — story ko'rilgani serverga (va shu orqali
+                // "kim ko'rdi" ro'yxatiga) bildirilmaydi, lekin mahalliy holat
+                // (o'zingiz uchun "ko'rilgan" belgisi) odatdagidek ishlayveradi.
+                NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.storiesReadUpdated);
+                return true;
+            }
             TL_stories.TL_stories_incrementStoryViews req = new TL_stories.TL_stories_incrementStoryViews();
             req.peer = MessagesController.getInstance(currentAccount).getInputPeer(dialogId);
             req.id.add(storyId);
