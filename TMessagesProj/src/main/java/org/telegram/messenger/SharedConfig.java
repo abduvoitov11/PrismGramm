@@ -352,6 +352,8 @@ public class SharedConfig {
     public static boolean ghostModeEnabled;
     // Krypton: Media Downloader — Instagram/TikTok/YouTube havolalarini yuklab olish
     public static boolean mediaDownloaderEnabled;
+    // Krypton: rasmiy Telegram "sponsored" (reklama) xabarlarini yashirish
+    public static boolean hideSponsoredAds;
     public static boolean multipleReactionsPromoShowed;
 
     public static boolean isFloatingDebugActive;
@@ -665,6 +667,7 @@ public class SharedConfig {
             dontAskManageStorage = preferences.getBoolean("dontAskManageStorage", false);
             ghostModeEnabled = preferences.getBoolean("krypton_ghostMode", false);
             mediaDownloaderEnabled = preferences.getBoolean("krypton_mediaDownloader", true);
+            hideSponsoredAds = preferences.getBoolean("krypton_hideAds", true);
             hasEmailLogin = preferences.getBoolean("hasEmailLogin", false);
             isFloatingDebugActive = preferences.getBoolean("floatingDebugActive", false);
             updateStickersOrderOnSend = preferences.getBoolean("updateStickersOrderOnSend", true);
@@ -1768,6 +1771,11 @@ public class SharedConfig {
     public static void setMediaDownloaderEnabled(boolean b) {
         mediaDownloaderEnabled = b;
         ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE).edit().putBoolean("krypton_mediaDownloader", mediaDownloaderEnabled).apply();
+    }
+
+    public static void setHideSponsoredAds(boolean b) {
+        hideSponsoredAds = b;
+        ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE).edit().putBoolean("krypton_hideAds", hideSponsoredAds).apply();
     }
 
     public static boolean canBlurChat() {

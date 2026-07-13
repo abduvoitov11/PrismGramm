@@ -48,6 +48,7 @@ public class KryptonSettingsActivity extends BaseFragment {
     private static final int ID_GHOST_MODE = 1;
     private static final int ID_MEDIA_DOWNLOADER = 2;
     private static final int ID_ARCHIVE = 3;
+    private static final int ID_HIDE_ADS = 4;
 
     @Override
     public View createView(Context context) {
@@ -98,6 +99,11 @@ public class KryptonSettingsActivity extends BaseFragment {
                 }
             } else if (item.id == ID_ARCHIVE) {
                 presentFragment(new KryptonArchiveActivity());
+            } else if (item.id == ID_HIDE_ADS) {
+                SharedConfig.setHideSponsoredAds(!SharedConfig.hideSponsoredAds);
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(SharedConfig.hideSponsoredAds);
+                }
             }
         });
 
@@ -117,6 +123,10 @@ public class KryptonSettingsActivity extends BaseFragment {
         items.add(new ItemInner(VIEW_TYPE_HEADER, 0, "Media Downloader"));
         items.add(new ItemInner(VIEW_TYPE_CHECK, ID_MEDIA_DOWNLOADER, "Ijtimoiy tarmoqlardan video yuklash"));
         items.add(new ItemInner(VIEW_TYPE_SHADOW, 0, "Instagram, TikTok yoki YouTube havolasi bo'lgan xabarni uzoq bosganingizda \"Yuklab olish\" bandi chiqadi. Video to'g'ridan-to'g'ri Downloads papkasiga yuklanadi."));
+
+        items.add(new ItemInner(VIEW_TYPE_HEADER, 0, "Reklamalar"));
+        items.add(new ItemInner(VIEW_TYPE_CHECK, ID_HIDE_ADS, "Rasmiy reklama xabarlarini yashirish"));
+        items.add(new ItemInner(VIEW_TYPE_SHADOW, 0, "Kanal va guruhlarda Telegramning o'zi ko'rsatadigan \"Sponsored\" (reklama) xabarlari butunlay yuklanmaydi va ko'rinmaydi."));
 
         items.add(new ItemInner(VIEW_TYPE_HEADER, 0, "Arxiv"));
         items.add(new ItemInner(VIEW_TYPE_NAV, ID_ARCHIVE, "O'chirilgan xabarlar"));
@@ -176,7 +186,14 @@ public class KryptonSettingsActivity extends BaseFragment {
                 cell.setText(item.text);
             } else if (viewType == VIEW_TYPE_CHECK) {
                 TextCheckCell cell = (TextCheckCell) holder.itemView;
-                boolean checked = item.id == ID_GHOST_MODE ? SharedConfig.ghostModeEnabled : SharedConfig.mediaDownloaderEnabled;
+                boolean checked;
+                if (item.id == ID_GHOST_MODE) {
+                    checked = SharedConfig.ghostModeEnabled;
+                } else if (item.id == ID_HIDE_ADS) {
+                    checked = SharedConfig.hideSponsoredAds;
+                } else {
+                    checked = SharedConfig.mediaDownloaderEnabled;
+                }
                 cell.setTextAndCheck(item.text, checked, false);
             } else if (viewType == VIEW_TYPE_NAV) {
                 TextCell cell = (TextCell) holder.itemView;
