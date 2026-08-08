@@ -141,7 +141,7 @@ public class IntroActivity extends BaseFragment implements NotificationCenter.No
                 LocaleController.getString(R.string.Page6Title)
         };
         messages = new String[]{
-                "Dunyoning eng tezkor va maxfiy Telegram mijozi.\nGhost Mode, Anti-Delete va Media Downloader bilan.",
+                "The quieter you become, the more you are able to hear !",
                 LocaleController.getString(R.string.Page2Message),
                 LocaleController.getString(R.string.Page3Message),
                 LocaleController.getString(R.string.Page5Message),
