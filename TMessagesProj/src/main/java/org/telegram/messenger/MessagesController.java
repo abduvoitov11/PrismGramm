@@ -10573,6 +10573,10 @@ public class MessagesController extends BaseController implements NotificationCe
     private long lastCheckPromoInfoTime;
 
     private void checkPromoInfoInternal(boolean reset) {
+        if (SharedConfig.hideSponsoredAds) {
+            promoDialogId = 0;
+            return;
+        }
         if (reset && checkingPromoInfo) {
             checkingPromoInfo = false;
         }
@@ -22816,6 +22820,9 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public ChannelRecommendations getChannelRecommendations(long dialogId) {
+        if (SharedConfig.hideSponsoredAds) {
+            return null;
+        }
         if (cachedChannelRecommendations == null) {
             cachedChannelRecommendations = new HashMap<>();
         }

@@ -1776,6 +1776,13 @@ public class SharedConfig {
     public static void setHideSponsoredAds(boolean b) {
         hideSponsoredAds = b;
         ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE).edit().putBoolean("krypton_hideAds", hideSponsoredAds).apply();
+        if (b) {
+            for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
+                if (UserConfig.getInstance(a).isClientActivated()) {
+                    MessagesController.getInstance(a).checkPromoInfo(true);
+                }
+            }
+        }
     }
 
     public static boolean canBlurChat() {

@@ -116,6 +116,9 @@ public class VideoAds {
         int msg_id,
         BulletinFactory bulletinFactory
     ) {
+        if (org.telegram.messenger.SharedConfig.hideSponsoredAds) {
+            return null;
+        }
         final VideoAdsLocation key = new VideoAdsLocation(currentAccount, dialogId);
         VideoAds ads = cached.get(key);
         if (ads == null || (ads.msg_id != msg_id || System.currentTimeMillis() - ads.lastTime > 3 * 60 * 1000) && ads.ads.isEmpty()) {

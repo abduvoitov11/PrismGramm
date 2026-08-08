@@ -126,9 +126,9 @@ public class KryptonSettingsActivity extends BaseFragment {
         items.add(new ItemInner(VIEW_TYPE_CHECK, ID_MEDIA_DOWNLOADER, "Ijtimoiy tarmoqlardan video yuklash"));
         items.add(new ItemInner(VIEW_TYPE_SHADOW, 0, "Instagram, TikTok yoki YouTube havolasi bo'lgan xabarni uzoq bosganingizda \"Yuklab olish\" bandi chiqadi. Video to'g'ridan-to'g'ri Downloads papkasiga yuklanadi."));
 
-        items.add(new ItemInner(VIEW_TYPE_HEADER, 0, "Reklamalar"));
-        items.add(new ItemInner(VIEW_TYPE_CHECK, ID_HIDE_ADS, "Rasmiy reklama xabarlarini yashirish"));
-        items.add(new ItemInner(VIEW_TYPE_SHADOW, 0, "Kanal va guruhlarda Telegramning o'zi ko'rsatadigan \"Sponsored\" (reklama) xabarlari butunlay yuklanmaydi va ko'rinmaydi."));
+        items.add(new ItemInner(VIEW_TYPE_HEADER, 0, "Reklama Blokirovkasi (Ad Blocker)"));
+        items.add(new ItemInner(VIEW_TYPE_CHECK, ID_HIDE_ADS, "Barcha reklamalarni butunlay bloklash"));
+        items.add(new ItemInner(VIEW_TYPE_SHADOW, 0, "Telegram rasmiy Sponsored postlari, video pleyer reklamalari, proxy sponsor kanallari hamda tavsiya etiladigan (Recommended) kanallar butunlay yuklanmaydi va ko'rsatilmaydi."));
 
         items.add(new ItemInner(VIEW_TYPE_HEADER, 0, "Arxiv"));
         items.add(new ItemInner(VIEW_TYPE_NAV, ID_ARCHIVE, "O'chirilgan xabarlar"));
