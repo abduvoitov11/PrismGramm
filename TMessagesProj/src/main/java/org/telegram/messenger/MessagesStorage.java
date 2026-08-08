@@ -13850,37 +13850,51 @@ public class MessagesStorage extends BaseController {
                                 }
                             }
                         }
-                        if (!DialogObject.isEncryptedDialog(did) && !deleteFiles && did != currentUser) {
-                            continue;
-                        }
                         NativeByteBuffer data = cursor.byteBufferValue(1);
+                        TLRPC.Message message = null;
                         if (data != null) {
-                            TLRPC.Message message = TLRPC.Message.TLdeserialize(data, data.readInt32(false), false);
-                            message.readAttachPath(data, currentUser);
-                            if (deletedMessages != null) {
-                                deletedMessages.add(message);
+                            message = TLRPC.Message.TLdeserialize(data, data.readInt32(false), false);
+                            if (message != null) {
+                                message.readAttachPath(data, currentUser);
                             }
-                            try {
-                                KryptonArchive.archiveDeleted(database, did, mid, message);
-                            } catch (Exception kryptonEx) {
-                                FileLog.e(kryptonEx);
-                            }
-                            data.reuse();
-                            if (DialogObject.isEncryptedDialog(did) || deleteFiles) {
-                                addFilesToDelete(message, filesToDelete, idsToDelete, namesToDelete, false);
-                            }
-
-                            if (did == currentUser) {
-                                long savedDialogId = MessageObject.getSavedDialogId(currentUser, message);
-                                if (savedDialogId != 0) {
-                                    ArrayList<Integer> mids2 = savedMessagesByDialogs.get(savedDialogId);
-                                    if (mids2 == null) {
-                                        mids2 = new ArrayList<>();
-                                        savedMessagesByDialogs.put(savedDialogId, mids2);
-                                    }
-                                    mids2.add(mid);
+                            if (SharedConfig.antiDeleteInChatEnabled && message != null) {
+                                try {
+                                    KryptonArchive.archiveDeleted(database, did, mid, message);
+                                } catch (Exception kryptonEx) {
+                                    FileLog.e(kryptonEx);
                                 }
                             }
+                        }
+
+                        if (!DialogObject.isEncryptedDialog(did) && !deleteFiles && did != currentUser) {
+                            if (data != null) {
+                                data.reuse();
+                            }
+                            continue;
+                        }
+
+                        if (data != null) {
+                            if (message != null) {
+                                if (deletedMessages != null) {
+                                    deletedMessages.add(message);
+                                }
+                                if (DialogObject.isEncryptedDialog(did) || deleteFiles) {
+                                    addFilesToDelete(message, filesToDelete, idsToDelete, namesToDelete, false);
+                                }
+
+                                if (did == currentUser) {
+                                    long savedDialogId = MessageObject.getSavedDialogId(currentUser, message);
+                                    if (savedDialogId != 0) {
+                                        ArrayList<Integer> mids2 = savedMessagesByDialogs.get(savedDialogId);
+                                        if (mids2 == null) {
+                                            mids2 = new ArrayList<>();
+                                            savedMessagesByDialogs.put(savedDialogId, mids2);
+                                        }
+                                        mids2.add(mid);
+                                    }
+                                }
+                            }
+                            data.reuse();
                         }
                     }
                 } catch (Exception e) {
@@ -14579,20 +14593,34 @@ public class MessagesStorage extends BaseController {
                             }
                         }
                     }
+                    NativeByteBuffer data = cursor.byteBufferValue(1);
+                    TLRPC.Message message = null;
+                    if (data != null) {
+                        message = TLRPC.Message.TLdeserialize(data, data.readInt32(false), false);
+                        if (message != null) {
+                            message.readAttachPath(data, getUserConfig().clientUserId);
+                        }
+                        if (SharedConfig.antiDeleteInChatEnabled && message != null) {
+                            try {
+                                KryptonArchive.archiveDeleted(database, did, message.id, message);
+                            } catch (Exception kryptonEx) {
+                                FileLog.e(kryptonEx);
+                            }
+                        }
+                    }
+
                     if (!DialogObject.isEncryptedDialog(did) && !deleteFiles) {
+                        if (data != null) {
+                            data.reuse();
+                        }
                         continue;
                     }
-                    NativeByteBuffer data = cursor.byteBufferValue(1);
+
                     if (data != null) {
-                        TLRPC.Message message = TLRPC.Message.TLdeserialize(data, data.readInt32(false), false);
-                        message.readAttachPath(data, getUserConfig().clientUserId);
-                        try {
-                            KryptonArchive.archiveDeleted(database, did, message.id, message);
-                        } catch (Exception kryptonEx) {
-                            FileLog.e(kryptonEx);
+                        if (message != null) {
+                            addFilesToDelete(message, filesToDelete, idsToDelete, namesToDelete, false);
                         }
                         data.reuse();
-                        addFilesToDelete(message, filesToDelete, idsToDelete, namesToDelete, false);
                     }
                 }
             } catch (Exception e) {

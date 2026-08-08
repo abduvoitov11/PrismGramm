@@ -184,6 +184,11 @@ public class KryptonSettingsActivity extends BaseFragment {
             ItemInner item = (ItemInner) o;
             return id == item.id && Objects.equals(text, item.text) && viewType == item.viewType;
         }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(viewType, id);
+        }
     }
 
     private class ListAdapter extends AdapterWithDiffUtils {

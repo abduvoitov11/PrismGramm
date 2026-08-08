@@ -353,7 +353,7 @@ public class SharedConfig {
     // Krypton: Media Downloader — Instagram/TikTok/YouTube havolalarini yuklab olish
     public static boolean mediaDownloaderEnabled;
     // Krypton: rasmiy Telegram "sponsored" (reklama) xabarlarini yashirish
-    public static boolean hideSponsoredAds;
+    public static boolean hideSponsoredAds = true;
     // Krypton: Chatda o'chirilgan xabarlarni saqlash va 🗑️ bilan ko'rsatish (AyuGram style)
     public static boolean antiDeleteInChatEnabled = true;
     // Krypton: Tahrirlangan xabarlar tarixini saqlab qolish

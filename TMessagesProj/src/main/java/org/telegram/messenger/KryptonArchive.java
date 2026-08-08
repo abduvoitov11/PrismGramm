@@ -68,6 +68,7 @@ public class KryptonArchive {
 
     private static void insert(SQLiteDatabase database, long uid, int mid, TLRPC.Message message, int kind) {
         if (database == null || message == null) return;
+        SQLitePreparedStatement state = null;
         try {
             String text = message.message != null ? message.message : "";
             // Xabar mazmuni bo'sh bo'lsa (masalan faqat media) va media ham yo'q bo'lsa, arxivlashning hojati yo'q
@@ -76,7 +77,7 @@ public class KryptonArchive {
 
             long senderId = message.from_id != null ? MessageObject.getPeerId(message.from_id) : 0;
 
-            SQLitePreparedStatement state = database.executeFast(
+            state = database.executeFast(
                 "INSERT INTO krypton_archive(mid, uid, sender_id, kind, message_text, media_label, orig_date, event_date) VALUES(?, ?, ?, ?, ?, ?, ?, ?)"
             );
             state.requery();
@@ -93,9 +94,12 @@ public class KryptonArchive {
             state.bindInteger(7, message.date);
             state.bindInteger(8, (int) (System.currentTimeMillis() / 1000));
             state.step();
-            state.dispose();
         } catch (Exception e) {
             FileLog.e(e);
+        } finally {
+            if (state != null) {
+                state.dispose();
+            }
         }
     }
 
@@ -114,8 +118,10 @@ public class KryptonArchive {
     public static ArrayList<Entry> getForDialog(SQLiteDatabase database, long uid, int limit) {
         ArrayList<Entry> result = new ArrayList<>();
         if (database == null) return result;
+        if (limit <= 0) limit = 50;
+        SQLiteCursor cursor = null;
         try {
-            SQLiteCursor cursor = database.queryFinalized(
+            cursor = database.queryFinalized(
                 "SELECT mid, sender_id, kind, message_text, media_label, orig_date, event_date FROM krypton_archive WHERE uid = " + uid + " ORDER BY event_date DESC LIMIT " + limit
             );
             while (cursor.next()) {
@@ -130,9 +136,12 @@ public class KryptonArchive {
                 entry.eventDate = cursor.intValue(6);
                 result.add(entry);
             }
-            cursor.dispose();
         } catch (Exception e) {
             FileLog.e(e);
+        } finally {
+            if (cursor != null) {
+                cursor.dispose();
+            }
         }
         return result;
     }
@@ -141,8 +150,10 @@ public class KryptonArchive {
     public static ArrayList<Entry> getAllRecent(SQLiteDatabase database, int limit) {
         ArrayList<Entry> result = new ArrayList<>();
         if (database == null) return result;
+        if (limit <= 0) limit = 50;
+        SQLiteCursor cursor = null;
         try {
-            SQLiteCursor cursor = database.queryFinalized(
+            cursor = database.queryFinalized(
                 "SELECT mid, uid, sender_id, kind, message_text, media_label, orig_date, event_date FROM krypton_archive ORDER BY event_date DESC LIMIT " + limit
             );
             while (cursor.next()) {
@@ -157,9 +168,12 @@ public class KryptonArchive {
                 entry.eventDate = cursor.intValue(7);
                 result.add(entry);
             }
-            cursor.dispose();
         } catch (Exception e) {
             FileLog.e(e);
+        } finally {
+            if (cursor != null) {
+                cursor.dispose();
+            }
         }
         return result;
     }
@@ -167,15 +181,19 @@ public class KryptonArchive {
     /** Berilgan xabar o'chirilganini arxivdan tekshiradi. */
     public static boolean isMessageDeleted(SQLiteDatabase database, long uid, int mid) {
         if (database == null) return false;
+        SQLiteCursor cursor = null;
         try {
-            SQLiteCursor cursor = database.queryFinalized(
+            cursor = database.queryFinalized(
                 "SELECT id FROM krypton_archive WHERE uid = " + uid + " AND mid = " + mid + " AND kind = 0 LIMIT 1"
             );
             boolean found = cursor.next();
-            cursor.dispose();
             return found;
         } catch (Exception e) {
             FileLog.e(e);
+        } finally {
+            if (cursor != null) {
+                cursor.dispose();
+            }
         }
         return false;
     }
@@ -184,8 +202,9 @@ public class KryptonArchive {
     public static ArrayList<String> getEditHistory(SQLiteDatabase database, long uid, int mid) {
         ArrayList<String> history = new ArrayList<>();
         if (database == null) return history;
+        SQLiteCursor cursor = null;
         try {
-            SQLiteCursor cursor = database.queryFinalized(
+            cursor = database.queryFinalized(
                 "SELECT message_text FROM krypton_archive WHERE uid = " + uid + " AND mid = " + mid + " AND kind = 1 ORDER BY event_date ASC"
             );
             while (cursor.next()) {
@@ -194,9 +213,12 @@ public class KryptonArchive {
                     history.add(txt);
                 }
             }
-            cursor.dispose();
         } catch (Exception e) {
             FileLog.e(e);
+        } finally {
+            if (cursor != null) {
+                cursor.dispose();
+            }
         }
         return history;
     }
