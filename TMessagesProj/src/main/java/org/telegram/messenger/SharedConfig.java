@@ -354,6 +354,12 @@ public class SharedConfig {
     public static boolean mediaDownloaderEnabled;
     // Krypton: rasmiy Telegram "sponsored" (reklama) xabarlarini yashirish
     public static boolean hideSponsoredAds;
+    // Krypton: Chatda o'chirilgan xabarlarni saqlash va 🗑️ bilan ko'rsatish (AyuGram style)
+    public static boolean antiDeleteInChatEnabled = true;
+    // Krypton: Tahrirlangan xabarlar tarixini saqlab qolish
+    public static boolean editHistoryEnabled = true;
+    // Krypton: O'chirilgan media fayllarni (rasm/video/voice) keshda saqlab qolish
+    public static boolean saveDeletedMediaEnabled = true;
     public static boolean multipleReactionsPromoShowed;
 
     public static boolean isFloatingDebugActive;
@@ -668,6 +674,9 @@ public class SharedConfig {
             ghostModeEnabled = preferences.getBoolean("krypton_ghostMode", false);
             mediaDownloaderEnabled = preferences.getBoolean("krypton_mediaDownloader", true);
             hideSponsoredAds = preferences.getBoolean("krypton_hideAds", true);
+            antiDeleteInChatEnabled = preferences.getBoolean("krypton_antiDeleteInChat", true);
+            editHistoryEnabled = preferences.getBoolean("krypton_editHistory", true);
+            saveDeletedMediaEnabled = preferences.getBoolean("krypton_saveDeletedMedia", true);
             hasEmailLogin = preferences.getBoolean("hasEmailLogin", false);
             isFloatingDebugActive = preferences.getBoolean("floatingDebugActive", false);
             updateStickersOrderOnSend = preferences.getBoolean("updateStickersOrderOnSend", true);
@@ -1783,6 +1792,21 @@ public class SharedConfig {
                 }
             }
         }
+    }
+
+    public static void setAntiDeleteInChatEnabled(boolean b) {
+        antiDeleteInChatEnabled = b;
+        ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE).edit().putBoolean("krypton_antiDeleteInChat", antiDeleteInChatEnabled).apply();
+    }
+
+    public static void setEditHistoryEnabled(boolean b) {
+        editHistoryEnabled = b;
+        ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE).edit().putBoolean("krypton_editHistory", editHistoryEnabled).apply();
+    }
+
+    public static void setSaveDeletedMediaEnabled(boolean b) {
+        saveDeletedMediaEnabled = b;
+        ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE).edit().putBoolean("krypton_saveDeletedMedia", saveDeletedMediaEnabled).apply();
     }
 
     public static boolean canBlurChat() {

@@ -164,6 +164,43 @@ public class KryptonArchive {
         return result;
     }
 
+    /** Berilgan xabar o'chirilganini arxivdan tekshiradi. */
+    public static boolean isMessageDeleted(SQLiteDatabase database, long uid, int mid) {
+        if (database == null) return false;
+        try {
+            SQLiteCursor cursor = database.queryFinalized(
+                "SELECT id FROM krypton_archive WHERE uid = " + uid + " AND mid = " + mid + " AND kind = 0 LIMIT 1"
+            );
+            boolean found = cursor.next();
+            cursor.dispose();
+            return found;
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+        return false;
+    }
+
+    /** Berilgan xabarning tahrirlar tarixini qaytaradi. */
+    public static ArrayList<String> getEditHistory(SQLiteDatabase database, long uid, int mid) {
+        ArrayList<String> history = new ArrayList<>();
+        if (database == null) return history;
+        try {
+            SQLiteCursor cursor = database.queryFinalized(
+                "SELECT message_text FROM krypton_archive WHERE uid = " + uid + " AND mid = " + mid + " AND kind = 1 ORDER BY event_date ASC"
+            );
+            while (cursor.next()) {
+                String txt = cursor.stringValue(0);
+                if (txt != null && !txt.isEmpty()) {
+                    history.add(txt);
+                }
+            }
+            cursor.dispose();
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+        return history;
+    }
+
     /** Arxivdagi barcha yozuvlarni tozalaydi. */
     public static void clearAll(SQLiteDatabase database) {
         if (database == null) return;

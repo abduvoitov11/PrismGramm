@@ -267,9 +267,14 @@ public class MessageObject {
     public TLRPC.Photo sponsoredPhoto;
     public String sponsoredInfo, sponsoredAdditionalInfo;
     public String sponsoredButtonText;
-    public TLRPC.PeerColor sponsoredColor;
     public TLRPC.MessageMedia sponsoredMedia;
     public boolean sponsoredCanReport;
+    public boolean kryptonDeleted;
+    public ArrayList<String> kryptonEditHistory;
+
+    public boolean isKryptonDeleted() {
+        return kryptonDeleted || (messageOwner != null && messageOwner.kryptonDeleted);
+    }
 
     public boolean replyTextEllipsized;
     public boolean replyTextRevealed;

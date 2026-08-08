@@ -51,6 +51,9 @@ public class KryptonSettingsActivity extends BaseFragment {
     private static final int ID_MEDIA_DOWNLOADER = 2;
     private static final int ID_ARCHIVE = 3;
     private static final int ID_HIDE_ADS = 4;
+    private static final int ID_ANTI_DELETE_IN_CHAT = 5;
+    private static final int ID_EDIT_HISTORY = 6;
+    private static final int ID_SAVE_DELETED_MEDIA = 7;
 
     @Override
     public View createView(Context context) {
@@ -106,6 +109,21 @@ public class KryptonSettingsActivity extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(SharedConfig.hideSponsoredAds);
                 }
+            } else if (item.id == ID_ANTI_DELETE_IN_CHAT) {
+                SharedConfig.setAntiDeleteInChatEnabled(!SharedConfig.antiDeleteInChatEnabled);
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(SharedConfig.antiDeleteInChatEnabled);
+                }
+            } else if (item.id == ID_EDIT_HISTORY) {
+                SharedConfig.setEditHistoryEnabled(!SharedConfig.editHistoryEnabled);
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(SharedConfig.editHistoryEnabled);
+                }
+            } else if (item.id == ID_SAVE_DELETED_MEDIA) {
+                SharedConfig.setSaveDeletedMediaEnabled(!SharedConfig.saveDeletedMediaEnabled);
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(SharedConfig.saveDeletedMediaEnabled);
+                }
             }
         });
 
@@ -130,9 +148,19 @@ public class KryptonSettingsActivity extends BaseFragment {
         items.add(new ItemInner(VIEW_TYPE_CHECK, ID_HIDE_ADS, "Barcha reklamalarni butunlay bloklash"));
         items.add(new ItemInner(VIEW_TYPE_SHADOW, 0, "Telegram rasmiy Sponsored postlari, video pleyer reklamalari, proxy sponsor kanallari hamda tavsiya etiladigan (Recommended) kanallar butunlay yuklanmaydi va ko'rsatilmaydi."));
 
+        items.add(new ItemInner(VIEW_TYPE_HEADER, 0, "Anti-Delete va Tahrirlar"));
+        items.add(new ItemInner(VIEW_TYPE_CHECK, ID_ANTI_DELETE_IN_CHAT, "Chat ichida o'chirilgan xabarlarni saqlash"));
+        items.add(new ItemInner(VIEW_TYPE_SHADOW, 0, "Suhbatdosh xabarni o'chirib yuborganda, u chatdan o'chib ketmaydi va 🗑️ belgisi bilan ko'rinib turadi (AyuGram uslubida)."));
+
+        items.add(new ItemInner(VIEW_TYPE_CHECK, ID_EDIT_HISTORY, "Tahrirlangan xabarlar tarixini saqlash"));
+        items.add(new ItemInner(VIEW_TYPE_SHADOW, 0, "Xabar tahrirlanganda uning asl (eski) versiyalari saqlab qolinadi."));
+
+        items.add(new ItemInner(VIEW_TYPE_CHECK, ID_SAVE_DELETED_MEDIA, "O'chirilgan media fayllarni saqlash"));
+        items.add(new ItemInner(VIEW_TYPE_SHADOW, 0, "O'chirilgan rasmlar, videolar va ovozli xabarlar qurilma keshidan o'chirib tashlanmaydi."));
+
         items.add(new ItemInner(VIEW_TYPE_HEADER, 0, "Arxiv"));
-        items.add(new ItemInner(VIEW_TYPE_NAV, ID_ARCHIVE, "O'chirilgan xabarlar"));
-        items.add(new ItemInner(VIEW_TYPE_SHADOW, 0, "Suhbatdoshingiz o'chirgan xabarlarni shu yerda ko'rishingiz mumkin. Faqat sizning qurilmangizda saqlanadi."));
+        items.add(new ItemInner(VIEW_TYPE_NAV, ID_ARCHIVE, "O'chirilgan xabarlar arxivi"));
+        items.add(new ItemInner(VIEW_TYPE_SHADOW, 0, "Suhbatdoshingiz o'chirgan va tahrirlagan barcha xabarlar ro'yxati. Faqat sizning qurilmangizda saqlanadi."));
 
         if (adapter != null) {
             adapter.notifyDataSetChanged();
@@ -193,6 +221,12 @@ public class KryptonSettingsActivity extends BaseFragment {
                     checked = SharedConfig.ghostModeEnabled;
                 } else if (item.id == ID_HIDE_ADS) {
                     checked = SharedConfig.hideSponsoredAds;
+                } else if (item.id == ID_ANTI_DELETE_IN_CHAT) {
+                    checked = SharedConfig.antiDeleteInChatEnabled;
+                } else if (item.id == ID_EDIT_HISTORY) {
+                    checked = SharedConfig.editHistoryEnabled;
+                } else if (item.id == ID_SAVE_DELETED_MEDIA) {
+                    checked = SharedConfig.saveDeletedMediaEnabled;
                 } else {
                     checked = SharedConfig.mediaDownloaderEnabled;
                 }
