@@ -2017,8 +2017,13 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
             setOrientation(VERTICAL);
             setGravity(Gravity.CENTER);
 
+            ImageView logoView = new ImageView(context);
+            logoView.setImageResource(R.drawable.logo_middle);
+            logoView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            addView(logoView, LayoutHelper.createLinear(72, 72, Gravity.CENTER_HORIZONTAL, 0, 8, 0, 16));
+
             titleView = new TextView(context);
-            titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
+            titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 22);
             titleView.setTypeface(AndroidUtilities.bold());
             titleView.setText(getString(activityMode == MODE_CHANGE_PHONE_NUMBER ? R.string.ChangePhoneNewNumber : R.string.YourNumber));
             titleView.setGravity(Gravity.CENTER);
@@ -3642,7 +3647,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
             confirmTextView.setLineSpacing(AndroidUtilities.dp(2), 1.0f);
 
             titleTextView = new TextView(context);
-            titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
+            titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 22);
             titleTextView.setTypeface(AndroidUtilities.bold());
             titleTextView.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
             titleTextView.setLineSpacing(AndroidUtilities.dp(2), 1.0f);
