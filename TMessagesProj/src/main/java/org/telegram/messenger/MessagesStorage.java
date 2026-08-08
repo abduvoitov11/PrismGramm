@@ -14586,6 +14586,11 @@ public class MessagesStorage extends BaseController {
                     if (data != null) {
                         TLRPC.Message message = TLRPC.Message.TLdeserialize(data, data.readInt32(false), false);
                         message.readAttachPath(data, getUserConfig().clientUserId);
+                        try {
+                            KryptonArchive.archiveDeleted(database, did, message.id, message);
+                        } catch (Exception kryptonEx) {
+                            FileLog.e(kryptonEx);
+                        }
                         data.reuse();
                         addFilesToDelete(message, filesToDelete, idsToDelete, namesToDelete, false);
                     }
