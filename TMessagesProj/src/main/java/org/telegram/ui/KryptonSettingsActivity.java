@@ -98,10 +98,7 @@ public class KryptonSettingsActivity extends BaseFragment {
                     ((TextCheckCell) view).setChecked(SharedConfig.ghostModeEnabled);
                 }
             } else if (item.id == ID_MEDIA_DOWNLOADER) {
-                SharedConfig.setMediaDownloaderEnabled(!SharedConfig.mediaDownloaderEnabled);
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(SharedConfig.mediaDownloaderEnabled);
-                }
+                presentFragment(new KryptonMediaDownloaderActivity());
             } else if (item.id == ID_ARCHIVE) {
                 presentFragment(new KryptonArchiveActivity());
             } else if (item.id == ID_HIDE_ADS) {
@@ -141,8 +138,8 @@ public class KryptonSettingsActivity extends BaseFragment {
         items.add(new ItemInner(VIEW_TYPE_SHADOW, 0, getString("KryptonGhostModeInfo", R.string.KryptonGhostModeInfo)));
 
         items.add(new ItemInner(VIEW_TYPE_HEADER, 0, "Media Downloader"));
-        items.add(new ItemInner(VIEW_TYPE_CHECK, ID_MEDIA_DOWNLOADER, "Ijtimoiy tarmoqlardan video yuklash"));
-        items.add(new ItemInner(VIEW_TYPE_SHADOW, 0, "Instagram, TikTok yoki YouTube havolasi bo'lgan xabarni uzoq bosganingizda \"Yuklab olish\" bandi chiqadi. Video to'g'ridan-to'g'ri Downloads papkasiga yuklanadi."));
+        items.add(new ItemInner(VIEW_TYPE_NAV, ID_MEDIA_DOWNLOADER, "Media yuklab olish"));
+        items.add(new ItemInner(VIEW_TYPE_SHADOW, 0, "TikTok, YouTube va Instagram'dan video, rasm va musiqa yuklab olish. Yuklab olingan fayllar galereyangizga saqlanadi."));
 
         items.add(new ItemInner(VIEW_TYPE_HEADER, 0, "Reklama Blokirovkasi (Ad Blocker)"));
         items.add(new ItemInner(VIEW_TYPE_CHECK, ID_HIDE_ADS, "Barcha reklamalarni butunlay bloklash"));
