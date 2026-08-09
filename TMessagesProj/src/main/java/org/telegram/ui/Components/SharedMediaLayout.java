@@ -3898,7 +3898,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
         if (forwardItem == null) {
             return;
         }
-        boolean noforwards = profileActivity.getMessagesController().isPeerNoForwards(dialog_id) || hasNoforwardsMessage();
+        boolean noforwards = !SharedConfig.anyDownloaderEnabled && (profileActivity.getMessagesController().isPeerNoForwards(dialog_id) || hasNoforwardsMessage());
         forwardItem.setAlpha(noforwards ? 0.5f : 1f);
         if (noforwards && forwardItem.getBackground() != null) {
             forwardItem.setBackground(null);
@@ -5306,6 +5306,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                 cantDeleteMessagesCount = 0;
             }, null, resourcesProvider);
         } else if (id == forward) {
+            if (!SharedConfig.anyDownloaderEnabled) {
             if (userInfo != null) {
                 if (profileActivity.getMessagesController().isUserNoForwards(userInfo)) {
                     if (fwdRestrictedHint != null) {
@@ -5332,6 +5333,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                     fwdRestrictedHint.showForView(v, true);
                 }
                 return;
+            }
             }
 
             Bundle args = new Bundle();

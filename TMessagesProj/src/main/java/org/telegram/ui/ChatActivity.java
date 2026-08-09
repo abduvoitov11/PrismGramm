@@ -8588,7 +8588,7 @@ public class ChatActivity extends BaseFragment implements
 
         flagSecure = new FlagSecureReason(getParentActivity().getWindow(), () ->
             currentEncryptedChat != null ||
-            isPeerNoForwards()
+            (!SharedConfig.anyDownloaderEnabled && isPeerNoForwards())
         );
 
         if (oldMessage != null) {
@@ -46398,6 +46398,7 @@ public class ChatActivity extends BaseFragment implements
     }
 
     public boolean isPeerNoForwards() {
+        if (SharedConfig.anyDownloaderEnabled) return false;
         return currentChat != null ?
             getMessagesController().isChatNoForwards(currentChat) :
             getMessagesController().isUserNoForwards(userInfo);

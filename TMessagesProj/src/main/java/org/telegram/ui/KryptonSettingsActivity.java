@@ -54,6 +54,7 @@ public class KryptonSettingsActivity extends BaseFragment {
     private static final int ID_ANTI_DELETE_IN_CHAT = 5;
     private static final int ID_EDIT_HISTORY = 6;
     private static final int ID_SAVE_DELETED_MEDIA = 7;
+    private static final int ID_ANY_DOWNLOADER = 8;
 
     @Override
     public View createView(Context context) {
@@ -121,6 +122,11 @@ public class KryptonSettingsActivity extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(SharedConfig.saveDeletedMediaEnabled);
                 }
+            } else if (item.id == ID_ANY_DOWNLOADER) {
+                SharedConfig.setAnyDownloaderEnabled(!SharedConfig.anyDownloaderEnabled);
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(SharedConfig.anyDownloaderEnabled);
+                }
             }
         });
 
@@ -140,6 +146,10 @@ public class KryptonSettingsActivity extends BaseFragment {
         items.add(new ItemInner(VIEW_TYPE_HEADER, 0, "Media Downloader"));
         items.add(new ItemInner(VIEW_TYPE_NAV, ID_MEDIA_DOWNLOADER, "Media yuklab olish"));
         items.add(new ItemInner(VIEW_TYPE_SHADOW, 0, "TikTok, YouTube va Instagram'dan video, rasm va musiqa yuklab olish. Yuklab olingan fayllar galereyangizga saqlanadi."));
+
+        items.add(new ItemInner(VIEW_TYPE_HEADER, 0, "Any Downloader"));
+        items.add(new ItemInner(VIEW_TYPE_CHECK, ID_ANY_DOWNLOADER, "Har qanday kanaldan media yuklab olish"));
+        items.add(new ItemInner(VIEW_TYPE_SHADOW, 0, "Yopiq va cheklangan (Restrict Saving Content) kanallar hamda guruhlardan video, rasm, audio va hujjatlarni yuklab olish, saqlash va boshqa chatlarga yo'naltirish imkoniyati. Skrinshot cheklovi ham olib tashlanadi."));
 
         items.add(new ItemInner(VIEW_TYPE_HEADER, 0, "Reklama Blokirovkasi (Ad Blocker)"));
         items.add(new ItemInner(VIEW_TYPE_CHECK, ID_HIDE_ADS, "Barcha reklamalarni butunlay bloklash"));
@@ -229,6 +239,8 @@ public class KryptonSettingsActivity extends BaseFragment {
                     checked = SharedConfig.editHistoryEnabled;
                 } else if (item.id == ID_SAVE_DELETED_MEDIA) {
                     checked = SharedConfig.saveDeletedMediaEnabled;
+                } else if (item.id == ID_ANY_DOWNLOADER) {
+                    checked = SharedConfig.anyDownloaderEnabled;
                 } else {
                     checked = SharedConfig.mediaDownloaderEnabled;
                 }
