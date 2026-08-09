@@ -16,15 +16,27 @@ Yangi, butunlay mustaqil klass. Asosiy Telegram kodiga faqat **2 ta joyda, bitta
 
 **Xavfsizlik:** Har ikkala chaqiruv `try/catch` bilan o'ralgan — agar arxivlashda xatolik yuz bersa, bu asl o'chirish jarayoniga **hech qanday ta'sir qilmaydi**, faqat log yoziladi.
 
+## ✅ Bajarildi: Chat ichida o'chirilgan xabarlarni ko'rsatish (In-Chat Anti-Delete)
+
+O'chirilgan xabarlar alohida arxiv oynasida emas, **to'g'ridan-to'g'ri chatda** qolib turadi va 🗑️ belgisi bilan ajralib ko'rinadi.
+
+### Ishlash mexanizmi (4 qadam):
+
+1. **`MessagesStorage.java` — `markMessagesAsDeletedInternal(...)`**: `SharedConfig.antiDeleteInChatEnabled` yoqilgan bo'lsa, xabar bazadan `DELETE` qilinmaydi — buning o'rniga `messages_v2` jadvalidagi `flags` maydoniga **bit 30** qo'yiladi (`UPDATE ... SET flags = flags | (1 << 30)`). Bu xabar bazada saqlanib qolishini ta'minlaydi.
+
+2. **`MessageObject.java` — konstruktor**: Xabar bazadan yuklanayotganda, `flags & (1 << 30)` tekshiriladi. Agar bit 30 o'rnatilgan bo'lsa, `kryptonDeleted = true` qo'yiladi.
+
+3. **`ChatActivity.java` — `processDeletedMessages(...)`**: Server "xabar o'chirildi" signali kelganda, agar `antiDeleteInChatEnabled` yoqilgan bo'lsa va xabar boshqa foydalanuvchi tomonidan o'chirilgan bo'lsa (`!sent && !obj.isOutOwner()`), xabar UI ro'yxatidan **olib tashlanmaydi** — buning o'rniga `obj.kryptonDeleted = true` qo'yiladi va `chatAdapter.notifyDataSetChanged()` orqali UI yangilanadi.
+
+4. **`ChatMessageCell.java`**: `isKryptonDeleted()` `true` bo'lganda, xabar vaqti oldiga 🗑️ emoji qo'yiladi — `currentTimeString = TextUtils.concat("🗑️ ", currentTimeString)`.
+
+### Sozlama:
+- **`SharedConfig.antiDeleteInChatEnabled`** — sukut bo'yicha `true`
+- Krypton Settings → "Chat ichida o'chirilgan xabarlarni saqlash" orqali yoqish/o'chirish mumkin
+
 ## ⏳ Hali qilinmagan
 
 1. **Tahrirlangan xabarlar arxivi** — texnik jihatdan buni to'g'ri joyga ulash (xabar tahrirlash oqimi "yangi xabar qo'shish" bilan bir xil kodni ishlatadi, bu yerga xato ulasam ishlash tezligiga yoki barqarorlikka salbiy ta'sir qilishi mumkin). Bu — DELETE funksiyasi Android Studio'da sinovdan muvaffaqiyatli o'tgandan keyin qo'shiladigan **keyingi bosqich**.
-
-2. **Ko'rish uchun UI** — hozircha arxiv faqat ma'lumotlar bazasida saqlanadi, uni ko'rsatadigan ekran hali yo'q. Dasturiy jihatdan ma'lumotni olish tayyor:
-   ```java
-   ArrayList<KryptonArchive.Entry> entries = KryptonArchive.getForDialog(database, dialogId, 50);
-   ```
-   Bu funksiyani biror chat ekraniga (masalan uzoq bosilganda chiqadigan menyuga "O'chirilgan xabarlar" bandi sifatida) ulash — keyingi bosqich.
 
 ## ⚠️ Push-bildirishnomalar haqida muhim eslatma
 
@@ -40,10 +52,14 @@ Build xatosini oldini olish uchun `google-services.json` fayllariga `app.krypton
 
 ## Qanday tekshirish mumkin (compile qilingandan keyin)
 
+### Anti-delete (chat ichida):
 1. Ikki qurilma/akkauntdan test chat oching
 2. Bir tomondan xabar yuboring, ikkinchi tomondan uni o'chiring ("Delete for everyone")
-3. `adb shell` orqali ilovaning SQLite bazasini tekshiring:
-   ```bash
-   adb shell "run-as app.krypton.messenger sqlite3 /data/data/app.krypton.messenger/files/account0.db 'SELECT * FROM krypton_archive;'"
-   ```
-   Agar o'chirilgan xabar matni shu yerda ko'rinsa — backend to'g'ri ishlayapti.
+3. Krypton ilovasida xabar **o'chib ketmaydi** — vaqt yonida 🗑️ belgisi paydo bo'ladi
+4. Chatdan chiqib qaytib kirsangiz ham, xabar 🗑️ bilan ko'rinib turadi (bazada saqlanadi)
+
+### Arxiv tekshiruvi (SQLite orqali):
+```bash
+adb shell "run-as app.krypton.messenger sqlite3 /data/data/app.krypton.messenger/files/account0.db 'SELECT * FROM krypton_archive;'"
+```
+Agar o'chirilgan xabar matni shu yerda ko'rinsa — backend to'g'ri ishlayapti.

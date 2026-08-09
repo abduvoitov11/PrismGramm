@@ -26110,6 +26110,28 @@ public class ChatActivity extends BaseFragment implements
                 updateReplyMessageOwners(mid, null);
             }
             if (obj != null) {
+                // ─── Krypton: anti-delete — xabarni o'chirish o'rniga 🗑️ bilan belgilash (barcha o'chirilgan xabarlar) ───
+                if (SharedConfig.antiDeleteInChatEnabled) {
+                    obj.kryptonDeleted = true;
+                    // reply counting logic ni bajaramiz
+                    if (obj.messageOwner.reply_to != null && !(obj.messageOwner.action instanceof TLRPC.TL_messageActionPinMessage)) {
+                        int replyId = obj.getReplyAnyMsgId();
+                        if (threadMessageObject != null && threadMessageObject.getId() == replyId) {
+                            if (!hasChatInBack && threadMessageObject.hasReplies()) {
+                                threadMessageObject.messageOwner.replies.replies--;
+                            }
+                            if (replyOriginalMessageId != 0) {
+                                commentsDeleted++;
+                            }
+                            updatedReplies = true;
+                        }
+                    }
+                    if (editingMessageObject == obj) {
+                        hideFieldPanel(true);
+                    }
+                    updated = true;
+                    continue;
+                }
                 if (obj.messageOwner.reply_to != null && !(obj.messageOwner.action instanceof TLRPC.TL_messageActionPinMessage)) {
                     int replyId = obj.getReplyAnyMsgId();
                     if (threadMessageObject != null && threadMessageObject.getId() == replyId) {
@@ -26245,6 +26267,12 @@ public class ChatActivity extends BaseFragment implements
                     }
                     updated = true;
                 }
+            }
+        }
+        // ─── Krypton: agar anti-delete bilan belgilangan xabarlar bo'lsa, UI ni yangilash ───
+        if (updated && SharedConfig.antiDeleteInChatEnabled) {
+            if (chatAdapter != null && !chatAdapter.isFrozen) {
+                chatAdapter.notifyDataSetChanged(false);
             }
         }
         if (updatedReplies) {

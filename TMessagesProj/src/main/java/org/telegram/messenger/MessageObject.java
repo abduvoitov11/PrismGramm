@@ -1912,6 +1912,11 @@ public class MessageObject {
         eventId = eid;
         wasUnread = !messageOwner.out && messageOwner.unread;
 
+        // ─── Krypton: bazadan yuklangan xabar flags'ida bit 30 belgilangan bo'lsa, anti-delete flag'ini o'rnatamiz ───
+        if (messageOwner != null && (messageOwner.flags & (1 << 30)) != 0) {
+            kryptonDeleted = true;
+        }
+
         if (message.replyMessage != null) {
             replyMessageObject = new MessageObject(currentAccount, message.replyMessage, null, users, chats, sUsers, sChats, false, checkMediaExists, eid);
         }
