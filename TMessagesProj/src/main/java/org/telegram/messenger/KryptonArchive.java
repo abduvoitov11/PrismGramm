@@ -63,6 +63,30 @@ public class KryptonArchive {
 
     /** Xabar tahrirlanishidan OLDIN chaqiriladi — eski (almashtirilayotgan) matnni arxivlaydi. */
     public static void archiveEdited(SQLiteDatabase database, long uid, int mid, TLRPC.Message oldMessage) {
+        if (database == null || oldMessage == null) return;
+        String text = oldMessage.message != null ? oldMessage.message : "";
+        if (text.isEmpty()) return;
+
+        // Oxirgi saqlangan versiya bilan bir xil bo'lsa takroran saqlamaymiz
+        SQLiteCursor cursor = null;
+        try {
+            cursor = database.queryFinalized(
+                "SELECT message_text FROM krypton_archive WHERE uid = " + uid + " AND mid = " + mid + " AND kind = 1 ORDER BY id DESC LIMIT 1"
+            );
+            if (cursor.next()) {
+                String lastText = cursor.stringValue(0);
+                if (text.equals(lastText)) {
+                    return;
+                }
+            }
+        } catch (Exception e) {
+            FileLog.e(e);
+        } finally {
+            if (cursor != null) {
+                cursor.dispose();
+            }
+        }
+
         insert(database, uid, mid, oldMessage, 1);
     }
 

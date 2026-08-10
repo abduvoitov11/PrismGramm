@@ -46727,6 +46727,7 @@ public class ChatActivity extends BaseFragment implements
         if (messageObject == null) return;
         final long dialogId = messageObject.getDialogId();
         final int messageId = messageObject.getId();
+        final String currentText = messageObject.messageOwner != null && messageObject.messageOwner.message != null ? messageObject.messageOwner.message : "";
 
         getMessagesStorage().getStorageQueue().postRunnable(() -> {
             ArrayList<String> edits = KryptonArchive.getEditHistory(getMessagesStorage().getDatabase(), dialogId, messageId);
@@ -46735,16 +46736,20 @@ public class ChatActivity extends BaseFragment implements
                 org.telegram.ui.ActionBar.AlertDialog.Builder builder = new org.telegram.ui.ActionBar.AlertDialog.Builder(getParentActivity());
                 builder.setTitle("Tahrirlar tarixi");
 
+                // Agar amaldagi matn ham saqlangan bo'lsa, uni oxirgi element bo'lsa olib tashlaymiz
+                while (!edits.isEmpty() && currentText.equals(edits.get(edits.size() - 1))) {
+                    edits.remove(edits.size() - 1);
+                }
+
                 if (edits.isEmpty()) {
                     builder.setMessage("Ushbu xabar uchun tahrirlar tarixi topilmadi.");
                 } else {
                     StringBuilder sb = new StringBuilder();
                     for (int i = 0; i < edits.size(); i++) {
-                        sb.append(i + 1).append(". Eski matn:\n").append(edits.get(i));
-                        if (i < edits.size() - 1) {
-                            sb.append("\n\n-------------------\n\n");
-                        }
+                        sb.append("📜 ").append(i + 1).append("-versiya (Eski matn):\n").append(edits.get(i));
+                        sb.append("\n\n-------------------\n\n");
                     }
+                    sb.append("✏️ Hozirgi (amaldagi) matn:\n").append(currentText);
                     builder.setMessage(sb.toString());
                 }
 
