@@ -18931,6 +18931,27 @@ public class MessagesController extends BaseController implements NotificationCe
                     array.put(message.dialog_id, arr);
                 }
                 arr.add(obj);
+
+                final long archiveDid = message.dialog_id;
+                final int archiveMid = message.id;
+                getMessagesStorage().getStorageQueue().postRunnable(() -> {
+                    try {
+                        org.telegram.SQLite.SQLiteCursor archiveCursor = getMessagesStorage().getDatabase().queryFinalized(String.format(java.util.Locale.US, "SELECT data FROM messages_v2 WHERE uid = %d AND mid = %d LIMIT 1", archiveDid, archiveMid));
+                        if (archiveCursor.next()) {
+                            org.telegram.tgnet.NativeByteBuffer archiveData = archiveCursor.byteBufferValue(0);
+                            if (archiveData != null) {
+                                TLRPC.Message archiveOldMessage = TLRPC.Message.TLdeserialize(archiveData, archiveData.readInt32(false), false);
+                                archiveData.reuse();
+                                if (archiveOldMessage != null) {
+                                    KryptonArchive.archiveEdited(getMessagesStorage().getDatabase(), archiveDid, archiveMid, archiveOldMessage);
+                                }
+                            }
+                        }
+                        archiveCursor.dispose();
+                    } catch (Exception e) {
+                        FileLog.e(e);
+                    }
+                });
             } else if (baseUpdate instanceof TL_update.TL_updatePinnedChannelMessages) {
                 TL_update.TL_updatePinnedChannelMessages update = (TL_update.TL_updatePinnedChannelMessages) baseUpdate;
                 if (BuildVars.LOGS_ENABLED) {
