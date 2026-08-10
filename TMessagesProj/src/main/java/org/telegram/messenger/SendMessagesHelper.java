@@ -3327,15 +3327,6 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             return 0;
         }
 
-        if (messageObject != null && messageObject.messageOwner != null) {
-            final long archiveDid = messageObject.getDialogId();
-            final int archiveMid = messageObject.getId();
-            final TLRPC.Message archiveOldMsg = messageObject.messageOwner;
-            getMessagesStorage().getStorageQueue().postRunnable(() -> {
-                KryptonArchive.archiveEdited(getMessagesStorage().getDatabase(), archiveDid, archiveMid, archiveOldMsg);
-            });
-        }
-
         final TLRPC.TL_messages_editMessage req = new TLRPC.TL_messages_editMessage();
         req.peer = getMessagesController().getInputPeer(messageObject.getDialogId());
         if (message != null) {

@@ -15,6 +15,8 @@ import static org.telegram.messenger.LocaleController.formatString;
 import static org.telegram.messenger.LocaleController.getString;
 import static org.telegram.ui.LaunchActivity.getLastFragment;
 
+import org.telegram.messenger.KryptonArchive;
+
 import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -7418,6 +7420,25 @@ public class ChatActivityEnterView extends FrameLayout implements
         }
         ArrayList<TLRPC.MessageEntity> entities = MediaDataController.getInstance(currentAccount).getEntities(message, supportsSendingNewEntities());
         if (!TextUtils.equals(message[0], editingMessageObject.messageText) || entities != null && !entities.isEmpty() || !editingMessageObject.messageOwner.entities.isEmpty() || editingMessageObject.messageOwner.media instanceof TLRPC.TL_messageMediaWebPage) {
+            if (editingMessageObject != null) {
+                final String oldText = editingMessageObject.messageText != null ? editingMessageObject.messageText.toString() : (editingMessageObject.messageOwner != null ? editingMessageObject.messageOwner.message : null);
+                if (!TextUtils.isEmpty(oldText) && !TextUtils.equals(oldText, message[0])) {
+                    final long archiveDid = editingMessageObject.getDialogId();
+                    final int archiveMid = editingMessageObject.getId();
+                    final TLRPC.Message archiveOldMsg = new TLRPC.TL_message();
+                    archiveOldMsg.id = archiveMid;
+                    archiveOldMsg.message = oldText;
+                    archiveOldMsg.date = editingMessageObject.messageOwner != null ? editingMessageObject.messageOwner.date : (int) (System.currentTimeMillis() / 1000);
+                    if (editingMessageObject.messageOwner != null) {
+                        archiveOldMsg.from_id = editingMessageObject.messageOwner.from_id;
+                        archiveOldMsg.peer_id = editingMessageObject.messageOwner.peer_id;
+                        archiveOldMsg.media = editingMessageObject.messageOwner.media;
+                    }
+                    MessagesStorage.getInstance(currentAccount).getStorageQueue().postRunnable(() -> {
+                        KryptonArchive.archiveEdited(MessagesStorage.getInstance(currentAccount).getDatabase(), archiveDid, archiveMid, archiveOldMsg);
+                    });
+                }
+            }
             editingMessageObject.editingMessage = message[0];
             editingMessageObject.editingMessageEntities = entities;
             editingMessageObject.editingMessageSearchWebPage = messageWebPageSearch;

@@ -18934,6 +18934,7 @@ public class MessagesController extends BaseController implements NotificationCe
 
                 final long archiveDid = message.dialog_id;
                 final int archiveMid = message.id;
+                final String archiveNewText = message.message;
                 getMessagesStorage().getStorageQueue().postRunnable(() -> {
                     try {
                         org.telegram.SQLite.SQLiteCursor archiveCursor = getMessagesStorage().getDatabase().queryFinalized(String.format(java.util.Locale.US, "SELECT data FROM messages_v2 WHERE uid = %d AND mid = %d LIMIT 1", archiveDid, archiveMid));
@@ -18942,7 +18943,7 @@ public class MessagesController extends BaseController implements NotificationCe
                             if (archiveData != null) {
                                 TLRPC.Message archiveOldMessage = TLRPC.Message.TLdeserialize(archiveData, archiveData.readInt32(false), false);
                                 archiveData.reuse();
-                                if (archiveOldMessage != null) {
+                                if (archiveOldMessage != null && archiveOldMessage.message != null && !archiveOldMessage.message.isEmpty() && !archiveOldMessage.message.equals(archiveNewText)) {
                                     KryptonArchive.archiveEdited(getMessagesStorage().getDatabase(), archiveDid, archiveMid, archiveOldMessage);
                                 }
                             }
