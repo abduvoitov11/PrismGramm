@@ -15,6 +15,8 @@ import static org.telegram.messenger.LocaleController.formatString;
 import static org.telegram.messenger.LocaleController.getString;
 import static org.telegram.ui.bots.AffiliateProgramFragment.percents;
 
+import org.telegram.messenger.KryptonArchive;
+
 import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -1235,6 +1237,7 @@ public class ChatActivity extends BaseFragment implements
     public final static int OPTION_GIFT = 108;
     public final static int OPTION_EDIT_TODO = 109;
     public final static int OPTION_ADD_TO_TODO = 110;
+    public final static int OPTION_EDIT_HISTORY = 999;
 
     public final static int OPTION_SUGGESTION_EDIT_PRICE = 111;
     public final static int OPTION_SUGGESTION_EDIT_TIME = 112;
@@ -33466,6 +33469,10 @@ public class ChatActivity extends BaseFragment implements
                 selectedObjectToEditCaption = null;
                 break;
             }
+            case OPTION_EDIT_HISTORY: {
+                showEditHistoryAlert(selectedObject);
+                break;
+            }
             case OPTION_EDIT_PRICE: {
                 final MessageObject msg = selectedObject;
                 TLRPC.TL_messageMediaPaidMedia paidMedia = (TLRPC.TL_messageMediaPaidMedia) selectedObject.messageOwner.media;
@@ -45662,6 +45669,11 @@ public class ChatActivity extends BaseFragment implements
                     options.add(OPTION_EDIT);
                     icons.add(R.drawable.msg_edit);
                 }
+                if (selectedObject != null && selectedObject.messageOwner != null && (selectedObject.messageOwner.edit_date != 0 || selectedObject.isKryptonDeleted())) {
+                    items.add("Tahrirlar tarixi");
+                    options.add(OPTION_EDIT_HISTORY);
+                    icons.add(R.drawable.msg_edit);
+                }
                 if (ChatObject.isMonoForum(currentChat) && selectedObject.getGroupId() == 0 && selectedObjectGroup == null && message != null && message.messageOwner != null && message.messageOwner.suggested_post == null && message.messageOwner.action == null) {
                     items.add(LocaleController.getString(R.string.EditOfferAdd));
                     options.add(OPTION_SUGGESTION_ADD_OFFER);
@@ -46709,6 +46721,37 @@ public class ChatActivity extends BaseFragment implements
             getThreadMessage(),
             true, 0, 0, null, 0, 0, getSendMonoForumPeerId(), 0
         );
+    }
+
+    private void showEditHistoryAlert(MessageObject messageObject) {
+        if (messageObject == null) return;
+        final long dialogId = messageObject.getDialogId();
+        final int messageId = messageObject.getId();
+
+        getMessagesStorage().getStorageQueue().postRunnable(() -> {
+            ArrayList<String> edits = KryptonArchive.getEditHistory(getMessagesStorage().getDatabase(), dialogId, messageId);
+            AndroidUtilities.runOnUIThread(() -> {
+                if (getParentActivity() == null) return;
+                org.telegram.ui.ActionBar.AlertDialog.Builder builder = new org.telegram.ui.ActionBar.AlertDialog.Builder(getParentActivity());
+                builder.setTitle("Tahrirlar tarixi");
+
+                if (edits.isEmpty()) {
+                    builder.setMessage("Ushbu xabar uchun tahrirlar tarixi topilmadi.");
+                } else {
+                    StringBuilder sb = new StringBuilder();
+                    for (int i = 0; i < edits.size(); i++) {
+                        sb.append(i + 1).append(". Eski matn:\n").append(edits.get(i));
+                        if (i < edits.size() - 1) {
+                            sb.append("\n\n-------------------\n\n");
+                        }
+                    }
+                    builder.setMessage(sb.toString());
+                }
+
+                builder.setPositiveButton(LocaleController.getString(R.string.OK), null);
+                showDialog(builder.create());
+            });
+        });
     }
 
     private abstract class ChatListRecyclerView extends RecyclerListViewInternal {
