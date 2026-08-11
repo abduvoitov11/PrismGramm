@@ -157,7 +157,7 @@ public class MessageDetailsPopupWrapper {
             if (messageObject.isPhoto() || messageObject.isSticker() || messageObject.isVideoSticker() || messageObject.isVideo() || messageObject.isGif()) {
                 try {
                     Dimension resolution = messageObject.isVideo() || messageObject.isVideoSticker() || messageObject.isGif() ? getVideoResolution(filePath) : getPhotoResolution(filePath);
-                    items.add(new Item(R.drawable.msg_photo, LocaleController.getString(R.string.Resolution), resolution.toString()));
+                    items.add(new Item(R.drawable.msg_photos, LocaleController.getString(R.string.Resolution), resolution.toString()));
                 } catch (Exception ignored) {}
             }
             if (messageObject.isMusic() || messageObject.isVoice() || messageObject.isRoundVideo() || messageObject.isVideo() || messageObject.isGif()) {
