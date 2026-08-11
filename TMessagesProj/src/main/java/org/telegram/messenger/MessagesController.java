@@ -20522,7 +20522,7 @@ public class MessagesController extends BaseController implements NotificationCe
                     for (int msgId : messageIds) {
                         TLRPC.Message msg = messagesStorage.getMessage(dialogId, msgId);
                         long topicId = msg != null ? MessageObject.getTopicId(currentAccount, msg, isForum(dialogId)) : 0;
-                        com.radolyn.ayugram.messages.AyuSavePreferences prefs = new com.radolyn.ayugram.messages.AyuSavePreferences(msg, currentAccount, dialogId, topicId, msgId, currentTimeS);
+                        com.radolyn.ayugram.messages.AyuSavePreferences prefs = new com.radolyn.ayugram.messages.AyuSavePreferences(msg, currentAccount, dialogId, (int) topicId, msgId, currentTimeS);
                         ayuMessagesController.onMessageDeleted(prefs);
                     }
                     final long dId = dialogId;
