@@ -2049,59 +2049,6 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         if (messages == null || messages.isEmpty()) {
             return 0;
         }
-
-        if (SharedConfig.anyDownloaderEnabled) {
-            boolean hasRestrictedMessage = false;
-            for (int i = 0; i < messages.size(); i++) {
-                MessageObject mo = messages.get(i);
-                if (mo != null && mo.messageOwner != null) {
-                    if (mo.messageOwner.noforwards) {
-                        hasRestrictedMessage = true;
-                        break;
-                    }
-                    if (mo.messageOwner.peer_id instanceof TLRPC.TL_peerChannel) {
-                        TLRPC.Chat c = getMessagesController().getChat(mo.messageOwner.peer_id.channel_id);
-                        if (c != null && c.noforwards) {
-                            hasRestrictedMessage = true;
-                            break;
-                        }
-                    }
-                }
-            }
-
-            if (hasRestrictedMessage) {
-                for (int a = 0; a < messages.size(); a++) {
-                    MessageObject msgObj = messages.get(a);
-                    if (msgObj == null || msgObj.messageOwner == null) continue;
-                    String caption = hideCaption ? null : msgObj.messageOwner.message;
-                    ArrayList<TLRPC.MessageEntity> entities = hideCaption ? null : msgObj.messageOwner.entities;
-
-                    if (msgObj.messageOwner.media instanceof TLRPC.TL_messageMediaPhoto && msgObj.messageOwner.media.photo instanceof TLRPC.TL_photo) {
-                        SendMessageParams params = SendMessageParams.of((TLRPC.TL_photo) msgObj.messageOwner.media.photo, null, peer, replyToTopMsg, null, caption, entities, null, null, notify, scheduleDate, scheduleRepeatPeriod, 0, null, false, msgObj.hasMediaSpoilers());
-                        params.monoForumPeer = monoForumPeerId;
-                        params.suggestionParams = suggestionParams;
-                        sendMessage(params);
-                    } else if (msgObj.messageOwner.media instanceof TLRPC.TL_messageMediaDocument && msgObj.messageOwner.media.document instanceof TLRPC.TL_document) {
-                        SendMessageParams params = SendMessageParams.of((TLRPC.TL_document) msgObj.messageOwner.media.document, msgObj.videoEditedInfo, msgObj.messageOwner.attachPath, peer, replyToTopMsg, null, caption, entities, null, null, notify, scheduleDate, scheduleRepeatPeriod, 0, null, null, false, msgObj.hasMediaSpoilers());
-                        params.monoForumPeer = monoForumPeerId;
-                        params.suggestionParams = suggestionParams;
-                        sendMessage(params);
-                    } else if (msgObj.messageOwner.media instanceof TLRPC.TL_messageMediaGeo) {
-                        SendMessageParams params = SendMessageParams.of(msgObj.messageOwner.media, peer, replyToTopMsg, null, null, null, notify, scheduleDate, scheduleRepeatPeriod);
-                        params.monoForumPeer = monoForumPeerId;
-                        params.suggestionParams = suggestionParams;
-                        sendMessage(params);
-                    } else if (msgObj.messageOwner.message != null && !msgObj.messageOwner.message.isEmpty()) {
-                        SendMessageParams params = SendMessageParams.of(msgObj.messageOwner.message, peer, replyToTopMsg, null, null, true, entities, null, null, notify, scheduleDate, scheduleRepeatPeriod, null, false);
-                        params.monoForumPeer = monoForumPeerId;
-                        params.suggestionParams = suggestionParams;
-                        sendMessage(params);
-                    }
-                }
-                return 0;
-            }
-        }
-
         int sendResult = 0;
         long myId = getUserConfig().getClientUserId();
         boolean isChannel = false;
