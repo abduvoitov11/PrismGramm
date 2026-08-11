@@ -254,7 +254,7 @@ public class UserConfig extends BaseController {
 
     public TLRPC.User getCurrentUser() {
         synchronized (sync) {
-            if (currentUser != null && (com.radolyn.ayugram.AyuConfig.localPremium || SharedConfig.localPremiumEnabled)) {
+            if (currentUser != null && com.radolyn.ayugram.AyuConfig.localPremium) {
                 currentUser.premium = true;
             }
             return currentUser;
@@ -575,7 +575,7 @@ public class UserConfig extends BaseController {
     }
 
     public boolean isPremium() {
-        if (com.radolyn.ayugram.AyuConfig.localPremium || SharedConfig.localPremiumEnabled) {
+        if (com.radolyn.ayugram.AyuConfig.localPremium) {
             if (currentUser != null) {
                 currentUser.premium = true;
             }

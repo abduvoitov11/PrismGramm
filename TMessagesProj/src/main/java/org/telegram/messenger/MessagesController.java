@@ -6700,7 +6700,7 @@ public class MessagesController extends BaseController implements NotificationCe
             return UserConfig.getInstance(currentAccount).getCurrentUser();
         }
         TLRPC.User user = users.get(id);
-        if (user != null && id == getUserConfig().getClientUserId() && (com.radolyn.ayugram.AyuConfig.localPremium || SharedConfig.localPremiumEnabled)) {
+        if (user != null && id == getUserConfig().getClientUserId() && com.radolyn.ayugram.AyuConfig.localPremium) {
             user.premium = true;
         }
         return user;
