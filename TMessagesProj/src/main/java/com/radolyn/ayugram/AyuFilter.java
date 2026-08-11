@@ -10,7 +10,8 @@
 package com.radolyn.ayugram;
 
 import android.text.TextUtils;
-import androidx.collection.LongSparseArray;
+import android.util.LongSparseArray;
+import com.exteragram.messenger.utils.ChatUtils;
 import org.telegram.messenger.MessageObject;
 
 import java.util.ArrayList;
@@ -78,7 +79,7 @@ public class AyuFilter {
             }
         }
 
-        res = isFiltered(msg.messageText != null ? msg.messageText : (msg.messageOwner != null ? msg.messageOwner.message : ""));
+        res = isFiltered(ChatUtils.getMessageText(msg, group));
 
         if (cached == null) {
             cached = new HashMap<>();

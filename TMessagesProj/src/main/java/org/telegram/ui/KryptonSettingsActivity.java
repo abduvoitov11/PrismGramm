@@ -55,6 +55,8 @@ public class KryptonSettingsActivity extends BaseFragment {
     private static final int ID_EDIT_HISTORY = 6;
     private static final int ID_SAVE_DELETED_MEDIA = 7;
 
+    private static final int ID_AYUGRAM_ADVANCED = 8;
+
     @Override
     public View createView(Context context) {
         actionBar.setBackButtonImage(R.drawable.ic_ab_back);
@@ -126,6 +128,8 @@ public class KryptonSettingsActivity extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(newState);
                 }
+            } else if (item.id == ID_AYUGRAM_ADVANCED) {
+                presentFragment(new com.radolyn.ayugram.ui.preferences.AyuGramPreferencesActivity());
             }
         });
 
@@ -158,6 +162,10 @@ public class KryptonSettingsActivity extends BaseFragment {
 
         items.add(new ItemInner(VIEW_TYPE_CHECK, ID_SAVE_DELETED_MEDIA, "O'chirilgan media fayllarni saqlash"));
         items.add(new ItemInner(VIEW_TYPE_SHADOW, 0, "O'chirilgan rasmlar, videolar va ovozli xabarlar qurilma keshidan o'chirib tashlanmaydi."));
+
+        items.add(new ItemInner(VIEW_TYPE_HEADER, 0, "AyuGram Kengaytirilgan Sozlamalari"));
+        items.add(new ItemInner(VIEW_TYPE_NAV, ID_AYUGRAM_ADVANCED, "Barcha AyuGram funksiyalari (Regex, AyuSync, DB)"));
+        items.add(new ItemInner(VIEW_TYPE_SHADOW, 0, "AyuGram'ning barcha nozik sozlamalari: xabarlarni filtrlash (Regex), AyuSync sinxronlash va kesh bazasini boshqarish."));
 
         items.add(new ItemInner(VIEW_TYPE_HEADER, 0, "Arxiv"));
         items.add(new ItemInner(VIEW_TYPE_NAV, ID_ARCHIVE, "O'chirilgan xabarlar arxivi"));

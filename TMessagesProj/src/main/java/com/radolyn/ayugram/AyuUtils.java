@@ -19,6 +19,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import androidx.core.util.Pair;
+import com.exteragram.messenger.utils.LocaleUtils;
 import com.google.android.exoplayer2.util.Log;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -249,7 +250,7 @@ public class AyuUtils {
             htmlParsed = new SpannableString(Html.fromHtml(text));
         }
 
-        return htmlParsed;
+        return LocaleUtils.formatWithURLs(htmlParsed);
     }
 
     public static boolean isMediaDownloadable(MessageObject message, boolean toGalleryOnly) {

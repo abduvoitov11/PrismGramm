@@ -40013,6 +40013,7 @@ public class TLRPC {
         public boolean call_active;
         public boolean call_not_empty;
         public boolean fake;
+        public boolean ayuNoforwards;
         public boolean gigagroup;
         public boolean noforwards;
         public boolean forum;
@@ -58860,6 +58861,7 @@ public class TLRPC {
         public int edit_date;
         public boolean kryptonDeleted;
         public boolean ayuDeleted;
+        public boolean ayuNoforwards;
         public boolean silent;
         public boolean post;
         public boolean from_scheduled;

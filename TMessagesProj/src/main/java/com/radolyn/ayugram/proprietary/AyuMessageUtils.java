@@ -115,4 +115,19 @@ public class AyuMessageUtils {
             msg.messageOwner.attachPath = editedMessage.mediaPath;
         }
     }
+
+    public static void map(EditedMessage editedMessage, TLRPC.Message msg, int currentAccount) {
+        if (editedMessage == null || msg == null) return;
+        msg.id = editedMessage.messageId;
+        msg.date = editedMessage.date;
+        msg.edit_date = editedMessage.editDate;
+        msg.message = editedMessage.text;
+    }
+
+    public static void mapMedia(EditedMessage editedMessage, TLRPC.Message msg) {
+        if (editedMessage == null || msg == null) return;
+        if (!TextUtils.isEmpty(editedMessage.mediaPath)) {
+            msg.attachPath = editedMessage.mediaPath;
+        }
+    }
 }
