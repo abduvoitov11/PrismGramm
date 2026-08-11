@@ -83,6 +83,12 @@ dependencies {
     // youtubedl-android for YouTube/Instagram downloads
     implementation "io.github.junkfood02.youtubedl-android:library:0.18.1"
     implementation "io.github.junkfood02.youtubedl-android:ffmpeg:0.18.1"
+
+    // AyuGram Room Database & Sync deps
+    implementation "androidx.room:room-runtime:2.5.2"
+    annotationProcessor "androidx.room:room-compiler:2.5.2"
+    implementation "dev.gustavoavila:java-android-websocket-client:2.0.2"
+    implementation "com.squareup.okhttp3:okhttp:4.10.0"
 }
 
 def isWindows = String.valueOf(DefaultNativePlatform.currentOperatingSystem.toFamilyName() == OperatingSystemFamily.WINDOWS)
@@ -106,8 +112,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
 
         coreLibraryDesugaringEnabled true
     }
