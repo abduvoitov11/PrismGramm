@@ -47,11 +47,13 @@ public class AyuGramPreferencesActivity extends BasePreferencesActivity implemen
     private int spyHeaderRow;
     private int saveDeletedMessagesRow;
     private int saveMessagesHistoryRow;
+    private int archiveRow;
     private int spyDivider1Row;
     private int messageSavingBtnRow;
     private int spyDivider2Row;
 
     private int qolHeaderRow;
+    private int mediaDownloaderRow;
     private int keepAliveServiceRow;
     private int disableAdsRow;
     private int localPremiumRow;
@@ -101,11 +103,13 @@ public class AyuGramPreferencesActivity extends BasePreferencesActivity implemen
         spyHeaderRow = newRow();
         saveDeletedMessagesRow = newRow();
         saveMessagesHistoryRow = newRow();
+        archiveRow = newRow();
         spyDivider1Row = newRow();
         messageSavingBtnRow = newRow();
         spyDivider2Row = newRow();
 
         qolHeaderRow = newRow();
+        mediaDownloaderRow = newRow();
         keepAliveServiceRow = newRow();
         disableAdsRow = newRow();
         localPremiumRow = newRow();
@@ -248,8 +252,12 @@ public class AyuGramPreferencesActivity extends BasePreferencesActivity implemen
         } else if (position == saveMessagesHistoryRow) {
             AyuConfig.editor.putBoolean("saveMessagesHistory", AyuConfig.saveMessagesHistory ^= true).apply();
             ((TextCheckCell) view).setChecked(AyuConfig.saveMessagesHistory);
+        } else if (position == archiveRow) {
+            presentFragment(new org.telegram.ui.KryptonArchiveActivity());
         } else if (position == messageSavingBtnRow) {
             presentFragment(new MessageSavingPreferencesActivity());
+        } else if (position == mediaDownloaderRow) {
+            presentFragment(new org.telegram.ui.KryptonMediaDownloaderActivity());
         } else if (position == keepAliveServiceRow) {
             AyuConfig.editor.putBoolean("keepAliveService", AyuConfig.keepAliveService ^= true).apply();
             ((TextCheckCell) view).setChecked(AyuConfig.keepAliveService);
@@ -329,7 +337,7 @@ public class AyuGramPreferencesActivity extends BasePreferencesActivity implemen
 
     @Override
     protected String getTitle() {
-        return LocaleController.getString(R.string.AyuPreferences);
+        return "Krypton Sozlamalari";
     }
 
     @Override
@@ -364,6 +372,10 @@ public class AyuGramPreferencesActivity extends BasePreferencesActivity implemen
                     textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
                     if (position == messageSavingBtnRow) {
                         textCell.setText(LocaleController.getString(R.string.MessageSavingBtn), false);
+                    } else if (position == archiveRow) {
+                        textCell.setTextAndIcon("O'chirilgan xabarlar arxivi", R.drawable.msg_archive, true);
+                    } else if (position == mediaDownloaderRow) {
+                        textCell.setTextAndIcon("Media Downloader (TikTok, YouTube, Insta)", R.drawable.msg_download, true);
                     } else if (position == deletedMarkTextRow) {
                         textCell.setTextAndValue(LocaleController.getString(R.string.DeletedMarkText), AyuConfig.getDeletedMark(), true);
                     } else if (position == editedMarkTextRow) {
@@ -486,6 +498,8 @@ public class AyuGramPreferencesActivity extends BasePreferencesActivity implemen
                 return 1;
             } else if (
                     position == messageSavingBtnRow ||
+                            position == archiveRow ||
+                            position == mediaDownloaderRow ||
                             position == deletedMarkTextRow ||
                             position == editedMarkTextRow ||
                             position == ayuSyncStatusBtnRow ||
