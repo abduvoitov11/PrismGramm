@@ -11,3 +11,6 @@ TMessagesProj/jniRes/
 TMessagesProj/afat/
 TMessagesProj_App/afat/
 TMessagesProj_AppStandalone/afat/
+*.apk
+*.idsig
+*.keystore

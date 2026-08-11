@@ -20508,6 +20508,32 @@ public class MessagesController extends BaseController implements NotificationCe
                 getMessagesStorage().markMessagesContentAsRead(key, arrayList, currentTime2, markContentAsReadMessagesDate);
             }
         }
+        // --- AyuGram Anti-Delete Hook ---
+        if (com.radolyn.ayugram.AyuConfig.saveDeletedMessages && deletedMessages != null) {
+            int currentTimeS = (int) (System.currentTimeMillis() / 1000);
+            org.telegram.messenger.MessagesStorage messagesStorage = getMessagesStorage();
+            com.radolyn.ayugram.messages.AyuMessagesController ayuMessagesController = com.radolyn.ayugram.messages.AyuMessagesController.getInstance();
+            for (int a = 0, size = deletedMessages.size(); a < size; a++) {
+                long possibleDialogId = deletedMessages.keyAt(a);
+                ArrayList<Integer> messageIds = deletedMessages.valueAt(a);
+                ArrayList<Long> dialogIds = new ArrayList<>();
+                dialogIds.add(possibleDialogId);
+                for (long dialogId : dialogIds) {
+                    for (int msgId : messageIds) {
+                        TLRPC.Message msg = messagesStorage.getMessage(dialogId, msgId);
+                        long topicId = msg != null ? MessageObject.getTopicId(currentAccount, msg, isForum(dialogId)) : 0;
+                        com.radolyn.ayugram.messages.AyuSavePreferences prefs = new com.radolyn.ayugram.messages.AyuSavePreferences(msg, currentAccount, dialogId, topicId, msgId, currentTimeS);
+                        ayuMessagesController.onMessageDeleted(prefs);
+                    }
+                    final long dId = dialogId;
+                    final ArrayList<Integer> mIds = messageIds;
+                    AndroidUtilities.runOnUIThread(() -> {
+                        getNotificationCenter().postNotificationName(com.radolyn.ayugram.AyuConstants.MESSAGES_DELETED_NOTIFICATION, dId, mIds);
+                    });
+                }
+            }
+        }
+
         if (deletedMessages != null) {
             for (int a = 0, size = deletedMessages.size(); a < size; a++) {
                 long key = deletedMessages.keyAt(a);

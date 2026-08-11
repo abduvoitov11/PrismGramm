@@ -677,6 +677,12 @@ public class SharedConfig {
             antiDeleteInChatEnabled = preferences.getBoolean("krypton_antiDeleteInChat", true);
             editHistoryEnabled = preferences.getBoolean("krypton_editHistory", true);
             saveDeletedMediaEnabled = preferences.getBoolean("krypton_saveDeletedMedia", true);
+
+            com.radolyn.ayugram.AyuConfig.setGhostMode(ghostModeEnabled);
+            com.radolyn.ayugram.AyuConfig.saveDeletedMessages = antiDeleteInChatEnabled;
+            com.radolyn.ayugram.AyuConfig.saveMessagesHistory = editHistoryEnabled;
+            com.radolyn.ayugram.AyuConfig.saveMedia = saveDeletedMediaEnabled;
+            com.radolyn.ayugram.AyuConfig.disableAds = hideSponsoredAds;
             hasEmailLogin = preferences.getBoolean("hasEmailLogin", false);
             isFloatingDebugActive = preferences.getBoolean("floatingDebugActive", false);
             updateStickersOrderOnSend = preferences.getBoolean("updateStickersOrderOnSend", true);
@@ -1770,6 +1776,7 @@ public class SharedConfig {
     public static void setGhostModeEnabled(boolean b) {
         ghostModeEnabled = b;
         ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE).edit().putBoolean("krypton_ghostMode", ghostModeEnabled).apply();
+        com.radolyn.ayugram.AyuConfig.setGhostMode(b);
         for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
             if (UserConfig.getInstance(a).isClientActivated()) {
                 MessagesController.getInstance(a).ignoreSetOnline = b;
@@ -1785,6 +1792,10 @@ public class SharedConfig {
     public static void setHideSponsoredAds(boolean b) {
         hideSponsoredAds = b;
         ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE).edit().putBoolean("krypton_hideAds", hideSponsoredAds).apply();
+        com.radolyn.ayugram.AyuConfig.disableAds = b;
+        if (com.radolyn.ayugram.AyuConfig.editor != null) {
+            com.radolyn.ayugram.AyuConfig.editor.putBoolean("disableAds", b).apply();
+        }
         if (b) {
             for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
                 if (UserConfig.getInstance(a).isClientActivated()) {
@@ -1797,16 +1808,28 @@ public class SharedConfig {
     public static void setAntiDeleteInChatEnabled(boolean b) {
         antiDeleteInChatEnabled = b;
         ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE).edit().putBoolean("krypton_antiDeleteInChat", antiDeleteInChatEnabled).apply();
+        com.radolyn.ayugram.AyuConfig.saveDeletedMessages = b;
+        if (com.radolyn.ayugram.AyuConfig.editor != null) {
+            com.radolyn.ayugram.AyuConfig.editor.putBoolean("saveDeletedMessages", b).apply();
+        }
     }
 
     public static void setEditHistoryEnabled(boolean b) {
         editHistoryEnabled = b;
         ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE).edit().putBoolean("krypton_editHistory", editHistoryEnabled).apply();
+        com.radolyn.ayugram.AyuConfig.saveMessagesHistory = b;
+        if (com.radolyn.ayugram.AyuConfig.editor != null) {
+            com.radolyn.ayugram.AyuConfig.editor.putBoolean("saveMessagesHistory", b).apply();
+        }
     }
 
     public static void setSaveDeletedMediaEnabled(boolean b) {
         saveDeletedMediaEnabled = b;
         ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE).edit().putBoolean("krypton_saveDeletedMedia", saveDeletedMediaEnabled).apply();
+        com.radolyn.ayugram.AyuConfig.saveMedia = b;
+        if (com.radolyn.ayugram.AyuConfig.editor != null) {
+            com.radolyn.ayugram.AyuConfig.editor.putBoolean("saveMedia", b).apply();
+        }
     }
 
     public static boolean canBlurChat() {

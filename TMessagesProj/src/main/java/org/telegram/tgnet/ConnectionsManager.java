@@ -1,6 +1,9 @@
 package org.telegram.tgnet;
 
 import android.annotation.SuppressLint;
+import com.radolyn.ayugram.AyuConfig;
+import com.radolyn.ayugram.utils.AyuState;
+import org.telegram.tgnet.tl.TL_account;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -371,6 +374,30 @@ public class ConnectionsManager extends BaseController {
     private void sendRequestInternal(TLObject object, RequestDelegate onComplete, RequestDelegateTimestamp onCompleteTimestamp, QuickAckDelegate onQuickAck, WriteToSocketDelegate onWriteToSocket, int flags, int datacenterId, int connectionType, boolean immediate, int requestToken) {
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("send request " + object + " with token = " + requestToken);
+        }
+
+        // --- AyuGram Ghost Mode Interception ---
+        if (!AyuConfig.sendOnlinePackets && object instanceof TL_account.updateStatus) {
+            ((TL_account.updateStatus) object).offline = true;
+        }
+
+        if (!AyuConfig.sendReadPackets && (
+                object instanceof TLRPC.TL_messages_readHistory ||
+                object instanceof TLRPC.TL_messages_readEncryptedHistory ||
+                object instanceof TLRPC.TL_messages_readDiscussion ||
+                object instanceof TLRPC.TL_messages_readMessageContents ||
+                object instanceof TLRPC.TL_channels_readHistory ||
+                object instanceof TLRPC.TL_channels_readMessageContents
+        )) {
+            if (!AyuState.getAllowReadPacket()) {
+                TLRPC.TL_messages_affectedMessages fakeRes = new TLRPC.TL_messages_affectedMessages();
+                fakeRes.pts = -1;
+                fakeRes.pts_count = 0;
+                if (onComplete != null) {
+                    onComplete.run(fakeRes, null);
+                }
+                return;
+            }
         }
         try {
             NativeByteBuffer buffer = new NativeByteBuffer(object.getObjectSize());

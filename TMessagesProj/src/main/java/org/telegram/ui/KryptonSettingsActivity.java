@@ -93,33 +93,38 @@ public class KryptonSettingsActivity extends BaseFragment {
             if (position < 0 || position >= items.size()) return;
             ItemInner item = items.get(position);
             if (item.id == ID_GHOST_MODE) {
-                SharedConfig.setGhostModeEnabled(!SharedConfig.ghostModeEnabled);
+                boolean newState = !SharedConfig.ghostModeEnabled;
+                SharedConfig.setGhostModeEnabled(newState);
                 if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(SharedConfig.ghostModeEnabled);
+                    ((TextCheckCell) view).setChecked(newState);
                 }
             } else if (item.id == ID_MEDIA_DOWNLOADER) {
                 presentFragment(new KryptonMediaDownloaderActivity());
             } else if (item.id == ID_ARCHIVE) {
                 presentFragment(new KryptonArchiveActivity());
             } else if (item.id == ID_HIDE_ADS) {
-                SharedConfig.setHideSponsoredAds(!SharedConfig.hideSponsoredAds);
+                boolean newState = !SharedConfig.hideSponsoredAds;
+                SharedConfig.setHideSponsoredAds(newState);
                 if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(SharedConfig.hideSponsoredAds);
+                    ((TextCheckCell) view).setChecked(newState);
                 }
             } else if (item.id == ID_ANTI_DELETE_IN_CHAT) {
-                SharedConfig.setAntiDeleteInChatEnabled(!SharedConfig.antiDeleteInChatEnabled);
+                boolean newState = !SharedConfig.antiDeleteInChatEnabled;
+                SharedConfig.setAntiDeleteInChatEnabled(newState);
                 if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(SharedConfig.antiDeleteInChatEnabled);
+                    ((TextCheckCell) view).setChecked(newState);
                 }
             } else if (item.id == ID_EDIT_HISTORY) {
-                SharedConfig.setEditHistoryEnabled(!SharedConfig.editHistoryEnabled);
+                boolean newState = !SharedConfig.editHistoryEnabled;
+                SharedConfig.setEditHistoryEnabled(newState);
                 if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(SharedConfig.editHistoryEnabled);
+                    ((TextCheckCell) view).setChecked(newState);
                 }
             } else if (item.id == ID_SAVE_DELETED_MEDIA) {
-                SharedConfig.setSaveDeletedMediaEnabled(!SharedConfig.saveDeletedMediaEnabled);
+                boolean newState = !SharedConfig.saveDeletedMediaEnabled;
+                SharedConfig.setSaveDeletedMediaEnabled(newState);
                 if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(SharedConfig.saveDeletedMediaEnabled);
+                    ((TextCheckCell) view).setChecked(newState);
                 }
             }
         });

@@ -58859,6 +58859,7 @@ public class TLRPC {
         public MessageReplies replies;
         public int edit_date;
         public boolean kryptonDeleted;
+        public boolean ayuDeleted;
         public boolean silent;
         public boolean post;
         public boolean from_scheduled;
