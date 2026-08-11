@@ -22417,7 +22417,7 @@ public class TLRPC {
             bot_chat_history = hasFlag(flags, FLAG_15);
             bot_nochats = hasFlag(flags, FLAG_16);
             verified = hasFlag(flags, FLAG_17);
-            restricted = hasFlag(flags, FLAG_18);
+            restricted = false;
             min = hasFlag(flags, FLAG_20);
             bot_inline_geo = hasFlag(flags, FLAG_21);
             support = hasFlag(flags, FLAG_23);
@@ -22623,7 +22623,7 @@ public class TLRPC {
             bot_chat_history = hasFlag(flags, FLAG_15);
             bot_nochats = hasFlag(flags, FLAG_16);
             verified = hasFlag(flags, FLAG_17);
-            restricted = hasFlag(flags, FLAG_18);
+            restricted = false;
             min = hasFlag(flags, FLAG_20);
             bot_inline_geo = hasFlag(flags, FLAG_21);
             support = hasFlag(flags, FLAG_23);
@@ -22822,7 +22822,7 @@ public class TLRPC {
             bot_chat_history = hasFlag(flags, FLAG_15);
             bot_nochats = hasFlag(flags, FLAG_16);
             verified = hasFlag(flags, FLAG_17);
-            restricted = hasFlag(flags, FLAG_18);
+            restricted = false;
             min = hasFlag(flags, FLAG_20);
             bot_inline_geo = hasFlag(flags, FLAG_21);
             support = hasFlag(flags, FLAG_23);
@@ -23012,7 +23012,7 @@ public class TLRPC {
             bot_chat_history = hasFlag(flags, FLAG_15);
             bot_nochats = hasFlag(flags, FLAG_16);
             verified = hasFlag(flags, FLAG_17);
-            restricted = hasFlag(flags, FLAG_18);
+            restricted = false;
             min = hasFlag(flags, FLAG_20);
             bot_inline_geo = hasFlag(flags, FLAG_21);
             support = hasFlag(flags, FLAG_23);
@@ -23202,7 +23202,7 @@ public class TLRPC {
             bot_chat_history = hasFlag(flags, FLAG_15);
             bot_nochats = hasFlag(flags, FLAG_16);
             verified = hasFlag(flags, FLAG_17);
-            restricted = hasFlag(flags, FLAG_18);
+            restricted = false;
             min = hasFlag(flags, FLAG_20);
             bot_inline_geo = hasFlag(flags, FLAG_21);
             support = hasFlag(flags, FLAG_23);
@@ -23392,7 +23392,7 @@ public class TLRPC {
             bot_chat_history = hasFlag(flags, FLAG_15);
             bot_nochats = hasFlag(flags, FLAG_16);
             verified = hasFlag(flags, FLAG_17);
-            restricted = hasFlag(flags, FLAG_18);
+            restricted = false;
             min = hasFlag(flags, FLAG_20);
             bot_inline_geo = hasFlag(flags, FLAG_21);
             support = hasFlag(flags, FLAG_23);
@@ -23576,7 +23576,7 @@ public class TLRPC {
             bot_chat_history = hasFlag(flags, FLAG_15);
             bot_nochats = hasFlag(flags, FLAG_16);
             verified = hasFlag(flags, FLAG_17);
-            restricted = hasFlag(flags, FLAG_18);
+            restricted = false;
             min = hasFlag(flags, FLAG_20);
             bot_inline_geo = hasFlag(flags, FLAG_21);
             support = hasFlag(flags, FLAG_23);
@@ -23758,7 +23758,7 @@ public class TLRPC {
             bot_chat_history = hasFlag(flags, FLAG_15);
             bot_nochats = hasFlag(flags, FLAG_16);
             verified = hasFlag(flags, FLAG_17);
-            restricted = hasFlag(flags, FLAG_18);
+            restricted = false;
             min = hasFlag(flags, FLAG_20);
             bot_inline_geo = hasFlag(flags, FLAG_21);
             support = hasFlag(flags, FLAG_23);
@@ -23934,7 +23934,7 @@ public class TLRPC {
             bot_chat_history = hasFlag(flags, FLAG_15);
             bot_nochats = hasFlag(flags, FLAG_16);
             verified = hasFlag(flags, FLAG_17);
-            restricted = hasFlag(flags, FLAG_18);
+            restricted = false;
             min = hasFlag(flags, FLAG_20);
             bot_inline_geo = hasFlag(flags, FLAG_21);
             support = hasFlag(flags, FLAG_23);
@@ -24105,7 +24105,7 @@ public class TLRPC {
             bot_chat_history = hasFlag(flags, FLAG_15);
             bot_nochats = hasFlag(flags, FLAG_16);
             verified = hasFlag(flags, FLAG_17);
-            restricted = hasFlag(flags, FLAG_18);
+            restricted = false;
             min = hasFlag(flags, FLAG_20);
             bot_inline_geo = hasFlag(flags, FLAG_21);
             support = hasFlag(flags, FLAG_23);
@@ -24259,7 +24259,7 @@ public class TLRPC {
             bot_chat_history = hasFlag(flags, FLAG_15);
             bot_nochats = hasFlag(flags, FLAG_16);
             verified = hasFlag(flags, FLAG_17);
-            restricted = hasFlag(flags, FLAG_18);
+            restricted = false;
             min = hasFlag(flags, FLAG_20);
             bot_inline_geo = hasFlag(flags, FLAG_21);
             support = hasFlag(flags, FLAG_23);
@@ -24399,7 +24399,7 @@ public class TLRPC {
             bot_chat_history = hasFlag(flags, FLAG_15);
             bot_nochats = hasFlag(flags, FLAG_16);
             verified = hasFlag(flags, FLAG_17);
-            restricted = hasFlag(flags, FLAG_18);
+            restricted = false;
             min = hasFlag(flags, FLAG_20);
             bot_inline_geo = hasFlag(flags, FLAG_21);
             support = hasFlag(flags, FLAG_23);
@@ -24522,7 +24522,7 @@ public class TLRPC {
             bot_chat_history = hasFlag(flags, FLAG_15);
             bot_nochats = hasFlag(flags, FLAG_16);
             verified = hasFlag(flags, FLAG_17);
-            restricted = hasFlag(flags, FLAG_18);
+            restricted = false;
             min = hasFlag(flags, FLAG_20);
             bot_inline_geo = hasFlag(flags, FLAG_21);
             support = hasFlag(flags, FLAG_23);
@@ -24637,7 +24637,7 @@ public class TLRPC {
             bot_chat_history = hasFlag(flags, FLAG_15);
             bot_nochats = hasFlag(flags, FLAG_16);
             verified = hasFlag(flags, FLAG_17);
-            restricted = hasFlag(flags, FLAG_18);
+            restricted = false;
             min = hasFlag(flags, FLAG_20);
             bot_inline_geo = hasFlag(flags, FLAG_21);
             support = hasFlag(flags, FLAG_23);
@@ -24748,7 +24748,7 @@ public class TLRPC {
             bot_chat_history = hasFlag(flags, FLAG_15);
             bot_nochats = hasFlag(flags, FLAG_16);
             verified = hasFlag(flags, FLAG_17);
-            restricted = hasFlag(flags, FLAG_18);
+            restricted = false;
             min = hasFlag(flags, FLAG_20);
             bot_inline_geo = hasFlag(flags, FLAG_21);
             support = hasFlag(flags, FLAG_23);
@@ -25054,7 +25054,7 @@ public class TLRPC {
             bot_chat_history = hasFlag(flags, FLAG_15);
             bot_nochats = hasFlag(flags, FLAG_16);
             verified = hasFlag(flags, FLAG_17);
-            restricted = hasFlag(flags, FLAG_18);
+            restricted = false;
             min = hasFlag(flags, FLAG_20);
             bot_inline_geo = hasFlag(flags, FLAG_21);
             id = stream.readInt32(exception);
@@ -33955,7 +33955,7 @@ public class TLRPC {
 
         public void readParams(InputSerializedData stream, boolean exception) {
             flags = stream.readInt32(exception);
-            history_deleted = hasFlag(flags, FLAG_0);
+            history_deleted = false;
             id = stream.readInt32(exception);
         }
 
@@ -40271,7 +40271,8 @@ public class TLRPC {
             deactivated = hasFlag(flags, FLAG_5);
             call_active = hasFlag(flags, FLAG_23);
             call_not_empty = hasFlag(flags, FLAG_24);
-            noforwards = hasFlag(flags, FLAG_25);
+            noforwards = false;
+            ayuNoforwards = hasFlag(flags, FLAG_25);
             id = stream.readInt64(exception);
             title = stream.readString(exception);
             photo = ChatPhoto.TLdeserialize(stream, stream.readInt32(exception), exception, allowStrippedThumb);
@@ -40297,7 +40298,7 @@ public class TLRPC {
             flags = setFlag(flags, FLAG_5, deactivated);
             flags = setFlag(flags, FLAG_23, call_active);
             flags = setFlag(flags, FLAG_24, call_not_empty);
-            flags = setFlag(flags, FLAG_25, noforwards);
+            flags = setFlag(flags, FLAG_25, ayuNoforwards);
             stream.writeInt32(flags);
             stream.writeInt64(id);
             stream.writeString(title);
@@ -40467,7 +40468,7 @@ public class TLRPC {
             broadcast = hasFlag(flags, FLAG_5);
             verified = hasFlag(flags, FLAG_7);
             megagroup = hasFlag(flags, FLAG_8);
-            restricted = hasFlag(flags, FLAG_9);
+            restricted = false;
             signatures = hasFlag(flags, FLAG_11);
             id = stream.readInt32(exception);
             access_hash = stream.readInt64(exception);
@@ -40537,7 +40538,7 @@ public class TLRPC {
             broadcast = hasFlag(flags, FLAG_5);
             verified = hasFlag(flags, FLAG_7);
             megagroup = hasFlag(flags, FLAG_8);
-            restricted = hasFlag(flags, FLAG_9);
+            restricted = false;
             signatures = hasFlag(flags, FLAG_11);
             min = hasFlag(flags, FLAG_12);
             scam = hasFlag(flags, FLAG_19);
@@ -40548,7 +40549,8 @@ public class TLRPC {
             call_not_empty = hasFlag(flags, FLAG_24);
             fake = hasFlag(flags, FLAG_25);
             gigagroup = hasFlag(flags, FLAG_26);
-            noforwards = hasFlag(flags, FLAG_27);
+            noforwards = false;
+            ayuNoforwards = hasFlag(flags, FLAG_27);
             join_to_send = hasFlag(flags, FLAG_28);
             join_request = hasFlag(flags, FLAG_29);
             forum = hasFlag(flags, FLAG_30);
@@ -40615,7 +40617,7 @@ public class TLRPC {
             flags = setFlag(flags, FLAG_24, call_not_empty);
             flags = setFlag(flags, FLAG_25, fake);
             flags = setFlag(flags, FLAG_26, gigagroup);
-            flags = setFlag(flags, FLAG_27, noforwards);
+            flags = setFlag(flags, FLAG_27, ayuNoforwards);
             flags = setFlag(flags, FLAG_28, join_to_send);
             flags = setFlag(flags, FLAG_29, join_request);
             flags = setFlag(flags, FLAG_30, forum);
@@ -40674,7 +40676,7 @@ public class TLRPC {
             broadcast = hasFlag(flags, FLAG_5);
             verified = hasFlag(flags, FLAG_7);
             megagroup = hasFlag(flags, FLAG_8);
-            restricted = hasFlag(flags, FLAG_9);
+            restricted = false;
             signatures = hasFlag(flags, FLAG_11);
             min = hasFlag(flags, FLAG_12);
             scam = hasFlag(flags, FLAG_19);
@@ -40685,7 +40687,8 @@ public class TLRPC {
             call_not_empty = hasFlag(flags, FLAG_24);
             fake = hasFlag(flags, FLAG_25);
             gigagroup = hasFlag(flags, FLAG_26);
-            noforwards = hasFlag(flags, FLAG_27);
+            noforwards = false;
+            ayuNoforwards = hasFlag(flags, FLAG_27);
             join_to_send = hasFlag(flags, FLAG_28);
             join_request = hasFlag(flags, FLAG_29);
             forum = hasFlag(flags, FLAG_30);
@@ -40755,7 +40758,7 @@ public class TLRPC {
             flags = setFlag(flags, FLAG_24, call_not_empty);
             flags = setFlag(flags, FLAG_25, fake);
             flags = setFlag(flags, FLAG_26, gigagroup);
-            flags = setFlag(flags, FLAG_27, noforwards);
+            flags = setFlag(flags, FLAG_27, ayuNoforwards);
             flags = setFlag(flags, FLAG_28, join_to_send);
             flags = setFlag(flags, FLAG_29, join_request);
             flags = setFlag(flags, FLAG_30, forum);
@@ -40817,7 +40820,7 @@ public class TLRPC {
             broadcast = hasFlag(flags, FLAG_5);
             verified = hasFlag(flags, FLAG_7);
             megagroup = hasFlag(flags, FLAG_8);
-            restricted = hasFlag(flags, FLAG_9);
+            restricted = false;
             signatures = hasFlag(flags, FLAG_11);
             min = hasFlag(flags, FLAG_12);
             scam = hasFlag(flags, FLAG_19);
@@ -40828,7 +40831,8 @@ public class TLRPC {
             call_not_empty = hasFlag(flags, FLAG_24);
             fake = hasFlag(flags, FLAG_25);
             gigagroup = hasFlag(flags, FLAG_26);
-            noforwards = hasFlag(flags, FLAG_27);
+            noforwards = false;
+            ayuNoforwards = hasFlag(flags, FLAG_27);
             join_to_send = hasFlag(flags, FLAG_28);
             join_request = hasFlag(flags, FLAG_29);
             forum = hasFlag(flags, FLAG_30);
@@ -40916,7 +40920,7 @@ public class TLRPC {
             flags = setFlag(flags, FLAG_24, call_not_empty);
             flags = setFlag(flags, FLAG_25, fake);
             flags = setFlag(flags, FLAG_26, gigagroup);
-            flags = setFlag(flags, FLAG_27, noforwards);
+            flags = setFlag(flags, FLAG_27, ayuNoforwards);
             flags = setFlag(flags, FLAG_28, join_to_send);
             flags = setFlag(flags, FLAG_29, join_request);
             flags = setFlag(flags, FLAG_30, forum);
@@ -40998,7 +41002,7 @@ public class TLRPC {
             broadcast = hasFlag(flags, FLAG_5);
             verified = hasFlag(flags, FLAG_7);
             megagroup = hasFlag(flags, FLAG_8);
-            restricted = hasFlag(flags, FLAG_9);
+            restricted = false;
             signatures = hasFlag(flags, FLAG_11);
             min = hasFlag(flags, FLAG_12);
             scam = hasFlag(flags, FLAG_19);
@@ -41009,7 +41013,8 @@ public class TLRPC {
             call_not_empty = hasFlag(flags, FLAG_24);
             fake = hasFlag(flags, FLAG_25);
             gigagroup = hasFlag(flags, FLAG_26);
-            noforwards = hasFlag(flags, FLAG_27);
+            noforwards = false;
+            ayuNoforwards = hasFlag(flags, FLAG_27);
             join_to_send = hasFlag(flags, FLAG_28);
             join_request = hasFlag(flags, FLAG_29);
             forum = hasFlag(flags, FLAG_30);
@@ -41099,7 +41104,7 @@ public class TLRPC {
             flags = setFlag(flags, FLAG_24, call_not_empty);
             flags = setFlag(flags, FLAG_25, fake);
             flags = setFlag(flags, FLAG_26, gigagroup);
-            flags = setFlag(flags, FLAG_27, noforwards);
+            flags = setFlag(flags, FLAG_27, ayuNoforwards);
             flags = setFlag(flags, FLAG_28, join_to_send);
             flags = setFlag(flags, FLAG_29, join_request);
             flags = setFlag(flags, FLAG_30, forum);
@@ -41181,7 +41186,7 @@ public class TLRPC {
             broadcast = hasFlag(flags, FLAG_5);
             verified = hasFlag(flags, FLAG_7);
             megagroup = hasFlag(flags, FLAG_8);
-            restricted = hasFlag(flags, FLAG_9);
+            restricted = false;
             signatures = hasFlag(flags, FLAG_11);
             min = hasFlag(flags, FLAG_12);
             scam = hasFlag(flags, FLAG_19);
@@ -41192,7 +41197,8 @@ public class TLRPC {
             call_not_empty = hasFlag(flags, FLAG_24);
             fake = hasFlag(flags, FLAG_25);
             gigagroup = hasFlag(flags, FLAG_26);
-            noforwards = hasFlag(flags, FLAG_27);
+            noforwards = false;
+            ayuNoforwards = hasFlag(flags, FLAG_27);
             join_to_send = hasFlag(flags, FLAG_28);
             join_request = hasFlag(flags, FLAG_29);
             forum = hasFlag(flags, FLAG_30);
@@ -41276,7 +41282,7 @@ public class TLRPC {
             flags = setFlag(flags, FLAG_24, call_not_empty);
             flags = setFlag(flags, FLAG_25, fake);
             flags = setFlag(flags, FLAG_26, gigagroup);
-            flags = setFlag(flags, FLAG_27, noforwards);
+            flags = setFlag(flags, FLAG_27, ayuNoforwards);
             flags = setFlag(flags, FLAG_28, join_to_send);
             flags = setFlag(flags, FLAG_29, join_request);
             flags = setFlag(flags, FLAG_30, forum);
@@ -41352,7 +41358,7 @@ public class TLRPC {
             broadcast = hasFlag(flags, FLAG_5);
             verified = hasFlag(flags, FLAG_7);
             megagroup = hasFlag(flags, FLAG_8);
-            restricted = hasFlag(flags, FLAG_9);
+            restricted = false;
             signatures = hasFlag(flags, FLAG_11);
             min = hasFlag(flags, FLAG_12);
             scam = hasFlag(flags, FLAG_19);
@@ -41363,7 +41369,8 @@ public class TLRPC {
             call_not_empty = hasFlag(flags, FLAG_24);
             fake = hasFlag(flags, FLAG_25);
             gigagroup = hasFlag(flags, FLAG_26);
-            noforwards = hasFlag(flags, FLAG_27);
+            noforwards = false;
+            ayuNoforwards = hasFlag(flags, FLAG_27);
             join_to_send = hasFlag(flags, FLAG_28);
             join_request = hasFlag(flags, FLAG_29);
             forum = hasFlag(flags, FLAG_30);
@@ -41443,7 +41450,7 @@ public class TLRPC {
             flags = setFlag(flags, FLAG_24, call_not_empty);
             flags = setFlag(flags, FLAG_25, fake);
             flags = setFlag(flags, FLAG_26, gigagroup);
-            flags = setFlag(flags, FLAG_27, noforwards);
+            flags = setFlag(flags, FLAG_27, ayuNoforwards);
             flags = setFlag(flags, FLAG_28, join_to_send);
             flags = setFlag(flags, FLAG_29, join_request);
             flags = setFlag(flags, FLAG_30, forum);
@@ -41515,7 +41522,7 @@ public class TLRPC {
             broadcast = hasFlag(flags, FLAG_5);
             verified = hasFlag(flags, FLAG_7);
             megagroup = hasFlag(flags, FLAG_8);
-            restricted = hasFlag(flags, FLAG_9);
+            restricted = false;
             signatures = hasFlag(flags, FLAG_11);
             min = hasFlag(flags, FLAG_12);
             scam = hasFlag(flags, FLAG_19);
@@ -41526,7 +41533,8 @@ public class TLRPC {
             call_not_empty = hasFlag(flags, FLAG_24);
             fake = hasFlag(flags, FLAG_25);
             gigagroup = hasFlag(flags, FLAG_26);
-            noforwards = hasFlag(flags, FLAG_27);
+            noforwards = false;
+            ayuNoforwards = hasFlag(flags, FLAG_27);
             join_to_send = hasFlag(flags, FLAG_28);
             join_request = hasFlag(flags, FLAG_29);
             forum = hasFlag(flags, FLAG_30);
@@ -41606,7 +41614,7 @@ public class TLRPC {
             flags = setFlag(flags, FLAG_24, call_not_empty);
             flags = setFlag(flags, FLAG_25, fake);
             flags = setFlag(flags, FLAG_26, gigagroup);
-            flags = setFlag(flags, FLAG_27, noforwards);
+            flags = setFlag(flags, FLAG_27, ayuNoforwards);
             flags = setFlag(flags, FLAG_28, join_to_send);
             flags = setFlag(flags, FLAG_29, join_request);
             flags = setFlag(flags, FLAG_30, forum);
@@ -41678,7 +41686,7 @@ public class TLRPC {
             broadcast = hasFlag(flags, FLAG_5);
             verified = hasFlag(flags, FLAG_7);
             megagroup = hasFlag(flags, FLAG_8);
-            restricted = hasFlag(flags, FLAG_9);
+            restricted = false;
             signatures = hasFlag(flags, FLAG_11);
             min = hasFlag(flags, FLAG_12);
             scam = hasFlag(flags, FLAG_19);
@@ -41689,7 +41697,8 @@ public class TLRPC {
             call_not_empty = hasFlag(flags, FLAG_24);
             fake = hasFlag(flags, FLAG_25);
             gigagroup = hasFlag(flags, FLAG_26);
-            noforwards = hasFlag(flags, FLAG_27);
+            noforwards = false;
+            ayuNoforwards = hasFlag(flags, FLAG_27);
             join_to_send = hasFlag(flags, FLAG_28);
             join_request = hasFlag(flags, FLAG_29);
             forum = hasFlag(flags, FLAG_30);
@@ -41766,7 +41775,7 @@ public class TLRPC {
             flags = setFlag(flags, FLAG_24, call_not_empty);
             flags = setFlag(flags, FLAG_25, fake);
             flags = setFlag(flags, FLAG_26, gigagroup);
-            flags = setFlag(flags, FLAG_27, noforwards);
+            flags = setFlag(flags, FLAG_27, ayuNoforwards);
             flags = setFlag(flags, FLAG_28, join_to_send);
             flags = setFlag(flags, FLAG_29, join_request);
             flags = setFlag(flags, FLAG_30, forum);
@@ -41835,7 +41844,7 @@ public class TLRPC {
             broadcast = hasFlag(flags, FLAG_5);
             verified = hasFlag(flags, FLAG_7);
             megagroup = hasFlag(flags, FLAG_8);
-            restricted = hasFlag(flags, FLAG_9);
+            restricted = false;
             signatures = hasFlag(flags, FLAG_11);
             min = hasFlag(flags, FLAG_12);
             scam = hasFlag(flags, FLAG_19);
@@ -41846,7 +41855,8 @@ public class TLRPC {
             call_not_empty = hasFlag(flags, FLAG_24);
             fake = hasFlag(flags, FLAG_25);
             gigagroup = hasFlag(flags, FLAG_26);
-            noforwards = hasFlag(flags, FLAG_27);
+            noforwards = false;
+            ayuNoforwards = hasFlag(flags, FLAG_27);
             join_to_send = hasFlag(flags, FLAG_28);
             join_request = hasFlag(flags, FLAG_29);
             forum = hasFlag(flags, FLAG_30);
@@ -41919,7 +41929,7 @@ public class TLRPC {
             flags = setFlag(flags, FLAG_24, call_not_empty);
             flags = setFlag(flags, FLAG_25, fake);
             flags = setFlag(flags, FLAG_26, gigagroup);
-            flags = setFlag(flags, FLAG_27, noforwards);
+            flags = setFlag(flags, FLAG_27, ayuNoforwards);
             flags = setFlag(flags, FLAG_28, join_to_send);
             flags = setFlag(flags, FLAG_29, join_request);
             flags = setFlag(flags, FLAG_30, forum);
@@ -41984,7 +41994,7 @@ public class TLRPC {
             broadcast = hasFlag(flags, FLAG_5);
             verified = hasFlag(flags, FLAG_7);
             megagroup = hasFlag(flags, FLAG_8);
-            restricted = hasFlag(flags, FLAG_9);
+            restricted = false;
             signatures = hasFlag(flags, FLAG_11);
             min = hasFlag(flags, FLAG_12);
             scam = hasFlag(flags, FLAG_19);
@@ -41995,7 +42005,8 @@ public class TLRPC {
             call_not_empty = hasFlag(flags, FLAG_24);
             fake = hasFlag(flags, FLAG_25);
             gigagroup = hasFlag(flags, FLAG_26);
-            noforwards = hasFlag(flags, FLAG_27);
+            noforwards = false;
+            ayuNoforwards = hasFlag(flags, FLAG_27);
             join_to_send = hasFlag(flags, FLAG_28);
             join_request = hasFlag(flags, FLAG_29);
             forum = hasFlag(flags, FLAG_30);
@@ -42059,7 +42070,7 @@ public class TLRPC {
             flags = setFlag(flags, FLAG_24, call_not_empty);
             flags = setFlag(flags, FLAG_25, fake);
             flags = setFlag(flags, FLAG_26, gigagroup);
-            flags = setFlag(flags, FLAG_27, noforwards);
+            flags = setFlag(flags, FLAG_27, ayuNoforwards);
             flags = setFlag(flags, FLAG_28, join_to_send);
             flags = setFlag(flags, FLAG_29, join_request);
             flags = setFlag(flags, FLAG_30, forum);
@@ -42115,7 +42126,7 @@ public class TLRPC {
             broadcast = hasFlag(flags, FLAG_5);
             verified = hasFlag(flags, FLAG_7);
             megagroup = hasFlag(flags, FLAG_8);
-            restricted = hasFlag(flags, FLAG_9);
+            restricted = false;
             signatures = hasFlag(flags, FLAG_11);
             min = hasFlag(flags, FLAG_12);
             scam = hasFlag(flags, FLAG_19);
@@ -42126,7 +42137,8 @@ public class TLRPC {
             call_not_empty = hasFlag(flags, FLAG_24);
             fake = hasFlag(flags, FLAG_25);
             gigagroup = hasFlag(flags, FLAG_26);
-            noforwards = hasFlag(flags, FLAG_27);
+            noforwards = false;
+            ayuNoforwards = hasFlag(flags, FLAG_27);
             join_to_send = hasFlag(flags, FLAG_28);
             join_request = hasFlag(flags, FLAG_29);
             forum = hasFlag(flags, FLAG_30);
@@ -42198,7 +42210,7 @@ public class TLRPC {
             flags = setFlag(flags, FLAG_24, call_not_empty);
             flags = setFlag(flags, FLAG_25, fake);
             flags = setFlag(flags, FLAG_26, gigagroup);
-            flags = setFlag(flags, FLAG_27, noforwards);
+            flags = setFlag(flags, FLAG_27, ayuNoforwards);
             flags = setFlag(flags, FLAG_28, join_to_send);
             flags = setFlag(flags, FLAG_29, join_request);
             flags = setFlag(flags, FLAG_30, forum);
@@ -42257,7 +42269,7 @@ public class TLRPC {
             broadcast = hasFlag(flags, FLAG_5);
             verified = hasFlag(flags, FLAG_7);
             megagroup = hasFlag(flags, FLAG_8);
-            restricted = hasFlag(flags, FLAG_9);
+            restricted = false;
             signatures = hasFlag(flags, FLAG_11);
             min = hasFlag(flags, FLAG_12);
             scam = hasFlag(flags, FLAG_19);
@@ -42268,7 +42280,8 @@ public class TLRPC {
             call_not_empty = hasFlag(flags, FLAG_24);
             fake = hasFlag(flags, FLAG_25);
             gigagroup = hasFlag(flags, FLAG_26);
-            noforwards = hasFlag(flags, FLAG_27);
+            noforwards = false;
+            ayuNoforwards = hasFlag(flags, FLAG_27);
             join_to_send = hasFlag(flags, FLAG_28);
             join_request = hasFlag(flags, FLAG_29);
             forum = hasFlag(flags, FLAG_30);
@@ -42334,7 +42347,7 @@ public class TLRPC {
             flags = setFlag(flags, FLAG_24, call_not_empty);
             flags = setFlag(flags, FLAG_25, fake);
             flags = setFlag(flags, FLAG_26, gigagroup);
-            flags = setFlag(flags, FLAG_27, noforwards);
+            flags = setFlag(flags, FLAG_27, ayuNoforwards);
             flags = setFlag(flags, FLAG_28, join_to_send);
             flags = setFlag(flags, FLAG_29, join_request);
             flags = setFlag(flags, FLAG_30, forum);
@@ -42395,7 +42408,7 @@ public class TLRPC {
             broadcast = hasFlag(flags, FLAG_5);
             verified = hasFlag(flags, FLAG_7);
             megagroup = hasFlag(flags, FLAG_8);
-            restricted = hasFlag(flags, FLAG_9);
+            restricted = false;
             signatures = hasFlag(flags, FLAG_11);
             min = hasFlag(flags, FLAG_12);
             scam = hasFlag(flags, FLAG_19);
@@ -42406,7 +42419,8 @@ public class TLRPC {
             call_not_empty = hasFlag(flags, FLAG_24);
             fake = hasFlag(flags, FLAG_25);
             gigagroup = hasFlag(flags, FLAG_26);
-            noforwards = hasFlag(flags, FLAG_27);
+            noforwards = false;
+            ayuNoforwards = hasFlag(flags, FLAG_27);
             join_to_send = hasFlag(flags, FLAG_28);
             join_request = hasFlag(flags, FLAG_29);
             forum = hasFlag(flags, FLAG_30);
@@ -42461,7 +42475,7 @@ public class TLRPC {
             flags = setFlag(flags, FLAG_24, call_not_empty);
             flags = setFlag(flags, FLAG_25, fake);
             flags = setFlag(flags, FLAG_26, gigagroup);
-            flags = setFlag(flags, FLAG_27, noforwards);
+            flags = setFlag(flags, FLAG_27, ayuNoforwards);
             flags = setFlag(flags, FLAG_28, join_to_send);
             flags = setFlag(flags, FLAG_29, join_request);
             flags = setFlag(flags, FLAG_30, forum);
@@ -42510,7 +42524,7 @@ public class TLRPC {
             broadcast = hasFlag(flags, FLAG_5);
             verified = hasFlag(flags, FLAG_7);
             megagroup = hasFlag(flags, FLAG_8);
-            restricted = hasFlag(flags, FLAG_9);
+            restricted = false;
             signatures = hasFlag(flags, FLAG_11);
             min = hasFlag(flags, FLAG_12);
             scam = hasFlag(flags, FLAG_19);
@@ -42521,7 +42535,8 @@ public class TLRPC {
             call_not_empty = hasFlag(flags, FLAG_24);
             fake = hasFlag(flags, FLAG_25);
             gigagroup = hasFlag(flags, FLAG_26);
-            noforwards = hasFlag(flags, FLAG_27);
+            noforwards = false;
+            ayuNoforwards = hasFlag(flags, FLAG_27);
             join_to_send = hasFlag(flags, FLAG_28);
             join_request = hasFlag(flags, FLAG_29);
             forum = hasFlag(flags, FLAG_30);
@@ -42570,7 +42585,7 @@ public class TLRPC {
             flags = setFlag(flags, FLAG_24, call_not_empty);
             flags = setFlag(flags, FLAG_25, fake);
             flags = setFlag(flags, FLAG_26, gigagroup);
-            flags = setFlag(flags, FLAG_27, noforwards);
+            flags = setFlag(flags, FLAG_27, ayuNoforwards);
             flags = setFlag(flags, FLAG_28, join_to_send);
             flags = setFlag(flags, FLAG_29, join_request);
             flags = setFlag(flags, FLAG_30, forum);
@@ -42645,7 +42660,7 @@ public class TLRPC {
             broadcast = hasFlag(flags, FLAG_5);
             verified = hasFlag(flags, FLAG_7);
             megagroup = hasFlag(flags, FLAG_8);
-            restricted = hasFlag(flags, FLAG_9);
+            restricted = false;
             signatures = hasFlag(flags, FLAG_11);
             min = hasFlag(flags, FLAG_12);
             id = stream.readInt32(exception);
@@ -42776,7 +42791,7 @@ public class TLRPC {
             broadcast = hasFlag(flags, FLAG_5);
             verified = hasFlag(flags, FLAG_7);
             megagroup = hasFlag(flags, FLAG_8);
-            restricted = hasFlag(flags, FLAG_9);
+            restricted = false;
             signatures = hasFlag(flags, FLAG_11);
             min = hasFlag(flags, FLAG_12);
             scam = hasFlag(flags, FLAG_19);
@@ -42873,7 +42888,7 @@ public class TLRPC {
             broadcast = hasFlag(flags, FLAG_5);
             verified = hasFlag(flags, FLAG_7);
             megagroup = hasFlag(flags, FLAG_8);
-            restricted = hasFlag(flags, FLAG_9);
+            restricted = false;
             signatures = hasFlag(flags, FLAG_11);
             min = hasFlag(flags, FLAG_12);
             scam = hasFlag(flags, FLAG_19);
@@ -42987,7 +43002,7 @@ public class TLRPC {
             broadcast = hasFlag(flags, FLAG_5);
             verified = hasFlag(flags, FLAG_7);
             megagroup = hasFlag(flags, FLAG_8);
-            restricted = hasFlag(flags, FLAG_9);
+            restricted = false;
             signatures = hasFlag(flags, FLAG_11);
             min = hasFlag(flags, FLAG_12);
             id = stream.readInt32(exception);
@@ -43064,7 +43079,7 @@ public class TLRPC {
             broadcast = hasFlag(flags, FLAG_5);
             verified = hasFlag(flags, FLAG_7);
             megagroup = hasFlag(flags, FLAG_8);
-            restricted = hasFlag(flags, FLAG_9);
+            restricted = false;
             signatures = hasFlag(flags, FLAG_11);
             min = hasFlag(flags, FLAG_12);
             id = stream.readInt32(exception);
@@ -43136,7 +43151,7 @@ public class TLRPC {
             broadcast = hasFlag(flags, FLAG_5);
             verified = hasFlag(flags, FLAG_7);
             megagroup = hasFlag(flags, FLAG_8);
-            restricted = hasFlag(flags, FLAG_9);
+            restricted = false;
             signatures = hasFlag(flags, FLAG_11);
             min = hasFlag(flags, FLAG_12);
             id = stream.readInt32(exception);
@@ -59735,7 +59750,8 @@ public class TLRPC {
             legacy = hasFlag(flags, FLAG_19);
             edit_hide = hasFlag(flags, FLAG_21);
             pinned = hasFlag(flags, FLAG_24);
-            noforwards = hasFlag(flags, FLAG_26);
+            noforwards = false;
+            ayuNoforwards = hasFlag(flags, FLAG_26);
             invert_media = hasFlag(flags, FLAG_27);
             flags2 = stream.readInt32(exception);
             offline = hasFlag(flags2, FLAG_1);
@@ -59855,7 +59871,7 @@ public class TLRPC {
             flags = setFlag(flags, FLAG_19, legacy);
             flags = setFlag(flags, FLAG_21, edit_hide);
             flags = setFlag(flags, FLAG_24, pinned);
-            flags = setFlag(flags, FLAG_26, noforwards);
+            flags = setFlag(flags, FLAG_26, ayuNoforwards);
             flags = setFlag(flags, FLAG_27, invert_media);
             stream.writeInt32(flags);
             flags2 = setFlag(flags2, FLAG_1, offline);
