@@ -65,7 +65,12 @@ public class AyuForwarder {
 
         for (var batch : batches) {
             if (batch.isAyuForwardNeeded) {
-                forwardMessages(currentAccount, batch.messages, peer, forwardFromMyName, hideCaption, notify, scheduleDate, replyToTopMsg);
+                try {
+                    forwardMessages(currentAccount, batch.messages, peer, forwardFromMyName, hideCaption, notify, scheduleDate, replyToTopMsg);
+                } catch (Exception e) {
+                    android.util.Log.e("AyuGram", "AyuForwarder crashed, falling back to native", e);
+                    AyuEasyUtils.forwardMessagesSync(currentAccount, batch.messages, peer, forwardFromMyName, hideCaption, notify, scheduleDate, replyToTopMsg);
+                }
             } else {
                 // use default forward, but wait for it
                 AyuEasyUtils.forwardMessagesSync(currentAccount, batch.messages, peer, forwardFromMyName, hideCaption, notify, scheduleDate, replyToTopMsg);
