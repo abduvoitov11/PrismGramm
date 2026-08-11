@@ -360,8 +360,6 @@ public class SharedConfig {
     public static boolean editHistoryEnabled = true;
     // Krypton: O'chirilgan media fayllarni (rasm/video/voice) keshda saqlab qolish
     public static boolean saveDeletedMediaEnabled = true;
-    // Krypton: Any Downloader — har qanday guruh/kanaldagi medialarni yuklab olish va ulashish (noforwards bypass)
-    public static boolean anyDownloaderEnabled = true;
     public static boolean multipleReactionsPromoShowed;
 
     public static boolean isFloatingDebugActive;
@@ -679,7 +677,6 @@ public class SharedConfig {
             antiDeleteInChatEnabled = preferences.getBoolean("krypton_antiDeleteInChat", true);
             editHistoryEnabled = preferences.getBoolean("krypton_editHistory", true);
             saveDeletedMediaEnabled = preferences.getBoolean("krypton_saveDeletedMedia", true);
-            anyDownloaderEnabled = preferences.getBoolean("krypton_anyDownloader", true);
             hasEmailLogin = preferences.getBoolean("hasEmailLogin", false);
             isFloatingDebugActive = preferences.getBoolean("floatingDebugActive", false);
             updateStickersOrderOnSend = preferences.getBoolean("updateStickersOrderOnSend", true);
@@ -1810,11 +1807,6 @@ public class SharedConfig {
     public static void setSaveDeletedMediaEnabled(boolean b) {
         saveDeletedMediaEnabled = b;
         ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE).edit().putBoolean("krypton_saveDeletedMedia", saveDeletedMediaEnabled).apply();
-    }
-
-    public static void setAnyDownloaderEnabled(boolean b) {
-        anyDownloaderEnabled = b;
-        ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE).edit().putBoolean("krypton_anyDownloader", anyDownloaderEnabled).apply();
     }
 
     public static boolean canBlurChat() {

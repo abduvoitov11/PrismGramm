@@ -8590,8 +8590,7 @@ public class ChatActivity extends BaseFragment implements
         chatScrollHelper.setAnimationCallback(chatScrollHelperCallback);
 
         flagSecure = new FlagSecureReason(getParentActivity().getWindow(), () ->
-            currentEncryptedChat != null ||
-            (!SharedConfig.anyDownloaderEnabled && isPeerNoForwards())
+            currentEncryptedChat != null || isPeerNoForwards()
         );
 
         if (oldMessage != null) {
@@ -46410,7 +46409,6 @@ public class ChatActivity extends BaseFragment implements
     }
 
     public boolean isPeerNoForwards() {
-        if (SharedConfig.anyDownloaderEnabled) return false;
         return currentChat != null ?
             getMessagesController().isChatNoForwards(currentChat) :
             getMessagesController().isUserNoForwards(userInfo);

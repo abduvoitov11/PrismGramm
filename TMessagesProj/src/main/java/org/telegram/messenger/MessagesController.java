@@ -6664,7 +6664,6 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public boolean isChatNoForwards(TLRPC.Chat chat) {
-        if (SharedConfig.anyDownloaderEnabled) return false;
         if (chat == null) {
             return false;
         }
@@ -6678,22 +6677,18 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public boolean isChatNoForwards(long chatId) {
-        if (SharedConfig.anyDownloaderEnabled) return false;
         return isChatNoForwards(getChat(chatId));
     }
 
     public boolean isPeerNoForwards(long dialogId) {
-        if (SharedConfig.anyDownloaderEnabled) return false;
         return dialogId > 0 ? isUserNoForwards(dialogId) : isChatNoForwards(-dialogId);
     }
 
     public boolean isUserNoForwards(long userId) {
-        if (SharedConfig.anyDownloaderEnabled) return false;
         return isUserNoForwards(getUserFull(userId));
     }
 
     public boolean isUserNoForwards(TLRPC.UserFull userFull) {
-        if (SharedConfig.anyDownloaderEnabled) return false;
         if (userFull == null) {
             return false;
         }
