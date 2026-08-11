@@ -183,10 +183,17 @@ public class AyuGramPreferencesActivity extends BasePreferencesActivity implemen
         var newState = !AyuConfig.localPremium;
 
         AyuConfig.editor.putBoolean("localPremium", AyuConfig.localPremium = newState).apply();
+        SharedConfig.setLocalPremiumEnabled(newState);
         listAdapter.notifyItemChanged(localPremiumRow, AyuConfig.localPremium);
+
+        TLRPC.User currentUser = UserConfig.getInstance(currentAccount).getCurrentUser();
+        if (currentUser != null) {
+            currentUser.premium = newState;
+        }
 
         getMessagesController().updatePremium(AyuConfig.localPremium);
         NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.currentUserPremiumStatusChanged);
+        NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.mainUserInfoChanged);
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.premiumStatusChangedGlobal);
 
         getMediaDataController().loadPremiumPromo(false);

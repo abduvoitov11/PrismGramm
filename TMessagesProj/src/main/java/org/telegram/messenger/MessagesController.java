@@ -6699,7 +6699,11 @@ public class MessagesController extends BaseController implements NotificationCe
         if (id == 0) {
             return UserConfig.getInstance(currentAccount).getCurrentUser();
         }
-        return users.get(id);
+        TLRPC.User user = users.get(id);
+        if (user != null && id == getUserConfig().getClientUserId() && (com.radolyn.ayugram.AyuConfig.localPremium || SharedConfig.localPremiumEnabled)) {
+            user.premium = true;
+        }
+        return user;
     }
 
     public TLObject getUserOrChat(long dialogId) {
