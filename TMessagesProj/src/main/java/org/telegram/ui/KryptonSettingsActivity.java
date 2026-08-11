@@ -247,7 +247,16 @@ public class KryptonSettingsActivity extends BaseFragment {
                 cell.setTextAndCheck(item.text, checked, false);
             } else if (viewType == VIEW_TYPE_NAV) {
                 TextCell cell = (TextCell) holder.itemView;
-                cell.setText(item.text, false);
+                cell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+                if (item.id == ID_MEDIA_DOWNLOADER) {
+                    cell.setTextAndIcon(item.text, R.drawable.msg_download, true);
+                } else if (item.id == ID_AYUGRAM_ADVANCED) {
+                    cell.setTextAndIcon(item.text, R.drawable.msg_settings, true);
+                } else if (item.id == ID_ARCHIVE) {
+                    cell.setTextAndIcon(item.text, R.drawable.msg_archive, false);
+                } else {
+                    cell.setText(item.text, false);
+                }
             }
         }
 
