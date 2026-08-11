@@ -2054,7 +2054,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         if (ayuForwardNeeded) {
             new Thread(() -> {
                 try {
-                    com.radolyn.ayugram.AyuForwarder.forwardMessages(currentAccount, messages, peer, forwardFromMyName, hideCaption, notify, scheduleDateOrig, replyToTopMsg);
+                    com.radolyn.ayugram.AyuForwarder.forwardMessages(currentAccount, messages, peer, forwardFromMyName, hideCaption, notify, scheduleDate, replyToTopMsg);
                 } catch (Exception e) {
                     android.util.Log.e("AyuGram", "Failed to forward messages", e);
                 }
@@ -2066,7 +2066,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         if (ayuIntelligentForwardNeeded) {
             new Thread(() -> {
                 try {
-                    com.radolyn.ayugram.AyuForwarder.intelligentForward(currentAccount, messages, peer, forwardFromMyName, hideCaption, notify, scheduleDateOrig, replyToTopMsg);
+                    com.radolyn.ayugram.AyuForwarder.intelligentForward(currentAccount, messages, peer, forwardFromMyName, hideCaption, notify, scheduleDate, replyToTopMsg);
                 } catch (Exception e) {
                     android.util.Log.e("AyuGram", "Failed to forward messages", e);
                 }
