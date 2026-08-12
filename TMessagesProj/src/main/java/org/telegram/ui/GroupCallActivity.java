@@ -10263,8 +10263,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                     WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS |
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION;
                 if (!BuildVars.DEBUG_PRIVATE_VERSION) {
-                    params.flags |= WindowManager.LayoutParams.FLAG_SECURE;
-                    AndroidUtilities.logFlagSecure();
+                    params.flags &= ~WindowManager.LayoutParams.FLAG_SECURE;
                 }
                 params.flags |= WindowManager.LayoutParams.FLAG_FULLSCREEN;
                 params.flags |= WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;

@@ -63,18 +63,11 @@ public class FlagSecureReason {
         if (window == null) {
             return;
         }
-
-        if (isSecuredNow(window)) {
-            window.addFlags(WindowManager.LayoutParams.FLAG_SECURE);
-            AndroidUtilities.logFlagSecure();
-        } else {
-            window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
-            AndroidUtilities.logFlagSecure();
-        }
+        window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
     }
 
     public static boolean isSecuredNow(Window window) {
-        return currentSecureReasons != null && currentSecureReasons.get(window) != null;
+        return false;
     }
 
     public interface FlagSecureCondition {
