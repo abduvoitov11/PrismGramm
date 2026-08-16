@@ -45,6 +45,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -120,6 +121,7 @@ public class IntroActivity extends BaseFragment implements NotificationCenter.No
     private long currentDate;
     private boolean justEndDragging;
     private boolean dragging;
+    private org.telegram.ui.Components.MotionBackgroundDrawable bgDrawable;
     private int startDragX;
 
     private LocaleController.LocaleInfo localeInfo;
@@ -162,6 +164,14 @@ public class IntroActivity extends BaseFragment implements NotificationCenter.No
 
         ScrollView scrollView = new ScrollView(context);
         scrollView.setFillViewport(true);
+
+        bgDrawable = new org.telegram.ui.Components.MotionBackgroundDrawable(
+                0xFF1E2329, 0xFF171C27, 0xFF0F1116, 0xFF121114, true);
+        scrollView.setBackground(bgDrawable);
+        scrollView.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+            bgDrawable.setBounds(0, 0, right - left, bottom - top);
+        });
+        bgDrawable.setParentView(scrollView);
 
         RLottieImageView themeIconView = new RLottieImageView(context);
         FrameLayout themeFrameLayout = new FrameLayout(context);
@@ -212,19 +222,15 @@ public class IntroActivity extends BaseFragment implements NotificationCenter.No
 
         themeIconView.setAnimation(darkThemeDrawable);
         themeFrameLayout.setOnClickListener(v -> {
-            if (DialogsActivity.switchingTheme) return;
-            DialogsActivity.switchingTheme = true;
-
-            // TODO: Generify this part, currently it's a clone of another theme switch toggle
-            String dayThemeName = "Blue";
-            String nightThemeName = "Night";
 
             Theme.ThemeInfo themeInfo;
             boolean toDark;
             if (toDark = !Theme.isCurrentThemeDark()) {
-                themeInfo = Theme.getTheme(nightThemeName);
+                themeInfo = Theme.getTheme("Night");
+                if (themeInfo == null) themeInfo = Theme.getTheme("Dark Blue");
             } else {
-                themeInfo = Theme.getTheme(dayThemeName);
+                themeInfo = Theme.getTheme("Blue");
+                if (themeInfo == null) themeInfo = Theme.getTheme("Day");
             }
 
             Theme.selectedAutoNightType = Theme.AUTO_NIGHT_TYPE_NONE;
@@ -234,61 +240,40 @@ public class IntroActivity extends BaseFragment implements NotificationCenter.No
             darkThemeDrawable.setCustomEndFrame(toDark ? darkThemeDrawable.getFramesCount() - 1 : 0);
             themeIconView.playAnimation();
 
-            int[] pos = new int[2];
-            themeIconView.getLocationInWindow(pos);
-            pos[0] += themeIconView.getMeasuredWidth() / 2;
-            pos[1] += themeIconView.getMeasuredHeight() / 2;
-            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needSetDayNightTheme, themeInfo, false, pos, -1, toDark, themeIconView);
+            if (themeInfo != null) {
+                Theme.applyTheme(themeInfo, false);
+            }
             themeIconView.setContentDescription(LocaleController.getString(toDark ? R.string.AccDescrSwitchToDayTheme : R.string.AccDescrSwitchToNightTheme));
         });
 
         frameLayout2 = new FrameLayout(context);
         frameContainerView.addView(frameLayout2, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 0, 78, 0, 0));
 
-        TextureView textureView = new TextureView(context);
-        frameLayout2.addView(textureView, LayoutHelper.createFrame(ICON_WIDTH_DP, ICON_HEIGHT_DP, Gravity.CENTER));
-        textureView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
+        ImageView logoImageView = new ImageView(context);
+        logoImageView.setImageResource(R.drawable.logo_middle);
+        logoImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        logoImageView.setOutlineProvider(new android.view.ViewOutlineProvider() {
             @Override
-            public void onSurfaceTextureAvailable(@NonNull SurfaceTexture surface, int width, int height) {
-                if (eglThread == null && surface != null) {
-                    eglThread = new EGLThread(surface);
-                    eglThread.setSurfaceTextureSize(width, height);
-                    eglThread.postRunnable(()->{
-                        float time = (System.currentTimeMillis() - currentDate) / 1000.0f;
-                        Intro.setPage(currentViewPagerPage);
-                        Intro.setDate(time);
-                        Intro.onDrawFrame(0);
-                        if (eglThread != null && eglThread.isAlive() && eglThread.eglDisplay != null && eglThread.eglSurface != null) {
-                            try {
-                                eglThread.egl10.eglSwapBuffers(eglThread.eglDisplay, eglThread.eglSurface);
-                            } catch (Exception ignored) {} // If display or surface already destroyed
-                        }
-                    });
-                    eglThread.postRunnable(eglThread.drawRunnable);
-                }
-            }
-
-            @Override
-            public void onSurfaceTextureSizeChanged(@NonNull SurfaceTexture surface, final int width, final int height) {
-                if (eglThread != null) {
-                    eglThread.setSurfaceTextureSize(width, height);
-                }
-            }
-
-            @Override
-            public boolean onSurfaceTextureDestroyed(@NonNull SurfaceTexture surface) {
-                if (eglThread != null) {
-                    eglThread.shutdown();
-                    eglThread = null;
-                }
-                return true;
-            }
-
-            @Override
-            public void onSurfaceTextureUpdated(@NonNull SurfaceTexture surface) {
-
+            public void getOutline(android.view.View view, android.graphics.Outline outline) {
+                outline.setOval(0, 0, view.getWidth(), view.getHeight());
             }
         });
+        logoImageView.setClipToOutline(true);
+        frameLayout2.addView(logoImageView, LayoutHelper.createFrame(150, 150, Gravity.CENTER));
+
+        android.animation.ObjectAnimator scaleX = android.animation.ObjectAnimator.ofFloat(logoImageView, "scaleX", 1f, 1.10f, 1f);
+        android.animation.ObjectAnimator scaleY = android.animation.ObjectAnimator.ofFloat(logoImageView, "scaleY", 1f, 1.10f, 1f);
+        android.animation.ObjectAnimator rotate = android.animation.ObjectAnimator.ofFloat(logoImageView, "rotation", 0f, 5f, -5f, 0f);
+        scaleX.setRepeatCount(android.animation.ValueAnimator.INFINITE);
+        scaleY.setRepeatCount(android.animation.ValueAnimator.INFINITE);
+        rotate.setRepeatCount(android.animation.ValueAnimator.INFINITE);
+        scaleX.setDuration(4000);
+        scaleY.setDuration(4000);
+        rotate.setDuration(8000);
+        android.animation.AnimatorSet animatorSet = new android.animation.AnimatorSet();
+        animatorSet.playTogether(scaleX, scaleY, rotate);
+        animatorSet.setInterpolator(new android.view.animation.AccelerateDecelerateInterpolator());
+        animatorSet.start();
 
         viewPager = new ViewPager(context);
         viewPager.setAdapter(new IntroAdapter());
@@ -970,34 +955,35 @@ public class IntroActivity extends BaseFragment implements NotificationCenter.No
     }
 
     private void updateColors(boolean fromTheme) {
-        startMessagingButtonBackground.setColors(new int[]{0xFF7B2CBF, 0xFF480CA8});
+        startMessagingButtonBackground.setColors(new int[]{0xFF4CA1AF, 0xFF2C3E50});
         logoDrawable.setColorFilter(null);
-        fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
         switchLanguageTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4));
         startMessagingButton.setTextColor(0xFFFFFFFF);
-        startMessagingButton.setBackground(Theme.createSimpleSelectorRoundRectDrawable(dp(24), Color.TRANSPARENT, 0x447B2CBF));
-        darkThemeDrawable.setColorFilter(new PorterDuffColorFilter(0xFF7B2CBF, PorterDuff.Mode.SRC_IN));
+        startMessagingButton.setBackground(Theme.createSimpleSelectorRoundRectDrawable(dp(24), Color.TRANSPARENT, 0x444CA1AF));
+        darkThemeDrawable.setColorFilter(new PorterDuffColorFilter(0xFF4CA1AF, PorterDuff.Mode.SRC_IN));
         bottomPages.invalidate();
-        if (fromTheme) {
-            if (eglThread != null) {
-                eglThread.postRunnable(()->{
-                    eglThread.loadTexture(R.drawable.intro_powerful_mask, 17, Theme.getColor(Theme.key_windowBackgroundWhite), true);
-                    eglThread.updatePowerfulTextures();
 
-                    eglThread.loadTexture(eglThread.telegramMaskProvider, 23, true);
-                    eglThread.updateTelegramTextures();
-
-                    Intro.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                });
+        if (bgDrawable != null) {
+            if (Theme.isCurrentThemeDark()) {
+                bgDrawable.setColors(0xFF1E2329, 0xFF171C27, 0xFF0F1116, 0xFF121114);
+            } else {
+                bgDrawable.setColors(0xFFFFFFFF, 0xFFE3F2FD, 0xFFBBDEFB, 0xFFF5F5F5);
             }
+        }
+
+        if (fromTheme) {
             for (int i = 0; i < viewPager.getChildCount(); i++) {
                 View ch = viewPager.getChildAt(i);
                 TextView headerTextView = ch.findViewWithTag(pagerHeaderTag);
-                headerTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
                 TextView messageTextView = ch.findViewWithTag(pagerMessageTag);
-                messageTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+                if (headerTextView != null) {
+                    headerTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+                }
+                if (messageTextView != null) {
+                    messageTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText6));
+                }
             }
-        } else Intro.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+        }
     }
 
     @Override

@@ -1431,6 +1431,9 @@ public class LocaleController {
     }
 
     private String getStringInternal(String key, String fallback, int fallbackRes, int res) {
+        if ("AppName".equals(key) || "AppNameBeta".equals(key) || res == R.string.AppName || res == R.string.AppNameBeta) {
+            return ApplicationLoader.applicationContext.getString(R.string.AppName);
+        }
         String value = BuildVars.USE_CLOUD_STRINGS ? localeValues.get(key) : null;
         if (value == null) {
             if (BuildVars.USE_CLOUD_STRINGS && fallback != null) {
@@ -1456,6 +1459,9 @@ public class LocaleController {
     }
 
     public static String getServerString(String key) {
+        if ("AppName".equals(key) || "AppNameBeta".equals(key)) {
+            return ApplicationLoader.applicationContext.getString(R.string.AppName);
+        }
         String value = getInstance().localeValues.get(key);
         if (value == null) {
             int resourceId = ApplicationLoader.applicationContext.getResources().getIdentifier(key, "string", ApplicationLoader.applicationContext.getPackageName());

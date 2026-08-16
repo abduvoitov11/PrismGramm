@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Liquid glass style gradient background -->
+    <item android:drawable="@drawable/splash_gradient" />
+    
+    <!-- Centered Krypton Logo -->
+    <item>
+        <bitmap
+            android:src="@drawable/logo_middle"
+            android:gravity="center" />
+    </item>
+</layer-list>

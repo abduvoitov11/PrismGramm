@@ -4,13 +4,9 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
-import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -20,7 +16,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,23 +31,15 @@ import org.telegram.ui.Components.LayoutHelper;
 
 import java.io.File;
 
-/**
- * Krypton Media Downloader — TikTok, YouTube va Instagram'dan
- * video, rasm va audio yuklab olish uchun professional, minimalistik ekran.
- */
 public class KryptonMediaDownloaderActivity extends BaseFragment {
 
     private EditTextBoldCursor urlInput;
     private TextView downloadButton;
     private LinearLayout progressContainer;
-    private TextView progressText;
     private ProgressBar progressBar;
     private TextView progressPercent;
     private LinearLayout resultContainer;
-    private TextView resultTitle;
-    private TextView resultInfo;
     private TextView openGalleryButton;
-    private TextView platformLabel;
 
     private boolean isDownloading = false;
     private Uri lastSavedUri;
@@ -62,7 +49,7 @@ public class KryptonMediaDownloaderActivity extends BaseFragment {
     public View createView(Context context) {
         actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
-        actionBar.setTitle("Media Downloader");
+        actionBar.setTitle("Downloader");
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int id) {
@@ -71,174 +58,87 @@ public class KryptonMediaDownloaderActivity extends BaseFragment {
         });
 
         FrameLayout rootFrame = new FrameLayout(context);
-        rootFrame.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
+        rootFrame.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
         fragmentView = rootFrame;
-
-        ScrollView scrollView = new ScrollView(context);
-        scrollView.setFillViewport(true);
-        rootFrame.addView(scrollView, LayoutHelper.createFrame(
-                LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
         LinearLayout container = new LinearLayout(context);
         container.setOrientation(LinearLayout.VERTICAL);
-        container.setPadding(AndroidUtilities.dp(20), AndroidUtilities.dp(24),
-                AndroidUtilities.dp(20), AndroidUtilities.dp(20));
-        scrollView.addView(container, new ScrollView.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        container.setPadding(AndroidUtilities.dp(32), 0, AndroidUtilities.dp(32), AndroidUtilities.dp(64));
+        rootFrame.addView(container, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_VERTICAL));
 
-        // ─── Platform Label ───
-        platformLabel = new TextView(context);
-        platformLabel.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
-        platformLabel.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText));
-        platformLabel.setText("TikTok  •  YouTube  •  Instagram");
-        platformLabel.setGravity(Gravity.CENTER);
-        container.addView(platformLabel, LayoutHelper.createLinear(
-                LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 0, 0, 14));
-
-        // ─── URL Input Card ───
-        FrameLayout inputCard = new FrameLayout(context);
-        GradientDrawable inputBg = new GradientDrawable();
-        inputBg.setColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-        inputBg.setCornerRadius(AndroidUtilities.dp(12));
-        inputCard.setBackground(inputBg);
-        inputCard.setPadding(AndroidUtilities.dp(16), AndroidUtilities.dp(4),
-                AndroidUtilities.dp(48), AndroidUtilities.dp(4));
-        inputCard.setElevation(AndroidUtilities.dp(1));
-        container.addView(inputCard, LayoutHelper.createLinear(
-                LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+        // URL Input Row
+        LinearLayout inputRow = new LinearLayout(context);
+        inputRow.setOrientation(LinearLayout.HORIZONTAL);
+        inputRow.setGravity(Gravity.CENTER_VERTICAL);
+        container.addView(inputRow, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
         urlInput = new EditTextBoldCursor(context);
-        urlInput.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+        urlInput.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
         urlInput.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
         urlInput.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-        urlInput.setHint("\uD83D\uDD17  Havolani kiriting...");
-        urlInput.setBackground(null);
+        urlInput.setHint("Link");
+        urlInput.setBackgroundDrawable(Theme.createEditTextDrawable(context, false));
         urlInput.setSingleLine(true);
         urlInput.setInputType(InputType.TYPE_TEXT_VARIATION_URI);
         urlInput.setImeOptions(EditorInfo.IME_ACTION_DONE);
-        urlInput.setCursorColor(Theme.getColor(Theme.key_chat_messagePanelCursor));
+        urlInput.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         urlInput.setCursorSize(AndroidUtilities.dp(20));
         urlInput.setCursorWidth(1.5f);
-        inputCard.addView(urlInput, LayoutHelper.createFrame(
-                LayoutHelper.MATCH_PARENT, 48, Gravity.CENTER_VERTICAL));
+        inputRow.addView(urlInput, LayoutHelper.createLinear(0, LayoutHelper.WRAP_CONTENT, 1.0f));
 
-        // Paste tugmasi
         ImageView pasteBtn = new ImageView(context);
         pasteBtn.setImageResource(R.drawable.msg_copy);
-        pasteBtn.setColorFilter(Theme.getColor(Theme.key_chat_messagePanelIcons));
+        pasteBtn.setColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayIcon));
         pasteBtn.setScaleType(ImageView.ScaleType.CENTER);
-        pasteBtn.setPadding(AndroidUtilities.dp(8), AndroidUtilities.dp(8),
-                AndroidUtilities.dp(8), AndroidUtilities.dp(8));
+        pasteBtn.setBackground(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector), 1));
         pasteBtn.setOnClickListener(v -> pasteFromClipboard(context));
-        inputCard.addView(pasteBtn, LayoutHelper.createFrame(
-                40, 40, Gravity.RIGHT | Gravity.CENTER_VERTICAL));
+        inputRow.addView(pasteBtn, LayoutHelper.createLinear(48, 48, 8, 0, 0, 0));
 
-        urlInput.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
-            @Override
-            public void afterTextChanged(Editable s) {
-                updatePlatformLabel(s.toString());
-            }
-        });
-
-        // ─── Download Button ───
+        // Download Button
         downloadButton = new TextView(context);
-        downloadButton.setText("\uD83D\uDCE5  Yuklab olish");
+        downloadButton.setText("Download");
         downloadButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         downloadButton.setTypeface(AndroidUtilities.bold());
-        downloadButton.setTextColor(Color.WHITE);
+        downloadButton.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText));
         downloadButton.setGravity(Gravity.CENTER);
-        downloadButton.setPadding(0, AndroidUtilities.dp(14), 0, AndroidUtilities.dp(14));
-        GradientDrawable btnBg = new GradientDrawable();
-        btnBg.setColor(Theme.getColor(Theme.key_featuredStickers_addButton));
-        btnBg.setCornerRadius(AndroidUtilities.dp(12));
-        downloadButton.setBackground(btnBg);
+        downloadButton.setBackground(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector), 0));
+        downloadButton.setPadding(0, AndroidUtilities.dp(16), 0, AndroidUtilities.dp(16));
         downloadButton.setOnClickListener(v -> startDownload(context));
-        container.addView(downloadButton, LayoutHelper.createLinear(
-                LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 16, 0, 0));
+        container.addView(downloadButton, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 24, 0, 0));
 
-        // ─── Progress Container (yashirin) ───
-        progressContainer = createCard(context);
+        // Progress
+        progressContainer = new LinearLayout(context);
+        progressContainer.setOrientation(LinearLayout.VERTICAL);
         progressContainer.setVisibility(View.GONE);
-        container.addView(progressContainer, LayoutHelper.createLinear(
-                LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 16, 0, 0));
-
-        progressText = new TextView(context);
-        progressText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-        progressText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-        progressText.setText("Yuklanmoqda...");
-        progressContainer.addView(progressText, LayoutHelper.createLinear(
-                LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+        container.addView(progressContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 16, 0, 0));
 
         progressBar = new ProgressBar(context, null, android.R.attr.progressBarStyleHorizontal);
-        progressBar.setMax(100);
-        progressBar.setProgress(0);
-        progressContainer.addView(progressBar, LayoutHelper.createLinear(
-                LayoutHelper.MATCH_PARENT, 6, 0, 10, 0, 4));
+        progressContainer.addView(progressBar, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 4));
 
         progressPercent = new TextView(context);
-        progressPercent.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
+        progressPercent.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
         progressPercent.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText));
-        progressPercent.setText("0%");
-        progressPercent.setGravity(Gravity.RIGHT);
-        progressContainer.addView(progressPercent, LayoutHelper.createLinear(
-                LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+        progressPercent.setGravity(Gravity.CENTER);
+        progressContainer.addView(progressPercent, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 12, 0, 0));
 
-        // ─── Result Container (yashirin) ───
-        resultContainer = createCard(context);
+        // Result
+        resultContainer = new LinearLayout(context);
+        resultContainer.setOrientation(LinearLayout.VERTICAL);
         resultContainer.setVisibility(View.GONE);
-        container.addView(resultContainer, LayoutHelper.createLinear(
-                LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 16, 0, 0));
-
-        resultTitle = new TextView(context);
-        resultTitle.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-        resultTitle.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-        resultTitle.setTypeface(AndroidUtilities.bold());
-        resultContainer.addView(resultTitle, LayoutHelper.createLinear(
-                LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
-
-        resultInfo = new TextView(context);
-        resultInfo.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
-        resultInfo.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText));
-        resultContainer.addView(resultInfo, LayoutHelper.createLinear(
-                LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 4, 0, 0));
+        container.addView(resultContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 8, 0, 0));
 
         openGalleryButton = new TextView(context);
-        openGalleryButton.setText("\uD83D\uDCC2  Galereyada ochish");
-        openGalleryButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+        openGalleryButton.setText("Open");
+        openGalleryButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         openGalleryButton.setTypeface(AndroidUtilities.bold());
-        openGalleryButton.setTextColor(Theme.getColor(Theme.key_featuredStickers_addButton));
+        openGalleryButton.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText));
         openGalleryButton.setGravity(Gravity.CENTER);
-        openGalleryButton.setPadding(0, AndroidUtilities.dp(12), 0, AndroidUtilities.dp(4));
+        openGalleryButton.setBackground(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector), 0));
+        openGalleryButton.setPadding(0, AndroidUtilities.dp(16), 0, AndroidUtilities.dp(16));
         openGalleryButton.setOnClickListener(v -> openLastSaved(context));
-        resultContainer.addView(openGalleryButton, LayoutHelper.createLinear(
-                LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 4, 0, 0));
-
-        // ─── Info Text ───
-        TextView infoText = new TextView(context);
-        infoText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
-        infoText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText));
-        infoText.setText("Video va rasmlar qurilmangizning galereyasiga\n(Krypton papkasiga) saqlanadi.");
-        infoText.setGravity(Gravity.CENTER);
-        infoText.setPadding(AndroidUtilities.dp(16), 0, AndroidUtilities.dp(16), 0);
-        container.addView(infoText, LayoutHelper.createLinear(
-                LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 24, 0, 0));
+        resultContainer.addView(openGalleryButton, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
         return fragmentView;
-    }
-
-    private LinearLayout createCard(Context context) {
-        LinearLayout card = new LinearLayout(context);
-        card.setOrientation(LinearLayout.VERTICAL);
-        GradientDrawable bg = new GradientDrawable();
-        bg.setColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-        bg.setCornerRadius(AndroidUtilities.dp(12));
-        card.setBackground(bg);
-        card.setPadding(AndroidUtilities.dp(16), AndroidUtilities.dp(14),
-                AndroidUtilities.dp(16), AndroidUtilities.dp(14));
-        card.setElevation(AndroidUtilities.dp(1));
-        return card;
     }
 
     private void pasteFromClipboard(Context context) {
@@ -259,28 +159,6 @@ public class KryptonMediaDownloaderActivity extends BaseFragment {
         }
     }
 
-    private void updatePlatformLabel(String url) {
-        KryptonMediaExtractor.Platform platform = KryptonMediaExtractor.detectPlatform(url);
-        switch (platform) {
-            case TIKTOK:
-                platformLabel.setText("\uD83D\uDCF1 TikTok aniqlandi");
-                platformLabel.setTextColor(Theme.getColor(Theme.key_featuredStickers_addButton));
-                break;
-            case YOUTUBE:
-                platformLabel.setText("▶️ YouTube aniqlandi");
-                platformLabel.setTextColor(0xFFFF0000);
-                break;
-            case INSTAGRAM:
-                platformLabel.setText("\uD83D\uDCF8 Instagram aniqlandi");
-                platformLabel.setTextColor(0xFFE1306C);
-                break;
-            default:
-                platformLabel.setText("TikTok  •  YouTube  •  Instagram");
-                platformLabel.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText));
-                break;
-        }
-    }
-
     private void startDownload(Context context) {
         String url = urlInput.getText().toString().trim();
         if (TextUtils.isEmpty(url)) {
@@ -291,21 +169,17 @@ public class KryptonMediaDownloaderActivity extends BaseFragment {
         KryptonMediaExtractor.Platform platform = KryptonMediaExtractor.detectPlatform(url);
         if (platform == KryptonMediaExtractor.Platform.UNKNOWN) {
             AndroidUtilities.shakeView(urlInput);
-            Toast.makeText(context, "Faqat TikTok, YouTube yoki Instagram havolalari qo‘llab-quvvatlanadi", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Unsupported link", Toast.LENGTH_SHORT).show();
             return;
         }
 
         if (isDownloading) return;
         isDownloading = true;
 
-        // UI yangilash
-        downloadButton.setText("⏳  Havola tahlil qilinmoqda...");
-        downloadButton.setEnabled(false);
-        downloadButton.setAlpha(0.6f);
+        downloadButton.setVisibility(View.GONE);
         progressContainer.setVisibility(View.VISIBLE);
         progressBar.setProgress(0);
-        progressText.setText("Media havola aniqlanmoqda...");
-        progressPercent.setText("0%");
+        progressPercent.setText("Extracting...");
         resultContainer.setVisibility(View.GONE);
 
         AndroidUtilities.hideKeyboard(urlInput);
@@ -314,11 +188,9 @@ public class KryptonMediaDownloaderActivity extends BaseFragment {
             @Override
             public void onSuccess(KryptonMediaExtractor.MediaResult result) {
                 if (result.directUrl == null || result.directUrl.isEmpty()) {
-                    onError("Media havolasi topilmadi");
+                    onError("Not found");
                     return;
                 }
-
-                progressText.setText("Yuklanmoqda: " + (result.filename != null ? result.filename : "media"));
 
                 String ext = result.isAudio ? ".mp3" : ".mp4";
                 if (result.filename != null && result.filename.contains(".")) {
@@ -327,8 +199,6 @@ public class KryptonMediaDownloaderActivity extends BaseFragment {
 
                 String fileName = "Krypton_" + System.currentTimeMillis() + ext;
                 File tempFile = new File(context.getCacheDir(), fileName);
-
-                final String displayName = result.filename != null ? result.filename : fileName;
 
                 KryptonMediaExtractor.downloadFile(result.directUrl, tempFile,
                         new KryptonMediaExtractor.DownloadProgressCallback() {
@@ -342,10 +212,9 @@ public class KryptonMediaDownloaderActivity extends BaseFragment {
 
                     @Override
                     public void onComplete(File file, String mimeType) {
-                        progressText.setText("Galereyaga saqlanmoqda...");
+                        progressPercent.setText("Saving...");
                         progressBar.setProgress(100);
 
-                        long fileSize = file.length();
                         Uri uri = KryptonMediaExtractor.saveToGallery(context, file, mimeType, fileName);
 
                         resetDownloadState();
@@ -355,25 +224,8 @@ public class KryptonMediaDownloaderActivity extends BaseFragment {
                             lastSavedUri = uri;
                             lastMimeType = mimeType;
                             resultContainer.setVisibility(View.VISIBLE);
-
-                            String icon = mimeType.startsWith("video") ? "🎬"
-                                    : mimeType.startsWith("audio") ? "🎵" : "🖼️";
-                            String type = mimeType.startsWith("video") ? "Video"
-                                    : mimeType.startsWith("audio") ? "Audio" : "Rasm";
-
-                            resultTitle.setText(icon + "  " + displayName);
-                            resultInfo.setText(type + "  •  " + AndroidUtilities.formatFileSize(fileSize)
-                                    + "  •  Galereyaga saqlandi ✓");
-
-                            if (mimeType.startsWith("audio")) {
-                                openGalleryButton.setText("🎵  Tinglash");
-                            } else if (mimeType.startsWith("image")) {
-                                openGalleryButton.setText("🖼️  Ko‘rish");
-                            } else {
-                                openGalleryButton.setText("📂  Galereyada ochish");
-                            }
                         } else {
-                            Toast.makeText(context, "Galereyaga saqlashda xatolik", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "Error saving", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -397,9 +249,7 @@ public class KryptonMediaDownloaderActivity extends BaseFragment {
 
     private void resetDownloadState() {
         isDownloading = false;
-        downloadButton.setText("📥  Yuklab olish");
-        downloadButton.setEnabled(true);
-        downloadButton.setAlpha(1.0f);
+        downloadButton.setVisibility(View.VISIBLE);
     }
 
     private void openLastSaved(Context context) {
@@ -411,7 +261,7 @@ public class KryptonMediaDownloaderActivity extends BaseFragment {
                 context.startActivity(intent);
             } catch (Exception e) {
                 FileLog.e(e);
-                Toast.makeText(context, "Faylni ochishda xatolik", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Cannot open file", Toast.LENGTH_SHORT).show();
             }
         }
     }

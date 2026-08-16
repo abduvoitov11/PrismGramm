@@ -1985,6 +1985,15 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
         private int titleClickCount = 0;
         private long lastTitleClick = 0;
         private Toast lastTitleToast;
+        
+        private void bounceField() {
+            if (phoneOutlineView != null) {
+                phoneOutlineView.animate().scaleX(1.02f).scaleY(1.02f).setDuration(40).setInterpolator(new android.view.animation.DecelerateInterpolator()).withEndAction(() -> {
+                    phoneOutlineView.animate().scaleX(1f).scaleY(1f).setDuration(250).setInterpolator(new android.view.animation.OvershootInterpolator(2.5f)).start();
+                }).start();
+            }
+        }
+
         private void showDebugMenu() {
             new AlertDialog.Builder(getContext())
                 .setTitle(LocaleController.getString(R.string.SettingsDebug))
@@ -2019,8 +2028,29 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
             ImageView logoView = new ImageView(context);
             logoView.setImageResource(R.drawable.logo_middle);
-            logoView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            logoView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            logoView.setOutlineProvider(new android.view.ViewOutlineProvider() {
+                @Override
+                public void getOutline(android.view.View view, android.graphics.Outline outline) {
+                    outline.setOval(0, 0, view.getWidth(), view.getHeight());
+                }
+            });
+            logoView.setClipToOutline(true);
             addView(logoView, LayoutHelper.createLinear(72, 72, Gravity.CENTER_HORIZONTAL, 0, 8, 0, 16));
+
+            android.animation.ObjectAnimator scaleX = android.animation.ObjectAnimator.ofFloat(logoView, "scaleX", 1f, 1.10f, 1f);
+            android.animation.ObjectAnimator scaleY = android.animation.ObjectAnimator.ofFloat(logoView, "scaleY", 1f, 1.10f, 1f);
+            android.animation.ObjectAnimator rotate = android.animation.ObjectAnimator.ofFloat(logoView, "rotation", 0f, 5f, -5f, 0f);
+            scaleX.setRepeatCount(android.animation.ValueAnimator.INFINITE);
+            scaleY.setRepeatCount(android.animation.ValueAnimator.INFINITE);
+            rotate.setRepeatCount(android.animation.ValueAnimator.INFINITE);
+            scaleX.setDuration(4000);
+            scaleY.setDuration(4000);
+            rotate.setDuration(8000);
+            android.animation.AnimatorSet animatorSet = new android.animation.AnimatorSet();
+            animatorSet.playTogether(scaleX, scaleY, rotate);
+            animatorSet.setInterpolator(new android.view.animation.AccelerateDecelerateInterpolator());
+            animatorSet.start();
 
             titleView = new TextView(context);
             titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 22);
@@ -2264,6 +2294,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                         }
                     }
                     ignoreOnTextChange = false;
+                    bounceField();
                 }
             });
             codeField.setOnEditorActionListener((textView, i, keyEvent) -> {
@@ -2444,6 +2475,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                     phoneField.onTextChange();
                     invalidateCountryHint();
                     ignoreOnPhoneChange = false;
+                    bounceField();
                 }
             });
             phoneField.setOnEditorActionListener((textView, i, keyEvent) -> {
