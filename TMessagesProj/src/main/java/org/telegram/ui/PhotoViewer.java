@@ -1932,6 +1932,15 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     int prevAnimation = animationInProgress;
                     animationInProgress = 0; // Set to 0 BEFORE running runnables so setImages() can succeed
                     transitionAnimationStartTime = 0;
+                    if (containerView != null) {
+                        containerView.setAlpha(1.0f);
+                    }
+                    if (backgroundDrawable != null) {
+                        backgroundDrawable.setAlpha(255);
+                    }
+                    if (navigationBar != null) {
+                        navigationBar.setAlpha(1.0f);
+                    }
                     
                     if (animationEndRunnable != null) {
                         try {
@@ -17969,6 +17978,13 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                             return;
                         }
                         containerView.setLayerType(View.LAYER_TYPE_NONE, null);
+                        containerView.setAlpha(1.0f);
+                        if (backgroundDrawable != null) {
+                            backgroundDrawable.setAlpha(255);
+                        }
+                        if (navigationBar != null) {
+                            navigationBar.setAlpha(1.0f);
+                        }
                         animationInProgress = 0;
                         invalidateBlur();
                         transitionAnimationStartTime = 0;
@@ -20599,6 +20615,9 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         if (photoViewerWebView == null || !photoViewerWebView.isLoaded()) {
             if (!centerImageTransformLocked) centerImageTransform.preTranslate(centerImage.getImageX(), centerImage.getImageY());
             stickerMakerView.drawOutline(canvas, false, containerView, switchingToMode != -1);
+            if (alpha <= 0.01f && animationInProgress == 0) {
+                alpha = 1.0f;
+            }
             centerImage.setAlpha(alpha);
             centerImage.draw(canvas);
             stickerMakerView.drawOutline(canvas, true, containerView, switchingToMode != -1);
