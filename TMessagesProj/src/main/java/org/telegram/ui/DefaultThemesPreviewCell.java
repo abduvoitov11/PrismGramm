@@ -94,7 +94,7 @@ public class DefaultThemesPreviewCell extends LinearLayout {
             ChatThemeBottomSheet.ChatThemeItem chatTheme = adapter.items.get(position);
             Theme.ThemeInfo info = chatTheme.chatTheme.getThemeInfo(themeIndex);
             int accentId = -1;
-            if (chatTheme.chatTheme.getEmoticonOrSlug().equals("\uD83C\uDFE0") || chatTheme.chatTheme.getEmoticonOrSlug().equals("\uD83C\uDFA8")) {
+            if (chatTheme.chatTheme.getEmoticonOrSlug().equals("\uD83C\uDFE0") || chatTheme.chatTheme.getEmoticonOrSlug().equals("\uD83C\uDFA8") || info != null) {
                 accentId = chatTheme.chatTheme.getAccentId(themeIndex);
             }
             if (info == null) {
@@ -294,19 +294,32 @@ public class DefaultThemesPreviewCell extends LinearLayout {
             }
         }
 
+        ArrayList<ChatThemeBottomSheet.ChatThemeItem> themes = new ArrayList<>();
         if (!MediaDataController.getInstance(parentFragment.getCurrentAccount()).defaultEmojiThemes.isEmpty()) {
-            ArrayList<ChatThemeBottomSheet.ChatThemeItem> themes = new ArrayList<>(MediaDataController.getInstance(parentFragment.getCurrentAccount()).defaultEmojiThemes);
-            if (currentType == ThemeActivity.THEME_TYPE_BASIC) {
-
-                EmojiThemes chatTheme = EmojiThemes.createPreviewCustom(parentFragment.getCurrentAccount());
-                chatTheme.loadPreviewColors(parentFragment.getCurrentAccount());
-                ChatThemeBottomSheet.ChatThemeItem item = new ChatThemeBottomSheet.ChatThemeItem(chatTheme);
-                item.themeIndex = !Theme.isCurrentThemeDay() ? 2 : 0;
-                themes.add(item);
-            }
-
-            adapter.setItems(themes);
+            themes.addAll(MediaDataController.getInstance(parentFragment.getCurrentAccount()).defaultEmojiThemes);
+        } else {
+            themes.add(new ChatThemeBottomSheet.ChatThemeItem(EmojiThemes.createHomePreviewTheme(parentFragment.getCurrentAccount())));
         }
+
+        // Add all Prism Themes right next to Classic and Custom!
+        ArrayList<EmojiThemes> prismThemes = EmojiThemes.createPrismThemes(parentFragment.getCurrentAccount());
+        for (int i = 0; i < prismThemes.size(); i++) {
+            EmojiThemes prismTheme = prismThemes.get(i);
+            prismTheme.loadPreviewColors(parentFragment.getCurrentAccount());
+            ChatThemeBottomSheet.ChatThemeItem item = new ChatThemeBottomSheet.ChatThemeItem(prismTheme);
+            item.themeIndex = !Theme.isCurrentThemeDay() ? 2 : 0;
+            themes.add(item);
+        }
+
+        if (currentType == ThemeActivity.THEME_TYPE_BASIC) {
+            EmojiThemes chatTheme = EmojiThemes.createPreviewCustom(parentFragment.getCurrentAccount());
+            chatTheme.loadPreviewColors(parentFragment.getCurrentAccount());
+            ChatThemeBottomSheet.ChatThemeItem item = new ChatThemeBottomSheet.ChatThemeItem(chatTheme);
+            item.themeIndex = !Theme.isCurrentThemeDay() ? 2 : 0;
+            themes.add(item);
+        }
+
+        adapter.setItems(themes);
         updateDayNightMode();
         updateSelectedPosition();
         updateColors();

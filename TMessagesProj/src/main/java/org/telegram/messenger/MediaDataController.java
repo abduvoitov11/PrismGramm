@@ -9230,6 +9230,10 @@ public class MediaDataController extends BaseController {
         int count = preferences.getInt("count", 0);
         ArrayList<ChatThemeBottomSheet.ChatThemeItem> previewItems = new ArrayList<>();
         previewItems.add(new ChatThemeBottomSheet.ChatThemeItem(EmojiThemes.createHomePreviewTheme(currentAccount)));
+        ArrayList<EmojiThemes> prismThemes = EmojiThemes.createPrismThemes(currentAccount);
+        for (int p = 0; p < prismThemes.size(); p++) {
+            previewItems.add(new ChatThemeBottomSheet.ChatThemeItem(prismThemes.get(p)));
+        }
         for (int i = 0; i < count; ++i) {
             String value = preferences.getString("theme_" + i, "");
             SerializedData serializedData = new SerializedData(Utilities.hexToBytes(value));
@@ -9275,6 +9279,10 @@ public class MediaDataController extends BaseController {
         if (!emojiPreviewThemes.isEmpty()) {
             final ArrayList<ChatThemeBottomSheet.ChatThemeItem> previewItems = new ArrayList<>();
             previewItems.add(new ChatThemeBottomSheet.ChatThemeItem(EmojiThemes.createHomePreviewTheme(currentAccount)));
+            ArrayList<EmojiThemes> prismThemes = EmojiThemes.createPrismThemes(currentAccount);
+            for (int p = 0; p < prismThemes.size(); p++) {
+                previewItems.add(new ChatThemeBottomSheet.ChatThemeItem(prismThemes.get(p)));
+            }
             for (int i = 0; i < emojiPreviewThemes.size(); i++) {
                 TLRPC.TL_theme theme = emojiPreviewThemes.get(i);
                 EmojiThemes chatTheme = EmojiThemes.createPreviewFullTheme(currentAccount, theme);

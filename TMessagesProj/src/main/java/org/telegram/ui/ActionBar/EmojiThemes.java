@@ -260,6 +260,57 @@ public class EmojiThemes {
         return themeItem;
     }
 
+    public static EmojiThemes createPrismTheme(int currentAccount, String emoji, String themeName, int dayAccentId, int nightAccentId) {
+        EmojiThemes themeItem = new EmojiThemes(currentAccount);
+        themeItem.emoji = emoji;
+        themeItem.key = ThemeKey.ofEmoticon(emoji);
+        themeItem.chatTheme = TLRPC.ChatTheme.ofEmoticon(emoji);
+
+        Theme.ThemeInfo themeInfo = Theme.getTheme(themeName);
+        if (themeInfo == null) {
+            themeInfo = Theme.getTheme("Night");
+        }
+
+        ThemeItem dayItem = new ThemeItem();
+        dayItem.themeInfo = themeInfo;
+        dayItem.accentId = dayAccentId;
+        themeItem.items.add(dayItem);
+
+        ThemeItem dayItem2 = new ThemeItem();
+        dayItem2.themeInfo = themeInfo;
+        dayItem2.accentId = dayAccentId;
+        themeItem.items.add(dayItem2);
+
+        ThemeItem nightItem = new ThemeItem();
+        nightItem.themeInfo = themeInfo;
+        nightItem.accentId = nightAccentId;
+        themeItem.items.add(nightItem);
+
+        ThemeItem nightItem2 = new ThemeItem();
+        nightItem2.themeInfo = themeInfo;
+        nightItem2.accentId = nightAccentId;
+        themeItem.items.add(nightItem2);
+
+        return themeItem;
+    }
+
+    public static ArrayList<EmojiThemes> createPrismThemes(int currentAccount) {
+        ArrayList<EmojiThemes> list = new ArrayList<>();
+        list.add(createPrismTheme(currentAccount, "\uD83D\uDD2E", "Prism Nebula", 0, 0));
+        list.add(createPrismTheme(currentAccount, "\uD83C\uDF3F", "Prism Matrix", 0, 0));
+        list.add(createPrismTheme(currentAccount, "\uD83C\uDF05", "Prism Sunset", 0, 0));
+        list.add(createPrismTheme(currentAccount, "\uD83D\uDCA7", "Prism Aqua", 0, 0));
+        list.add(createPrismTheme(currentAccount, "⚡", "Prism Matrix", 1, 1));
+        list.add(createPrismTheme(currentAccount, "\uD83D\uDD0B", "Prism Matrix", 2, 2));
+        list.add(createPrismTheme(currentAccount, "\uD83D\uDD25", "Prism Sunset", 2, 2));
+        list.add(createPrismTheme(currentAccount, "\uD83D\uDC51", "Prism Sunset", 1, 1));
+        list.add(createPrismTheme(currentAccount, "\uD83D\uDC8E", "Prism Nebula", 2, 2));
+        list.add(createPrismTheme(currentAccount, "\uD83C\uDF0C", "Prism Nebula", 1, 1));
+        list.add(createPrismTheme(currentAccount, "\uD83C\uDF0A", "Prism Aqua", 1, 1));
+        list.add(createPrismTheme(currentAccount, "❄️", "Prism Aqua", 3, 3));
+        return list;
+    }
+
     public static EmojiThemes createHomeQrTheme(int currentAccount) {
         EmojiThemes themeItem = new EmojiThemes(currentAccount);
         themeItem.emoji = "\uD83C\uDFE0";
