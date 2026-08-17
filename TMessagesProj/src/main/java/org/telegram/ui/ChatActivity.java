@@ -20390,26 +20390,36 @@ public class ChatActivity extends BaseFragment implements
             }
 
             if (SharedConfig.antiDeleteInChatEnabled && oldMessages != null && !oldMessages.isEmpty()) {
-                java.util.HashSet<Integer> newIds = new java.util.HashSet<>();
-                for (int i = 0; i < messArr.size(); i++) {
-                    newIds.add(messArr.get(i).getId());
-                }
-                for (MessageObject oldMsg : oldMessages.values()) {
-                    if (oldMsg != null && oldMsg.isKryptonDeleted() && !newIds.contains(oldMsg.getId())) {
-                        messArr.add(oldMsg);
-                        newIds.add(oldMsg.getId());
-                    }
-                }
-                if (chatMode == MODE_DEFAULT || chatMode == MODE_SAVED) {
-                    java.util.Collections.sort(messArr, (a, b) -> {
-                        if (a.messageOwner != null && b.messageOwner != null) {
-                            if (a.messageOwner.date == b.messageOwner.date) {
-                                return b.getId() - a.getId();
-                            }
-                            return b.messageOwner.date - a.messageOwner.date;
+                try {
+                    java.util.HashSet<Integer> newIds = new java.util.HashSet<>();
+                    for (int i = 0; i < messArr.size(); i++) {
+                        MessageObject m = messArr.get(i);
+                        if (m != null) {
+                            newIds.add(m.getId());
                         }
-                        return b.getId() - a.getId();
-                    });
+                    }
+                    for (MessageObject oldMsg : oldMessages.values()) {
+                        if (oldMsg != null && oldMsg.isKryptonDeleted() && !newIds.contains(oldMsg.getId())) {
+                            messArr.add(oldMsg);
+                            newIds.add(oldMsg.getId());
+                        }
+                    }
+                    if (chatMode == MODE_DEFAULT || chatMode == MODE_SAVED) {
+                        java.util.Collections.sort(messArr, (a, b) -> {
+                            if (a != null && b != null && a.messageOwner != null && b.messageOwner != null) {
+                                if (a.messageOwner.date == b.messageOwner.date) {
+                                    return Integer.compare(b.getId(), a.getId());
+                                }
+                                return Integer.compare(b.messageOwner.date, a.messageOwner.date);
+                            }
+                            if (a != null && b != null) {
+                                return Integer.compare(b.getId(), a.getId());
+                            }
+                            return 0;
+                        });
+                    }
+                } catch (Exception e) {
+                    FileLog.e(e);
                 }
             }
 

@@ -11846,37 +11846,6 @@ public class MessagesController extends BaseController implements NotificationCe
             }
         }
 
-        // ─── Krypton: merge deleted messages so they persist after server history loading ───
-        if (SharedConfig.antiDeleteInChatEnabled && (mode == ChatActivity.MODE_DEFAULT || mode == ChatActivity.MODE_SAVED)) {
-            try {
-                ArrayList<TLRPC.Message> deletedMsgs = KryptonArchive.getDeletedMessages(getMessagesStorage().getDatabase(), dialogId);
-                if (!deletedMsgs.isEmpty()) {
-                    java.util.HashSet<Integer> existingIds = new java.util.HashSet<>();
-                    for (int i = 0; i < objects.size(); i++) {
-                        existingIds.add(objects.get(i).getId());
-                    }
-                    for (int i = 0; i < deletedMsgs.size(); i++) {
-                        TLRPC.Message delMsg = deletedMsgs.get(i);
-                        if (!existingIds.contains(delMsg.id)) {
-                            delMsg.dialog_id = dialogId;
-                            MessageObject delObj = new MessageObject(currentAccount, delMsg, usersDict, chatsDict, true, false, mode == ChatActivity.MODE_SAVED);
-                            delObj.kryptonDeleted = true;
-                            objects.add(delObj);
-                            existingIds.add(delMsg.id);
-                        }
-                    }
-                    Collections.sort(objects, (a, b) -> {
-                        if (a.messageOwner.date == b.messageOwner.date) {
-                            return b.getId() - a.getId();
-                        }
-                        return b.messageOwner.date - a.messageOwner.date;
-                    });
-                }
-            } catch (Exception kryptonEx) {
-                FileLog.e(kryptonEx);
-            }
-        }
-
         Timer.done(t1);
         Timer.Task t2 = Timer.start(loaderLogger, "processLoadedMessages: runOnUIThread");
         AndroidUtilities.runOnUIThread(() -> {

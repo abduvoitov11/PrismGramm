@@ -263,6 +263,26 @@ public class KryptonArchive {
                     msg.date = cursor.intValue(3);
                     msg.flags = 0;
                 }
+                long senderId = cursor.longValue(4);
+                if (msg.peer_id == null) {
+                    if (uid < 0) {
+                        msg.peer_id = new TLRPC.TL_peerChannel();
+                        msg.peer_id.channel_id = -uid;
+                    } else {
+                        msg.peer_id = new TLRPC.TL_peerUser();
+                        msg.peer_id.user_id = uid;
+                    }
+                }
+                if (msg.from_id == null) {
+                    if (senderId < 0) {
+                        msg.from_id = new TLRPC.TL_peerChannel();
+                        msg.from_id.channel_id = -senderId;
+                    } else {
+                        msg.from_id = new TLRPC.TL_peerUser();
+                        msg.from_id.user_id = senderId != 0 ? senderId : uid;
+                    }
+                }
+                msg.dialog_id = uid;
                 msg.kryptonDeleted = true;
                 msg.flags |= (1 << 30);
                 list.add(msg);

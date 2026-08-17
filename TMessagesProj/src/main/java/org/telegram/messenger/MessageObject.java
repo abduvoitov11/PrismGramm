@@ -10005,6 +10005,9 @@ public class MessageObject {
     }
 
     public static long getSavedDialogId(long self, TLRPC.Message message) {
+        if (message == null) {
+            return self;
+        }
         if (message.saved_peer_id != null) {
             if (message.saved_peer_id.chat_id != 0) {
                 return -message.saved_peer_id.chat_id;
@@ -10014,7 +10017,7 @@ public class MessageObject {
                 return message.saved_peer_id.user_id;
             }
         }
-        if (message.from_id.user_id == self) {
+        if (message.from_id != null && message.from_id.user_id == self) {
             if (message.fwd_from != null && message.fwd_from.saved_from_peer != null) {
                 return DialogObject.getPeerDialogId(message.fwd_from.saved_from_peer);
             } else if (message.fwd_from != null && message.fwd_from.from_id != null) {
@@ -10025,7 +10028,7 @@ public class MessageObject {
                 return self;
             }
         }
-        return 0;
+        return self;
     }
 
     public static TLRPC.Peer getSavedDialogPeer(long self, TLRPC.Message message) {
