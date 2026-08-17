@@ -260,7 +260,21 @@ public class EmojiThemes {
         return themeItem;
     }
 
-    public static EmojiThemes createPrismTheme(int currentAccount, String emoji, String themeName, int dayAccentId, int nightAccentId) {
+    public static EmojiThemes createLiquidGlassTheme(
+            int currentAccount,
+            String emoji,
+            String themeName,
+            int dayAccentId,
+            int nightAccentId,
+            int inBubbleColor,
+            int outBubbleColor,
+            int outLineColor,
+            int bg1,
+            int bg2,
+            int bg3,
+            int bg4,
+            int rotation
+    ) {
         EmojiThemes themeItem = new EmojiThemes(currentAccount);
         themeItem.emoji = emoji;
         themeItem.key = ThemeKey.ofEmoticon(emoji);
@@ -268,46 +282,62 @@ public class EmojiThemes {
 
         Theme.ThemeInfo themeInfo = Theme.getTheme(themeName);
         if (themeInfo == null) {
-            themeInfo = Theme.getTheme("Night");
+            themeInfo = Theme.getTheme("Liquid Glass");
+            if (themeInfo == null) themeInfo = Theme.getTheme("Night");
         }
 
-        ThemeItem dayItem = new ThemeItem();
-        dayItem.themeInfo = themeInfo;
-        dayItem.accentId = dayAccentId;
-        themeItem.items.add(dayItem);
-
-        ThemeItem dayItem2 = new ThemeItem();
-        dayItem2.themeInfo = themeInfo;
-        dayItem2.accentId = dayAccentId;
-        themeItem.items.add(dayItem2);
-
-        ThemeItem nightItem = new ThemeItem();
-        nightItem.themeInfo = themeInfo;
-        nightItem.accentId = nightAccentId;
-        themeItem.items.add(nightItem);
-
-        ThemeItem nightItem2 = new ThemeItem();
-        nightItem2.themeInfo = themeInfo;
-        nightItem2.accentId = nightAccentId;
-        themeItem.items.add(nightItem2);
+        for (int i = 0; i < 4; i++) {
+            ThemeItem item = new ThemeItem();
+            item.themeInfo = themeInfo;
+            item.accentId = (i >= 2) ? nightAccentId : dayAccentId;
+            item.inBubbleColor = inBubbleColor;
+            item.outBubbleColor = outBubbleColor;
+            item.outLineColor = outLineColor;
+            item.patternBgColor = bg1;
+            item.patternBgGradientColor1 = bg2;
+            item.patternBgGradientColor2 = bg3;
+            item.patternBgGradientColor3 = bg4;
+            item.patternBgRotation = rotation;
+            themeItem.items.add(item);
+        }
 
         return themeItem;
     }
 
     public static ArrayList<EmojiThemes> createPrismThemes(int currentAccount) {
         ArrayList<EmojiThemes> list = new ArrayList<>();
-        list.add(createPrismTheme(currentAccount, "\uD83D\uDD2E", "Prism Nebula", 0, 0));
-        list.add(createPrismTheme(currentAccount, "\uD83C\uDF3F", "Prism Matrix", 0, 0));
-        list.add(createPrismTheme(currentAccount, "\uD83C\uDF05", "Prism Sunset", 0, 0));
-        list.add(createPrismTheme(currentAccount, "\uD83D\uDCA7", "Prism Aqua", 0, 0));
-        list.add(createPrismTheme(currentAccount, "⚡", "Prism Matrix", 1, 1));
-        list.add(createPrismTheme(currentAccount, "\uD83D\uDD0B", "Prism Matrix", 2, 2));
-        list.add(createPrismTheme(currentAccount, "\uD83D\uDD25", "Prism Sunset", 2, 2));
-        list.add(createPrismTheme(currentAccount, "\uD83D\uDC51", "Prism Sunset", 1, 1));
-        list.add(createPrismTheme(currentAccount, "\uD83D\uDC8E", "Prism Nebula", 2, 2));
-        list.add(createPrismTheme(currentAccount, "\uD83C\uDF0C", "Prism Nebula", 1, 1));
-        list.add(createPrismTheme(currentAccount, "\uD83C\uDF0A", "Prism Aqua", 1, 1));
-        list.add(createPrismTheme(currentAccount, "❄️", "Prism Aqua", 3, 3));
+        // 1. Liquid Glass Pro (Frosted Chromatic Glass)
+        list.add(createLiquidGlassTheme(currentAccount, "\uD83E\uDEE7", "Liquid Glass", 0, 0, 0x281A2D4C, 0xFF00E5FF, 0xFF00E5FF, 0xFF0E1726, 0xFF1B2A4A, 0xFF112240, 0xFF0A1220, 45));
+        // 2. Liquid Diamond (Ultra Pure Liquid Crystal)
+        list.add(createLiquidGlassTheme(currentAccount, "\uD83E\uDE9E", "Liquid Glass", 4, 4, 0x24242B3D, 0xFF818CF8, 0xFF818CF8, 0xFF12141D, 0xFF1C2030, 0xFF242A42, 0xFF141724, 135));
+        // 3. Liquid Glacial (Frosted Arctic Ice)
+        list.add(createLiquidGlassTheme(currentAccount, "\uD83E\uDDCA", "Liquid Glass", 3, 3, 0x2616334D, 0xFF38BDF8, 0xFF38BDF8, 0xFF0B1B2B, 0xFF112E48, 0xFF183F60, 0xFF091724, 180));
+        // 4. Liquid Nebula (Cosmic Ultra Violet Refractions)
+        list.add(createLiquidGlassTheme(currentAccount, "\uD83C\uDF0C", "Prism Nebula", 0, 0, 0x28261342, 0xFFA855F7, 0xFFA855F7, 0xFF160D2B, 0xFF251448, 0xFF381966, 0xFF120824, 45));
+        // 5. Liquid Sunset Glow (Molten Amber & Crimson Glass)
+        list.add(createLiquidGlassTheme(currentAccount, "\uD83C\uDF05", "Prism Sunset", 0, 0, 0x28381520, 0xFFFB923C, 0xFFFB923C, 0xFF241018, 0xFF3B1522, 0xFF4D1D2B, 0xFF1A0A10, 135));
+        // 6. Liquid Emerald (Translucent Jade & Cyber Mint)
+        list.add(createLiquidGlassTheme(currentAccount, "\uD83C\uDF3F", "Prism Matrix", 0, 0, 0x2614352A, 0xFF10B981, 0xFF10B981, 0xFF091C16, 0xFF0F2E23, 0xFF164032, 0xFF061510, 45));
+        // 7. Liquid Ruby Obsidian (Velvet Wine Glass)
+        list.add(createLiquidGlassTheme(currentAccount, "\uD83C\uDF77", "Liquid Ruby", 0, 0, 0x262D0D1B, 0xFFE11D48, 0xFFE11D48, 0xFF1F0B13, 0xFF330F1F, 0xFF421429, 0xFF16060C, 45));
+        // 8. Liquid Royal Gold (Molten Champagne & Amber)
+        list.add(createLiquidGlassTheme(currentAccount, "\uD83D\uDC51", "Prism Sunset", 1, 1, 0x282E210D, 0xFFF59E0B, 0xFFF59E0B, 0xFF1F170B, 0xFF33250E, 0xFF453112, 0xFF161006, 90));
+        // 9. Liquid Cosmic Opal (Iridescent Multiverse Glass)
+        list.add(createLiquidGlassTheme(currentAccount, "\uD83E\uDE90", "Prism Nebula", 2, 2, 0x2822183D, 0xFF8B5CF6, 0xFF8B5CF6, 0xFF15102A, 0xFF112338, 0xFF28183E, 0xFF0B101E, 135));
+        // 10. Liquid Cyber Chrome (Electric Neon & Titanium)
+        list.add(createLiquidGlassTheme(currentAccount, "⚡", "Liquid Glass", 5, 5, 0x26172635, 0xFF00F0FF, 0xFF00F0FF, 0xFF0D141C, 0xFF14202C, 0xFF1C2D3E, 0xFF080D13, 45));
+        // 11. Liquid Velvet Rose (Frosted Quartz & Pastel Pink)
+        list.add(createLiquidGlassTheme(currentAccount, "\uD83C\uDF3A", "Liquid Ruby", 2, 2, 0x28331326, 0xFFF472B6, 0xFFF472B6, 0xFF220E1A, 0xFF381429, 0xFF4A1A37, 0xFF180812, 135));
+        // 12. Liquid Aquamarine (Deep Oceanic Glass)
+        list.add(createLiquidGlassTheme(currentAccount, "\uD83C\uDF0A", "Prism Aqua", 0, 0, 0x26102636, 0xFF06B6D4, 0xFF06B6D4, 0xFF081822, 0xFF0E2838, 0xFF14384E, 0xFF051017, 180));
+        // 13. Liquid Midnight OLED (True Pitch Black Liquid Glass)
+        list.add(createLiquidGlassTheme(currentAccount, "\uD83D\uDDA4", "Night", 0, 0, 0x261B1E2B, 0xFF60A5FA, 0xFF60A5FA, 0xFF08090C, 0xFF101218, 0xFF181C26, 0xFF030406, 0));
+        // 14. Liquid Matrix Core (Cyber Matrix Liquid Light)
+        list.add(createLiquidGlassTheme(currentAccount, "\uD83E\uDDEA", "Prism Matrix", 1, 1, 0x260C2618, 0xFF00FF66, 0xFF00FF66, 0xFF06140D, 0xFF0A2216, 0xFF0E3220, 0xFF030C07, 45));
+        // 15. Liquid Peach Nectar (Translucent Apricot & Champagne)
+        list.add(createLiquidGlassTheme(currentAccount, "\uD83C\uDF4A", "Prism Sunset", 3, 3, 0x28361C12, 0xFFFB923C, 0xFFFB923C, 0xFF24140E, 0xFF3B1E13, 0xFF4E2819, 0xFF180C08, 135));
+        // 16. Liquid Amethyst Prism (Refractive Purple Crystal)
+        list.add(createLiquidGlassTheme(currentAccount, "\uD83D\uDD2E", "Liquid Glass", 1, 1, 0x28290E3C, 0xFFC084FC, 0xFFC084FC, 0xFF180A24, 0xFF2A0F3D, 0xFF3B1556, 0xFF100518, 90));
         return list;
     }
 
@@ -745,23 +775,25 @@ public class EmojiThemes {
             if (items.get(i) == null) {
                 continue;
             }
-            SparseIntArray colorsMap = getPreviewColors(currentAccount, i);
-            items.get(i).inBubbleColor = getOrDefault(colorsMap, Theme.key_chat_inBubble);
-            items.get(i).outBubbleColor = getOrDefault(colorsMap, Theme.key_chat_outBubble);
-            items.get(i).outLineColor = getOrDefault(colorsMap, Theme.key_featuredStickers_addButton);
-            items.get(i).patternBgColor = colorsMap.get(Theme.key_chat_wallpaper, 0);
-            items.get(i).patternBgGradientColor1 = colorsMap.get(Theme.key_chat_wallpaper_gradient_to1, 0);
-            items.get(i).patternBgGradientColor2 = colorsMap.get(Theme.key_chat_wallpaper_gradient_to2, 0);
-            items.get(i).patternBgGradientColor3 = colorsMap.get(Theme.key_chat_wallpaper_gradient_to3, 0);
-            items.get(i).patternBgRotation = colorsMap.get(Theme.key_chat_wallpaper_gradient_rotation, 0);
+            if (items.get(i).patternBgColor == 0) {
+                SparseIntArray colorsMap = getPreviewColors(currentAccount, i);
+                items.get(i).inBubbleColor = getOrDefault(colorsMap, Theme.key_chat_inBubble);
+                items.get(i).outBubbleColor = getOrDefault(colorsMap, Theme.key_chat_outBubble);
+                items.get(i).outLineColor = getOrDefault(colorsMap, Theme.key_featuredStickers_addButton);
+                items.get(i).patternBgColor = colorsMap.get(Theme.key_chat_wallpaper, 0);
+                items.get(i).patternBgGradientColor1 = colorsMap.get(Theme.key_chat_wallpaper_gradient_to1, 0);
+                items.get(i).patternBgGradientColor2 = colorsMap.get(Theme.key_chat_wallpaper_gradient_to2, 0);
+                items.get(i).patternBgGradientColor3 = colorsMap.get(Theme.key_chat_wallpaper_gradient_to3, 0);
+                items.get(i).patternBgRotation = colorsMap.get(Theme.key_chat_wallpaper_gradient_rotation, 0);
 
-            if (items.get(i).themeInfo != null && items.get(i).themeInfo.getKey().equals("Blue")) {
-                int accentId = items.get(i).accentId >= 0 ? items.get(i).accentId : items.get(i).themeInfo.currentAccentId;
-                if (accentId == 99) {
-                    items.get(i).patternBgColor = 0xffdbddbb;
-                    items.get(i).patternBgGradientColor1 = 0xff6ba587;
-                    items.get(i).patternBgGradientColor2 = 0xffd5d88d;
-                    items.get(i).patternBgGradientColor3 = 0xff88b884;
+                if (items.get(i).themeInfo != null && items.get(i).themeInfo.getKey().equals("Blue")) {
+                    int accentId = items.get(i).accentId >= 0 ? items.get(i).accentId : items.get(i).themeInfo.currentAccentId;
+                    if (accentId == 99) {
+                        items.get(i).patternBgColor = 0xffdbddbb;
+                        items.get(i).patternBgGradientColor1 = 0xff6ba587;
+                        items.get(i).patternBgGradientColor2 = 0xffd5d88d;
+                        items.get(i).patternBgGradientColor3 = 0xff88b884;
+                    }
                 }
             }
         }

@@ -2370,6 +2370,10 @@ public class Theme {
                 return "Prism Nebula";
             } else if ("Prism Aqua".equals(name)) {
                 return "Prism Aqua";
+            } else if ("Liquid Glass".equals(name)) {
+                return "Liquid Glass";
+            } else if ("Liquid Ruby".equals(name)) {
+                return "Liquid Ruby";
             }
             return info != null ? info.title : name;
         }
@@ -2486,7 +2490,7 @@ public class Theme {
             if (isDark != UNKNOWN) {
                 return isDark == DARK;
             }
-            if ("Dark Blue".equals(name) || "Night".equals(name) || (name != null && name.startsWith("Prism"))) {
+            if ("Dark Blue".equals(name) || "Night".equals(name) || (name != null && (name.startsWith("Prism") || name.startsWith("Liquid")))) {
                 isDark = DARK;
             } else if ("Blue".equals(name) || "Arctic Blue".equals(name) || "Day".equals(name)) {
                 isDark = LIGHT;
@@ -2661,6 +2665,26 @@ public class Theme {
                     themeAccent.backgroundGradientOverrideColor1 = 0xff040e14;
                     themeAccent.backgroundGradientOverrideColor2 = 0xff102e40;
                     themeAccent.backgroundGradientOverrideColor3 = 0xff07151e;
+                } else if (isHome(themeAccent) && name.equals("Liquid Glass")) {
+                    themeAccent.myMessagesAccentColor = 0xff00e5ff;
+                    themeAccent.myMessagesGradientAccentColor1 = 0xff7c4dff;
+                    themeAccent.myMessagesGradientAccentColor2 = 0xffff007f;
+                    themeAccent.myMessagesGradientAccentColor3 = 0xff00e5ff;
+                    themeAccent.patternIntensity = -0.65f;
+                    themeAccent.backgroundOverrideColor = 0xff0e1726;
+                    themeAccent.backgroundGradientOverrideColor1 = 0xff1b2a4a;
+                    themeAccent.backgroundGradientOverrideColor2 = 0xff112240;
+                    themeAccent.backgroundGradientOverrideColor3 = 0xff0a1220;
+                } else if (isHome(themeAccent) && name.equals("Liquid Ruby")) {
+                    themeAccent.myMessagesAccentColor = 0xffe11d48;
+                    themeAccent.myMessagesGradientAccentColor1 = 0xffbe123c;
+                    themeAccent.myMessagesGradientAccentColor2 = 0xfffb7185;
+                    themeAccent.myMessagesGradientAccentColor3 = 0xff9f1239;
+                    themeAccent.patternIntensity = -0.65f;
+                    themeAccent.backgroundOverrideColor = 0xff1f0b13;
+                    themeAccent.backgroundGradientOverrideColor1 = 0xff330f1f;
+                    themeAccent.backgroundGradientOverrideColor2 = 0xff421429;
+                    themeAccent.backgroundGradientOverrideColor3 = 0xff16060c;
                 }
                 themeAccentsMap.put(themeAccent.id, themeAccent);
                 themeAccents.add(themeAccent);
@@ -4865,6 +4889,56 @@ public class Theme {
         sortAccents(themeInfo);
         themes.add(themeInfo);
         themesDict.put("Prism Aqua", themeInfo);
+
+        // Liquid Glass Theme (iOS 26.5 Liquid Chromatic Glass)
+        themeInfo = new ThemeInfo();
+        themeInfo.name = "Liquid Glass";
+        themeInfo.assetName = "night.attheme";
+        themeInfo.previewBackgroundColor = 0xff0e1726;
+        themeInfo.previewInColor = 0xff1b2a4a;
+        themeInfo.previewOutColor = 0xff00e5ff;
+        themeInfo.sortIndex = 10;
+        themeInfo.setAccentColorOptions(
+                new int[]    { 0xFF00E5FF, 0xFF7C4DFF, 0xFFFF007F, 0xFF38BDF8, 0xFF818CF8, 0xFF00F0FF, 0xFFC084FC, 0xFF22D3EE },
+                new int[]    { 0xFF00E5FF, 0xFF7C4DFF, 0xFFFF007F, 0xFF38BDF8, 0xFF818CF8, 0xFF00F0FF, 0xFFC084FC, 0xFF22D3EE },
+                new int[]    { 0xFF7C4DFF, 0xFFFF007F, 0xFF00E5FF, 0xFF818CF8, 0xFFC084FC, 0xFF7000FF, 0xFF00E5FF, 0xFF38BDF8 },
+                new int[]    { 0xFF0e1726, 0xFF120c1e, 0xFF1c0e14, 0xFF0b1b2b, 0xFF141724, 0xFF0d141c, 0xFF15102a, 0xFF081822 },
+                new int[]    { 0xFF1b2a4a, 0xFF090510, 0xFF0f060a, 0xFF112e48, 0xFF1c2030, 0xFF14202c, 0xFF112338, 0xFF0e2838 },
+                new int[]    { 0xFF112240, 0xFF1f1433, 0xFF2b131c, 0xFF183f60, 0xFF242a42, 0xFF1c2d3e, 0xFF28183e, 0xFF14384e },
+                new int[]    { 0xFF0a1220, 0xFF0e0817, 0xFF14080e, 0xFF091724, 0xFF141724, 0xFF080d13, 0xFF0b101e, 0xFF051017 },
+                new int[]    {          0,          1,          2,          3,          4,          5,          6,          7 },
+                new String[] { "dk_wwlghOFACAAAAfz9xrxi6euw", "O-wmAfBPSFADAAAA4zINVfD_bro", "9ShF73d1MFIIAAAAjWnm8_ZMe8Q", "MIo6r0qGSFAFAAAAtL8TsDzNX60", "F5oWoCs7QFACAAAAgf2bD_mg8Bw", "ptuUd96JSFACAAAATobI23sPpz0", "dhf9pceaQVACAAAAbzdVo4SCiZA", "9LW_RcoOSVACAAAAFTk3DTyXN-M" },
+                new int[]    {         45,        135,         45,        180,          0,         45,        135,          0 },
+                new int[]    {         40,         45,         50,         40,         45,         35,         45,         40 }
+        );
+        sortAccents(themeInfo);
+        themes.add(themeInfo);
+        themesDict.put("Liquid Glass", themeInfo);
+
+        // Liquid Ruby Theme (iOS 26.5 Liquid Velvet Ruby Glass)
+        themeInfo = new ThemeInfo();
+        themeInfo.name = "Liquid Ruby";
+        themeInfo.assetName = "night.attheme";
+        themeInfo.previewBackgroundColor = 0xff1f0b13;
+        themeInfo.previewInColor = 0xff330f1f;
+        themeInfo.previewOutColor = 0xffe11d48;
+        themeInfo.sortIndex = 11;
+        themeInfo.setAccentColorOptions(
+                new int[]    { 0xFFE11D48, 0xFFBE123C, 0xFFFB7185, 0xFFF472B6, 0xFFFF2A6D, 0xFFFF007F, 0xFFD946EF, 0xFFFF6B8B },
+                new int[]    { 0xFFE11D48, 0xFFBE123C, 0xFFFB7185, 0xFFF472B6, 0xFFFF2A6D, 0xFFFF007F, 0xFFD946EF, 0xFFFF6B8B },
+                new int[]    { 0xFFBE123C, 0xFFFB7185, 0xFF9F1239, 0xFFE11D48, 0xFF7928CA, 0xFFE11D48, 0xFFBE123C, 0xFFFF007F },
+                new int[]    { 0xFF1f0b13, 0xFF1c0a0f, 0xFF220e1a, 0xFF241018, 0xFF1a0a14, 0xFF1e0c18, 0xFF16060c, 0xFF200d16 },
+                new int[]    { 0xFF330f1f, 0xFF100508, 0xFF381429, 0xFF3b1522, 0xFF2a0b1c, 0xFF2c0e20, 0xFF0e0308, 0xFF30101f },
+                new int[]    { 0xFF421429, 0xFF2c0f17, 0xFF4a1a37, 0xFF4d1d2b, 0xFF380e25, 0xFF3d122b, 0xFF1c0710, 0xFF3f1327 },
+                new int[]    { 0xFF16060c, 0xFF14070a, 0xFF180812, 0xFF1a0a10, 0xFF12050e, 0xFF150711, 0xFF0b0206, 0xFF14060e },
+                new int[]    {          0,          1,          2,          3,          4,          5,          6,          7 },
+                new String[] { "9ShF73d1MFIIAAAAjWnm8_ZMe8Q", "3rX-PaKbSFACAAAAEiHNvcEm6X4", "9GcNVISdSVADAAAAUcw5BYjELW4", "9LW_RcoOSVACAAAAFTk3DTyXN-M", "fqv01SQemVIBAAAApND8LDRUhRU", "RepJ5uE_SVABAAAAr4d0YhgB850", "PllZ-bf_SFAEAAAA8crRfwZiDNg", "dk_wwlghOFACAAAAfz9xrxi6euw" },
+                new int[]    {         45,        135,         45,        180,          0,         45,        135,          0 },
+                new int[]    {         40,         45,         50,         40,         45,         35,         45,         40 }
+        );
+        sortAccents(themeInfo);
+        themes.add(themeInfo);
+        themesDict.put("Liquid Ruby", themeInfo);
 
         String themesString = themeConfig.getString("themes2", null);
 
@@ -10704,7 +10778,7 @@ public class Theme {
             if (accent.parentTheme.getKey().equals("Day") && accent.id == 9) {
                 return true;
             }
-            if ((accent.parentTheme.getKey().equals("Night") || accent.parentTheme.getKey().equals("Dark Blue") || accent.parentTheme.getKey().startsWith("Prism")) && accent.id == 0) {
+            if ((accent.parentTheme.getKey().equals("Night") || accent.parentTheme.getKey().equals("Dark Blue") || accent.parentTheme.getKey().startsWith("Prism") || accent.parentTheme.getKey().startsWith("Liquid")) && accent.id == 0) {
                 return true;
             }
         }
