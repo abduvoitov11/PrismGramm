@@ -43,7 +43,7 @@ public class KryptonArchiveActivity extends BaseFragment {
     public View createView(Context context) {
         actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
-        actionBar.setTitle("O'chirilgan xabarlar");
+        actionBar.setTitle(LocaleController.getString(R.string.PrismGrammArchive));
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int id) {
