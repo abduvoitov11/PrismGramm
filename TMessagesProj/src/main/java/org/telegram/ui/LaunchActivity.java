@@ -594,6 +594,14 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                 actionBarLayout.addFragmentToStack(mainTabsActivity);
             }
 
+            if (savedInstanceState == null) {
+                try {
+                    org.telegram.ui.Components.PrismSplashScreenView splashView = new org.telegram.ui.Components.PrismSplashScreenView(this);
+                    frameLayout.addView(splashView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
+                    splashView.showAndAutoDismiss(750);
+                } catch (Throwable ignored) {}
+            }
+
             try {
                 if (savedInstanceState != null) {
                     String fragmentName = savedInstanceState.getString("fragment");
