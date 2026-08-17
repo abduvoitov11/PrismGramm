@@ -182,7 +182,7 @@ public class KryptonMediaExtractor {
                 if (directUrl != null && !directUrl.isEmpty()) {
                     MediaResult result = new MediaResult();
                     result.directUrl = directUrl;
-                    result.filename = streamInfo.getTitle() != null ? streamInfo.getTitle().replaceAll("[^a-zA-Z0-9_ -]", "") : "krypton_media";
+                    result.filename = streamInfo.getTitle() != null ? streamInfo.getTitle().replaceAll("[^a-zA-Z0-9_ -]", "") : "prismgramm_media";
                     result.isVideo = !audioOnly;
                     result.isAudio = audioOnly;
                     AndroidUtilities.runOnUIThread(() -> callback.onSuccess(result));
@@ -295,22 +295,22 @@ public class KryptonMediaExtractor {
             Uri collection;
             if (mimeType.startsWith("video")) {
                 if (Build.VERSION.SDK_INT >= 29) {
-                    values.put(MediaStore.Video.Media.RELATIVE_PATH, Environment.DIRECTORY_MOVIES + "/Krypton");
+                    values.put(MediaStore.Video.Media.RELATIVE_PATH, Environment.DIRECTORY_MOVIES + "/PrismGramm");
                 }
                 collection = MediaStore.Video.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
             } else if (mimeType.startsWith("image")) {
                 if (Build.VERSION.SDK_INT >= 29) {
-                    values.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + "/Krypton");
+                    values.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + "/PrismGramm");
                 }
                 collection = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
             } else if (mimeType.startsWith("audio")) {
                 if (Build.VERSION.SDK_INT >= 29) {
-                    values.put(MediaStore.Audio.Media.RELATIVE_PATH, Environment.DIRECTORY_MUSIC + "/Krypton");
+                    values.put(MediaStore.Audio.Media.RELATIVE_PATH, Environment.DIRECTORY_MUSIC + "/PrismGramm");
                 }
                 collection = MediaStore.Audio.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
             } else {
                 if (Build.VERSION.SDK_INT >= 29) {
-                    values.put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS + "/Krypton");
+                    values.put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS + "/PrismGramm");
                 }
                 collection = MediaStore.Downloads.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
             }

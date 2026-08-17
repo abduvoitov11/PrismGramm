@@ -362,11 +362,11 @@ public class KryptonMediaDownloader {
 
             String ext = isVideo ? ".mp4" : ".jpg";
             String platform = platformName(sourceUrl).toLowerCase().replaceAll("[^a-z0-9]", "");
-            String fileName = "krypton_" + platform + "_" + System.currentTimeMillis() + ext;
+            String fileName = "prismgramm_" + platform + "_" + System.currentTimeMillis() + ext;
 
             DownloadManager.Request request = new DownloadManager.Request(Uri.parse(directUrl));
             request.setTitle(platformName(sourceUrl) + (isVideo ? " Video" : " Rasm"));
-            request.setDescription("Krypton Downloader orqali yuklanmoqda...");
+            request.setDescription("PrismGramm Downloader orqali yuklanmoqda...");
             request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
             request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
             request.setAllowedOverMetered(true);

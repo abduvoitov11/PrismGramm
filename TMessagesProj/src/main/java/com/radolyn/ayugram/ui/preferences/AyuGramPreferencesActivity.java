@@ -343,7 +343,7 @@ public class AyuGramPreferencesActivity extends BasePreferencesActivity implemen
 
     @Override
     protected String getTitle() {
-        return "Krypton Sozlamalari";
+        return "PrismGramm Sozlamalari";
     }
 
     @Override

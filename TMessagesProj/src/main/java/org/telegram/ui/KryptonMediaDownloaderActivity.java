@@ -197,7 +197,7 @@ public class KryptonMediaDownloaderActivity extends BaseFragment {
                     ext = result.filename.substring(result.filename.lastIndexOf("."));
                 }
 
-                String fileName = "Krypton_" + System.currentTimeMillis() + ext;
+                String fileName = "PrismGramm_" + System.currentTimeMillis() + ext;
                 File tempFile = new File(context.getCacheDir(), fileName);
 
                 KryptonMediaExtractor.downloadFile(result.directUrl, tempFile,
