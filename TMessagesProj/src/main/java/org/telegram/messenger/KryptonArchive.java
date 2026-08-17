@@ -4,6 +4,7 @@ import org.telegram.SQLite.SQLiteDatabase;
 import org.telegram.SQLite.SQLiteException;
 import org.telegram.SQLite.SQLitePreparedStatement;
 import org.telegram.SQLite.SQLiteCursor;
+import org.telegram.tgnet.NativeByteBuffer;
 import org.telegram.tgnet.TLRPC;
 
 import java.util.ArrayList;
@@ -31,9 +32,13 @@ public class KryptonArchive {
                     "message_text TEXT, " +
                     "media_label TEXT, " +
                     "orig_date INTEGER, " +
-                    "event_date INTEGER" +
+                    "event_date INTEGER, " +
+                    "message_data BLOB" +
                 ")"
             ).stepThis().dispose();
+            try {
+                database.executeFast("ALTER TABLE krypton_archive ADD COLUMN message_data BLOB").stepThis().dispose();
+            } catch (Exception ignored) {}
             database.executeFast(
                 "CREATE INDEX IF NOT EXISTS idx_krypton_archive_uid ON krypton_archive(uid, event_date)"
             ).stepThis().dispose();
@@ -93,16 +98,16 @@ public class KryptonArchive {
     private static void insert(SQLiteDatabase database, long uid, int mid, TLRPC.Message message, int kind) {
         if (database == null || message == null) return;
         SQLitePreparedStatement state = null;
+        NativeByteBuffer data = null;
         try {
             String text = message.message != null ? message.message : "";
-            // Xabar mazmuni bo'sh bo'lsa (masalan faqat media) va media ham yo'q bo'lsa, arxivlashning hojati yo'q
             String media = mediaLabel(message);
             if (text.isEmpty() && media == null) return;
 
             long senderId = message.from_id != null ? MessageObject.getPeerId(message.from_id) : 0;
 
             state = database.executeFast(
-                "INSERT INTO krypton_archive(mid, uid, sender_id, kind, message_text, media_label, orig_date, event_date) VALUES(?, ?, ?, ?, ?, ?, ?, ?)"
+                "INSERT INTO krypton_archive(mid, uid, sender_id, kind, message_text, media_label, orig_date, event_date, message_data) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)"
             );
             state.requery();
             state.bindInteger(1, mid);
@@ -117,10 +122,20 @@ public class KryptonArchive {
             }
             state.bindInteger(7, message.date);
             state.bindInteger(8, (int) (System.currentTimeMillis() / 1000));
+            try {
+                data = new NativeByteBuffer(message.getObjectSize());
+                message.serializeToStream(data);
+                state.bindByteBuffer(9, data);
+            } catch (Exception e) {
+                state.bindNull(9);
+            }
             state.step();
         } catch (Exception e) {
             FileLog.e(e);
         } finally {
+            if (data != null) {
+                data.reuse();
+            }
             if (state != null) {
                 state.dispose();
             }
@@ -220,6 +235,46 @@ public class KryptonArchive {
             }
         }
         return set;
+    }
+
+    /** Berilgan chat (uid) bo'yicha barcha o'chirilgan to'liq xabarlarni qaytaradi. */
+    public static ArrayList<TLRPC.Message> getDeletedMessages(SQLiteDatabase database, long uid) {
+        ArrayList<TLRPC.Message> list = new ArrayList<>();
+        if (database == null) return list;
+        SQLiteCursor cursor = null;
+        try {
+            cursor = database.queryFinalized("SELECT message_data, mid, message_text, orig_date, sender_id FROM krypton_archive WHERE uid = " + uid + " AND kind = 0");
+            while (cursor.next()) {
+                NativeByteBuffer data = cursor.byteBufferValue(0);
+                TLRPC.Message msg = null;
+                if (data != null) {
+                    try {
+                        msg = TLRPC.Message.TLdeserialize(data, data.readInt32(false), false);
+                    } catch (Exception e) {
+                        FileLog.e(e);
+                    } finally {
+                        data.reuse();
+                    }
+                }
+                if (msg == null) {
+                    msg = new TLRPC.TL_message();
+                    msg.id = cursor.intValue(1);
+                    msg.message = cursor.stringValue(2);
+                    msg.date = cursor.intValue(3);
+                    msg.flags = 0;
+                }
+                msg.kryptonDeleted = true;
+                msg.flags |= (1 << 30);
+                list.add(msg);
+            }
+        } catch (Exception e) {
+            FileLog.e(e);
+        } finally {
+            if (cursor != null) {
+                cursor.dispose();
+            }
+        }
+        return list;
     }
 
     /** Berilgan xabar o'chirilganini arxivdan tekshiradi. */

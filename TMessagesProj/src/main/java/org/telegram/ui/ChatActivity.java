@@ -20389,6 +20389,30 @@ public class ChatActivity extends BaseFragment implements
                 toggleIsAllChats();
             }
 
+            if (SharedConfig.antiDeleteInChatEnabled && oldMessages != null && !oldMessages.isEmpty()) {
+                java.util.HashSet<Integer> newIds = new java.util.HashSet<>();
+                for (int i = 0; i < messArr.size(); i++) {
+                    newIds.add(messArr.get(i).getId());
+                }
+                for (MessageObject oldMsg : oldMessages.values()) {
+                    if (oldMsg != null && oldMsg.isKryptonDeleted() && !newIds.contains(oldMsg.getId())) {
+                        messArr.add(oldMsg);
+                        newIds.add(oldMsg.getId());
+                    }
+                }
+                if (chatMode == MODE_DEFAULT || chatMode == MODE_SAVED) {
+                    java.util.Collections.sort(messArr, (a, b) -> {
+                        if (a.messageOwner != null && b.messageOwner != null) {
+                            if (a.messageOwner.date == b.messageOwner.date) {
+                                return b.getId() - a.getId();
+                            }
+                            return b.messageOwner.date - a.messageOwner.date;
+                        }
+                        return b.getId() - a.getId();
+                    });
+                }
+            }
+
             if (index == -1) {
                 if (chatMode == MODE_SCHEDULED && mode == MODE_SCHEDULED && !isCache) {
                     waitingForReplyMessageLoad = true;
