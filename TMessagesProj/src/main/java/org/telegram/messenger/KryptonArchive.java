@@ -202,6 +202,26 @@ public class KryptonArchive {
         return result;
     }
 
+    /** Berilgan chat (uid) bo'yicha barcha o'chirilgan xabarlar ID sini qaytaradi. */
+    public static java.util.HashSet<Integer> getDeletedMids(SQLiteDatabase database, long uid) {
+        java.util.HashSet<Integer> set = new java.util.HashSet<>();
+        if (database == null) return set;
+        SQLiteCursor cursor = null;
+        try {
+            cursor = database.queryFinalized("SELECT mid FROM krypton_archive WHERE uid = " + uid + " AND kind = 0");
+            while (cursor.next()) {
+                set.add(cursor.intValue(0));
+            }
+        } catch (Exception e) {
+            FileLog.e(e);
+        } finally {
+            if (cursor != null) {
+                cursor.dispose();
+            }
+        }
+        return set;
+    }
+
     /** Berilgan xabar o'chirilganini arxivdan tekshiradi. */
     public static boolean isMessageDeleted(SQLiteDatabase database, long uid, int mid) {
         if (database == null) return false;

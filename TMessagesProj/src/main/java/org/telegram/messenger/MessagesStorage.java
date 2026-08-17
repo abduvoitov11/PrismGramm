@@ -7723,12 +7723,17 @@ public class MessagesStorage extends BaseController {
         storageQueue.postRunnable(() -> {
             SQLiteCursor cursor = null;
             try {
-                cursor = database.queryFinalized("SELECT data FROM messages_v2 WHERE uid = " + dialogId + " AND mid = " + msgId + " LIMIT 1");
+                cursor = database.queryFinalized("SELECT data, flags FROM messages_v2 WHERE uid = " + dialogId + " AND mid = " + msgId + " LIMIT 1");
                 while (cursor.next()) {
                     NativeByteBuffer data = cursor.byteBufferValue(0);
                     if (data != null) {
                         TLRPC.Message message = TLRPC.Message.TLdeserialize(data, data.readInt32(false), false);
                         data.reuse();
+                        int dbFlags = cursor.intValue(1);
+                        if ((dbFlags & (1 << 30)) != 0 || (SharedConfig.antiDeleteInChatEnabled && KryptonArchive.isMessageDeleted(database, dialogId, (int) msgId))) {
+                            message.kryptonDeleted = true;
+                            message.flags |= (1 << 30);
+                        }
                         ref.set(message);
                     }
                 }
@@ -8778,9 +8783,9 @@ public class MessagesStorage extends BaseController {
             ArrayList<Long> replyMessageRandomIds = new ArrayList<>();
             String messageSelect;
             if (threadMessageId != 0) {
-                messageSelect = "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention, m.imp, m.forwards, m.replies_data, m.custom_params, m.reply_to_story_id FROM messages_topics as m LEFT JOIN randoms_v2 as r ON r.mid = m.mid AND r.uid = m.uid";
+                messageSelect = "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention, m.imp, m.forwards, m.replies_data, m.custom_params, m.reply_to_story_id, m.flags FROM messages_topics as m LEFT JOIN randoms_v2 as r ON r.mid = m.mid AND r.uid = m.uid";
             } else {
-                messageSelect = "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention, m.imp, m.forwards, m.replies_data, m.custom_params, m.reply_to_story_id FROM messages_v2 as m LEFT JOIN randoms_v2 as r ON r.mid = m.mid AND r.uid = m.uid";
+                messageSelect = "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention, m.imp, m.forwards, m.replies_data, m.custom_params, m.reply_to_story_id, m.flags FROM messages_v2 as m LEFT JOIN randoms_v2 as r ON r.mid = m.mid AND r.uid = m.uid";
             }
             if (scheduled) {
                 isEnd = true;
@@ -9422,6 +9427,7 @@ public class MessagesStorage extends BaseController {
                 int maxId = Integer.MIN_VALUE;
                 ArrayList<Long> messageIdsToFix = null;
 
+                java.util.HashSet<Integer> kryptonDeletedMids = SharedConfig.antiDeleteInChatEnabled ? KryptonArchive.getDeletedMids(database, dialogId) : null;
                 if (cursor != null) {
                     while (cursor.next()) {
                         messagesCount++;
@@ -9478,6 +9484,17 @@ public class MessagesStorage extends BaseController {
                                 message.stickerVerified = 0;
                             } else if ((flags & 2) != 0) {
                                 message.stickerVerified = 2;
+                            }
+                            if (cursor.getColumnCount() > 15) {
+                                int dbFlags = cursor.intValue(15);
+                                if ((dbFlags & (1 << 30)) != 0) {
+                                    message.kryptonDeleted = true;
+                                    message.flags |= (1 << 30);
+                                }
+                            }
+                            if (kryptonDeletedMids != null && kryptonDeletedMids.contains(message.id)) {
+                                message.kryptonDeleted = true;
+                                message.flags |= (1 << 30);
                             }
                             NativeByteBuffer customParams = cursor.byteBufferValue(13);
                             if (customParams != null) {
