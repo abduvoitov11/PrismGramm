@@ -24,7 +24,58 @@ public class LauncherIconController {
         return i == PackageManager.COMPONENT_ENABLED_STATE_ENABLED || i == PackageManager.COMPONENT_ENABLED_STATE_DEFAULT && icon == LauncherIcon.DEFAULT;
     }
 
+    private static android.graphics.Bitmap cachedIconBitmap;
+    private static LauncherIcon cachedForIcon;
+
+    public static LauncherIcon getSelectedIcon() {
+        for (LauncherIcon icon : LauncherIcon.values()) {
+            if (isEnabled(icon)) {
+                return icon;
+            }
+        }
+        return LauncherIcon.DEFAULT;
+    }
+
+    public static android.graphics.Bitmap getSelectedIconBitmap(Context context) {
+        if (context == null) {
+            context = ApplicationLoader.applicationContext;
+        }
+        if (context == null) {
+            return null;
+        }
+        LauncherIcon current = getSelectedIcon();
+        if (cachedIconBitmap != null && cachedForIcon == current && !cachedIconBitmap.isRecycled()) {
+            return cachedIconBitmap;
+        }
+        try {
+            int size = org.telegram.messenger.AndroidUtilities.dp(48);
+            android.graphics.Bitmap bitmap = android.graphics.Bitmap.createBitmap(size, size, android.graphics.Bitmap.Config.ARGB_8888);
+            android.graphics.Canvas canvas = new android.graphics.Canvas(bitmap);
+
+            android.graphics.drawable.Drawable bgDrawable = androidx.core.content.ContextCompat.getDrawable(context, current.background);
+            if (bgDrawable != null) {
+                bgDrawable.setBounds(0, 0, size, size);
+                bgDrawable.draw(canvas);
+            }
+
+            android.graphics.drawable.Drawable fgDrawable = androidx.core.content.ContextCompat.getDrawable(context, current.foreground);
+            if (fgDrawable != null) {
+                fgDrawable.setBounds(0, 0, size, size);
+                fgDrawable.draw(canvas);
+            }
+
+            cachedIconBitmap = bitmap;
+            cachedForIcon = current;
+            return bitmap;
+        } catch (Throwable e) {
+            org.telegram.messenger.FileLog.e(e);
+            return null;
+        }
+    }
+
     public static void setIcon(LauncherIcon icon) {
+        cachedIconBitmap = null;
+        cachedForIcon = null;
         Context ctx = ApplicationLoader.applicationContext;
         PackageManager pm = ctx.getPackageManager();
         for (LauncherIcon i : LauncherIcon.values()) {

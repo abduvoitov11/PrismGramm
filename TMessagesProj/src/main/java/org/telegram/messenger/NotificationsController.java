@@ -4616,6 +4616,11 @@ public class NotificationsController extends BaseController implements Notificat
 
                     }
                 }
+            } else {
+                Bitmap appIconBitmap = org.telegram.ui.LauncherIconController.getSelectedIconBitmap(ApplicationLoader.applicationContext);
+                if (appIconBitmap != null) {
+                    mBuilder.setLargeIcon(appIconBitmap);
+                }
             }
 
             int configImportance = 0;
@@ -5636,6 +5641,11 @@ public class NotificationsController extends BaseController implements Notificat
             }
             if (avatarBitmap != null) {
                 builder.setLargeIcon(avatarBitmap);
+            } else {
+                Bitmap appIconBitmap = org.telegram.ui.LauncherIconController.getSelectedIconBitmap(ApplicationLoader.applicationContext);
+                if (appIconBitmap != null) {
+                    builder.setLargeIcon(appIconBitmap);
+                }
             }
 
             if (!AndroidUtilities.needShowPasscode(false) && !SharedConfig.isWaitingForPasscodeEnter) {
