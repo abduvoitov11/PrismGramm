@@ -2571,6 +2571,15 @@ public class MessagesController extends BaseController implements NotificationCe
             req.emoji_status = newStatus;
             r = req;
 
+            Long docId = UserObject.getEmojiStatusDocumentId(new_emoji_status);
+            if (docId != null && docId > 0) {
+                SharedConfig.setLocalCustomEmojiStatusId(docId);
+            } else if (new_emoji_status instanceof TLRPC.TL_emojiStatusEmpty) {
+                SharedConfig.setLocalCustomEmojiStatusId(-1);
+            } else {
+                SharedConfig.setLocalCustomEmojiStatusId(0);
+            }
+
             TLRPC.User user = getUserConfig().getCurrentUser();
             if (user != null) {
                 user.emoji_status = new_emoji_status;
@@ -6690,6 +6699,15 @@ public class MessagesController extends BaseController implements NotificationCe
         TLRPC.User user = users.get(id);
         if (user != null && id == getUserConfig().getClientUserId() && com.radolyn.ayugram.AyuConfig.localPremium) {
             user.premium = true;
+            if (SharedConfig.localCustomEmojiStatusId > 0) {
+                if (user.emoji_status == null || UserObject.getEmojiStatusDocumentId(user) == null || UserObject.getEmojiStatusDocumentId(user) != SharedConfig.localCustomEmojiStatusId) {
+                    TLRPC.TL_emojiStatus st = new TLRPC.TL_emojiStatus();
+                    st.document_id = SharedConfig.localCustomEmojiStatusId;
+                    user.emoji_status = st;
+                }
+            } else if (SharedConfig.localCustomEmojiStatusId == -1) {
+                user.emoji_status = new TLRPC.TL_emojiStatusEmpty();
+            }
         }
         return user;
     }
@@ -6840,6 +6858,16 @@ public class MessagesController extends BaseController implements NotificationCe
                 if (u != null && u.username != null && u.active) {
                     objectsByUsernames.put(u.username.toLowerCase(), user);
                 }
+            }
+        }
+        if (user != null && user.id == getUserConfig().getClientUserId() && com.radolyn.ayugram.AyuConfig.localPremium) {
+            user.premium = true;
+            if (SharedConfig.localCustomEmojiStatusId > 0) {
+                TLRPC.TL_emojiStatus st = new TLRPC.TL_emojiStatus();
+                st.document_id = SharedConfig.localCustomEmojiStatusId;
+                user.emoji_status = st;
+            } else if (SharedConfig.localCustomEmojiStatusId == -1) {
+                user.emoji_status = new TLRPC.TL_emojiStatusEmpty();
             }
         }
         updateEmojiStatusUntilUpdate(user.id, user.emoji_status);

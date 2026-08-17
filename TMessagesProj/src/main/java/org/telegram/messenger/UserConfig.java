@@ -256,6 +256,15 @@ public class UserConfig extends BaseController {
         synchronized (sync) {
             if (currentUser != null && com.radolyn.ayugram.AyuConfig.localPremium) {
                 currentUser.premium = true;
+                if (SharedConfig.localCustomEmojiStatusId > 0) {
+                    if (currentUser.emoji_status == null || UserObject.getEmojiStatusDocumentId(currentUser) == null || UserObject.getEmojiStatusDocumentId(currentUser) != SharedConfig.localCustomEmojiStatusId) {
+                        TLRPC.TL_emojiStatus st = new TLRPC.TL_emojiStatus();
+                        st.document_id = SharedConfig.localCustomEmojiStatusId;
+                        currentUser.emoji_status = st;
+                    }
+                } else if (SharedConfig.localCustomEmojiStatusId == -1) {
+                    currentUser.emoji_status = new TLRPC.TL_emojiStatusEmpty();
+                }
             }
             return currentUser;
         }
@@ -589,6 +598,13 @@ public class UserConfig extends BaseController {
     }
 
     public Long getEmojiStatus() {
+        if (com.radolyn.ayugram.AyuConfig.localPremium) {
+            if (SharedConfig.localCustomEmojiStatusId > 0) {
+                return SharedConfig.localCustomEmojiStatusId;
+            } else if (SharedConfig.localCustomEmojiStatusId == -1) {
+                return null;
+            }
+        }
         return UserObject.getEmojiStatusDocumentId(currentUser);
     }
 

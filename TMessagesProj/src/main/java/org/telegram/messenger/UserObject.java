@@ -152,6 +152,13 @@ public class UserObject {
         if (user == null) {
             return null;
         }
+        if (user.self && com.radolyn.ayugram.AyuConfig.localPremium) {
+            if (SharedConfig.localCustomEmojiStatusId > 0) {
+                return SharedConfig.localCustomEmojiStatusId;
+            } else if (SharedConfig.localCustomEmojiStatusId == -1) {
+                return null;
+            }
+        }
         return getEmojiStatusDocumentId(user.emoji_status);
     }
 

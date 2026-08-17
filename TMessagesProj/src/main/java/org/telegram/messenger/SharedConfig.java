@@ -360,6 +360,8 @@ public class SharedConfig {
     public static boolean editHistoryEnabled = true;
     // Krypton: O'chirilgan media fayllarni (rasm/video/voice) keshda saqlab qolish
     public static boolean saveDeletedMediaEnabled = true;
+    // Krypton: Mahalliy Premium custom emoji status document_id
+    public static long localCustomEmojiStatusId = 0;
     public static boolean multipleReactionsPromoShowed;
 
     public static boolean isFloatingDebugActive;
@@ -677,6 +679,7 @@ public class SharedConfig {
             antiDeleteInChatEnabled = preferences.getBoolean("krypton_antiDeleteInChat", true);
             editHistoryEnabled = preferences.getBoolean("krypton_editHistory", true);
             saveDeletedMediaEnabled = preferences.getBoolean("krypton_saveDeletedMedia", true);
+            localCustomEmojiStatusId = preferences.getLong("krypton_localCustomEmojiStatusId", 0);
 
             com.radolyn.ayugram.AyuConfig.setGhostMode(ghostModeEnabled);
             com.radolyn.ayugram.AyuConfig.saveDeletedMessages = antiDeleteInChatEnabled;
@@ -1830,6 +1833,11 @@ public class SharedConfig {
         if (com.radolyn.ayugram.AyuConfig.editor != null) {
             com.radolyn.ayugram.AyuConfig.editor.putBoolean("saveMedia", b).apply();
         }
+    }
+
+    public static void setLocalCustomEmojiStatusId(long docId) {
+        localCustomEmojiStatusId = docId;
+        ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE).edit().putLong("krypton_localCustomEmojiStatusId", localCustomEmojiStatusId).apply();
     }
 
     public static boolean canBlurChat() {
