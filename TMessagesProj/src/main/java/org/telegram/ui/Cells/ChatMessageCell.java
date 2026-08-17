@@ -18362,7 +18362,11 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         } else if (currentMessageObject.isRepostPreview) {
             timeString = LocaleController.formatSmallDateChat(messageObject.messageOwner.date) + ", " + LocaleController.getInstance().getFormatterDay().format((long) (messageObject.messageOwner.date) * 1000);
         } else if (edited) {
-            timeString = getString(R.string.EditedMessage) + " " + LocaleController.getInstance().getFormatterDay().format((long) (messageObject.messageOwner.date) * 1000);
+            String editMark = com.radolyn.ayugram.AyuConfig.getEditedMark();
+            if (TextUtils.isEmpty(editMark)) {
+                editMark = getString(R.string.EditedMessage);
+            }
+            timeString = editMark + " " + LocaleController.getInstance().getFormatterDay().format((long) (messageObject.messageOwner.date) * 1000);
         } else if (currentMessageObject.isSaved && currentMessageObject.messageOwner.fwd_from != null && (currentMessageObject.messageOwner.fwd_from.date != 0 || currentMessageObject.messageOwner.fwd_from.saved_date != 0)) {
             int date = currentMessageObject.messageOwner.fwd_from.saved_date;
             if (date == 0) {
@@ -18417,7 +18421,11 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         }
         timeTextWidth = timeWidth = (int) Math.ceil(Theme.chat_timePaint.measureText(currentTimeString, 0, currentTimeString == null ? 0 : currentTimeString.length()));
         if (currentMessageObject != null && currentMessageObject.isKryptonDeleted()) {
-            String trashPrefix = "\uD83D\uDDD1\uFE0F ";
+            String mark = com.radolyn.ayugram.AyuConfig.getDeletedMark();
+            if (TextUtils.isEmpty(mark)) {
+                mark = "\uD83D\uDDD1\uFE0F";
+            }
+            String trashPrefix = mark + " ";
             currentTimeString = TextUtils.concat(trashPrefix, currentTimeString);
             timeWidth += (int) Math.ceil(Theme.chat_timePaint.measureText(trashPrefix));
             timeTextWidth = timeWidth;

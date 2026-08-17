@@ -26271,6 +26271,7 @@ public class ChatActivity extends BaseFragment implements
         }
         // ─── Krypton: agar anti-delete bilan belgilangan xabarlar bo'lsa, UI ni yangilash ───
         if (updated && SharedConfig.antiDeleteInChatEnabled) {
+            updateVisibleRows();
             if (chatAdapter != null && !chatAdapter.isFrozen) {
                 chatAdapter.notifyDataSetChanged(false);
             }
