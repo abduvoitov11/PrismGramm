@@ -13442,6 +13442,19 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 });
             }
 
+            if (com.radolyn.ayugram.AyuConfig.showGhostToggleInDrawer) {
+                boolean active = com.radolyn.ayugram.AyuConfig.isGhostModeActive();
+                io.add(R.drawable.msg_secret, active ? getString(R.string.DisableGhostMode) : getString(R.string.EnableGhostMode), () -> {
+                    com.radolyn.ayugram.AyuConfig.toggleGhostMode();
+                });
+            }
+
+            if (com.radolyn.ayugram.AyuConfig.showKillButtonInDrawer) {
+                io.add(R.drawable.msg_leave, getString(R.string.KillApp), () -> {
+                    com.radolyn.ayugram.AyuUtils.killApplication(getParentActivity());
+                });
+            }
+
             if (proxyMenuSubItem != null) {
                 proxyMenuSubItem.setOnClickListener(v -> {
                     io.dismiss();
