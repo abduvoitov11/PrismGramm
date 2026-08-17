@@ -2362,6 +2362,14 @@ public class Theme {
                 return getString(R.string.ThemeDay);
             } else if ("Night".equals(name)) {
                 return getString(R.string.ThemeNight);
+            } else if ("Prism Matrix".equals(name)) {
+                return "Prism Matrix";
+            } else if ("Prism Sunset".equals(name)) {
+                return "Prism Sunset";
+            } else if ("Prism Nebula".equals(name)) {
+                return "Prism Nebula";
+            } else if ("Prism Aqua".equals(name)) {
+                return "Prism Aqua";
             }
             return info != null ? info.title : name;
         }
@@ -2478,7 +2486,7 @@ public class Theme {
             if (isDark != UNKNOWN) {
                 return isDark == DARK;
             }
-            if ("Dark Blue".equals(name) || "Night".equals(name)) {
+            if ("Dark Blue".equals(name) || "Night".equals(name) || (name != null && name.startsWith("Prism"))) {
                 isDark = DARK;
             } else if ("Blue".equals(name) || "Arctic Blue".equals(name) || "Day".equals(name)) {
                 isDark = LIGHT;
@@ -2605,7 +2613,7 @@ public class Theme {
                 }
 
                 //override default themes
-                if (isHome(themeAccent) && name.equals("Dark Blue") || name.equals("Night")) {
+                if (isHome(themeAccent) && (name.equals("Dark Blue") || name.equals("Night"))) {
                     themeAccent.myMessagesAccentColor = 0xff258DE5;
                     themeAccent.myMessagesGradientAccentColor1 = 0xff4272DF;
                     themeAccent.myMessagesGradientAccentColor2 = 0xff8146D7;
@@ -2617,6 +2625,42 @@ public class Theme {
                         themeAccent.backgroundGradientOverrideColor2 = 0xff7874a7;
                         themeAccent.backgroundGradientOverrideColor3 = 0xff333258;
                     }
+                } else if (isHome(themeAccent) && name.equals("Prism Matrix")) {
+                    themeAccent.myMessagesAccentColor = 0xff00E676;
+                    themeAccent.myMessagesGradientAccentColor1 = 0xff00B0FF;
+                    themeAccent.myMessagesGradientAccentColor2 = 0xff00E676;
+                    themeAccent.patternIntensity = -0.50f;
+                    themeAccent.backgroundOverrideColor = 0xff08140e;
+                    themeAccent.backgroundGradientOverrideColor1 = 0xff030c08;
+                    themeAccent.backgroundGradientOverrideColor2 = 0xff0c2016;
+                    themeAccent.backgroundGradientOverrideColor3 = 0xff05120c;
+                } else if (isHome(themeAccent) && name.equals("Prism Sunset")) {
+                    themeAccent.myMessagesAccentColor = 0xffff5722;
+                    themeAccent.myMessagesGradientAccentColor1 = 0xffff007a;
+                    themeAccent.myMessagesGradientAccentColor2 = 0xffffa000;
+                    themeAccent.patternIntensity = -0.50f;
+                    themeAccent.backgroundOverrideColor = 0xff1c0e14;
+                    themeAccent.backgroundGradientOverrideColor1 = 0xff0f060a;
+                    themeAccent.backgroundGradientOverrideColor2 = 0xff2b131c;
+                    themeAccent.backgroundGradientOverrideColor3 = 0xff14080e;
+                } else if (isHome(themeAccent) && name.equals("Prism Nebula")) {
+                    themeAccent.myMessagesAccentColor = 0xff7928ca;
+                    themeAccent.myMessagesGradientAccentColor1 = 0xffff0080;
+                    themeAccent.myMessagesGradientAccentColor2 = 0xff651fff;
+                    themeAccent.patternIntensity = -0.50f;
+                    themeAccent.backgroundOverrideColor = 0xff120c1e;
+                    themeAccent.backgroundGradientOverrideColor1 = 0xff090510;
+                    themeAccent.backgroundGradientOverrideColor2 = 0xff1f1433;
+                    themeAccent.backgroundGradientOverrideColor3 = 0xff0e0817;
+                } else if (isHome(themeAccent) && name.equals("Prism Aqua")) {
+                    themeAccent.myMessagesAccentColor = 0xff00e5ff;
+                    themeAccent.myMessagesGradientAccentColor1 = 0xff0072ff;
+                    themeAccent.myMessagesGradientAccentColor2 = 0xff1de9b6;
+                    themeAccent.patternIntensity = -0.50f;
+                    themeAccent.backgroundOverrideColor = 0xff091a24;
+                    themeAccent.backgroundGradientOverrideColor1 = 0xff040e14;
+                    themeAccent.backgroundGradientOverrideColor2 = 0xff102e40;
+                    themeAccent.backgroundGradientOverrideColor3 = 0xff07151e;
                 }
                 themeAccentsMap.put(themeAccent.id, themeAccent);
                 themeAccents.add(themeAccent);
@@ -4721,6 +4765,106 @@ public class Theme {
         sortAccents(themeInfo);
         themes.add(themeInfo);
         themesDict.put("Night", themeInfo);
+
+        // Prism Matrix Theme
+        themeInfo = new ThemeInfo();
+        themeInfo.name = "Prism Matrix";
+        themeInfo.assetName = "night.attheme";
+        themeInfo.previewBackgroundColor = 0xff08140e;
+        themeInfo.previewInColor = 0xff0f251a;
+        themeInfo.previewOutColor = 0xff00e676;
+        themeInfo.sortIndex = 6;
+        themeInfo.setAccentColorOptions(
+                new int[]    { 0xFF00E676, 0xFF69F0AE, 0xFFAEEA00, 0xFFFFD600, 0xFF00B0FF, 0xFF76FF03, 0xFF00E5FF, 0xFFB2FF59 },
+                new int[]    { 0xFF00E676, 0xFF69F0AE, 0xFFAEEA00, 0xFFFFD600, 0xFF00B0FF, 0xFF76FF03, 0xFF00E5FF, 0xFFB2FF59 },
+                new int[]    { 0xFF00B0FF, 0xFF00E5FF, 0xFF00E676, 0xFF76FF03, 0xFF00E676, 0xFF00E5FF, 0xFF00B0FF, 0xFF00E676 },
+                new int[]    { 0xFF08140e, 0xFF0a1816, 0xFF101608, 0xFF141306, 0xFF07121b, 0xFF091608, 0xFF071718, 0xFF0c1708 },
+                new int[]    { 0xFF030c08, 0xFF04100e, 0xFF0a0e04, 0xFF0c0b03, 0xFF030a10, 0xFF040e04, 0xFF030e0f, 0xFF050e04 },
+                new int[]    { 0xFF0c2016, 0xFF102620, 0xFF1a240c, 0xFF221f08, 0xFF0d2030, 0xFF10240d, 0xFF0d2729, 0xFF15280d },
+                new int[]    { 0xFF05120c, 0xFF061410, 0xFF0b1205, 0xFF0f0d04, 0xFF050f16, 0xFF061306, 0xFF051314, 0xFF081305 },
+                new int[]    {          0,          1,          2,          3,          4,          5,          6,          7 },
+                new String[] { "dk_wwlghOFACAAAAfz9xrxi6euw", "F5oWoCs7QFACAAAAgf2bD_mg8Bw", "ptuUd96JSFACAAAATobI23sPpz0", "p-pXcflrmFIBAAAAvXYQk-mCwZU", "9iklpvIPQVABAAAAORQXKur_Eyc", "fqv01SQemVIBAAAApND8LDRUhRU", "dhf9pceaQVACAAAAbzdVo4SCiZA", "9LW_RcoOSVACAAAAFTk3DTyXN-M" },
+                new int[]    {          0,         45,        135,          0,        180,          0,         45,          0 },
+                new int[]    {         40,         45,         50,         40,         45,         35,         45,         40 }
+        );
+        sortAccents(themeInfo);
+        themes.add(themeInfo);
+        themesDict.put("Prism Matrix", themeInfo);
+
+        // Prism Sunset Theme
+        themeInfo = new ThemeInfo();
+        themeInfo.name = "Prism Sunset";
+        themeInfo.assetName = "night.attheme";
+        themeInfo.previewBackgroundColor = 0xff1b0f15;
+        themeInfo.previewInColor = 0xff2a1620;
+        themeInfo.previewOutColor = 0xffff5722;
+        themeInfo.sortIndex = 7;
+        themeInfo.setAccentColorOptions(
+                new int[]    { 0xFFFF5722, 0xFFFF9100, 0xFFFF1744, 0xFFFF4081, 0xFFFFAB00, 0xFFFF6D00, 0xFFFF5252, 0xFFFF80AB },
+                new int[]    { 0xFFFF5722, 0xFFFF9100, 0xFFFF1744, 0xFFFF4081, 0xFFFFAB00, 0xFFFF6D00, 0xFFFF5252, 0xFFFF80AB },
+                new int[]    { 0xFFFF007A, 0xFFFF3D00, 0xFFFF5252, 0xFFFF6E40, 0xFFFF3D00, 0xFFFF007A, 0xFFFF9100, 0xFFFF4081 },
+                new int[]    { 0xFF1c0e14, 0xFF1a1108, 0xFF1c0a0f, 0xFF1e0d18, 0xFF1b1206, 0xFF1c0f0a, 0xFF1b0b0c, 0xFF1e0e1a },
+                new int[]    { 0xFF0f060a, 0xFF0e0803, 0xFF100508, 0xFF11060d, 0xFF0f0902, 0xFF100704, 0xFF0f0506, 0xFF11060e },
+                new int[]    { 0xFF2b131c, 0xFF27190b, 0xFF2c0f17, 0xFF2e1324, 0xFF291b09, 0xFF2b160e, 0xFF291012, 0xFF2e1427 },
+                new int[]    { 0xFF14080e, 0xFF130c04, 0xFF14070a, 0xFF150810, 0xFF130c03, 0xFF140906, 0xFF130708, 0xFF150911 },
+                new int[]    {          0,          1,          2,          3,          4,          5,          6,          7 },
+                new String[] { "9ShF73d1MFIIAAAAjWnm8_ZMe8Q", "3rX-PaKbSFACAAAAEiHNvcEm6X4", "9GcNVISdSVADAAAAUcw5BYjELW4", "9LW_RcoOSVACAAAAFTk3DTyXN-M", "fqv01SQemVIBAAAApND8LDRUhRU", "RepJ5uE_SVABAAAAr4d0YhgB850", "PllZ-bf_SFAEAAAA8crRfwZiDNg", "dk_wwlghOFACAAAAfz9xrxi6euw" },
+                new int[]    {          0,         45,        135,          0,        180,          0,         45,          0 },
+                new int[]    {         40,         45,         50,         40,         45,         35,         45,         40 }
+        );
+        sortAccents(themeInfo);
+        themes.add(themeInfo);
+        themesDict.put("Prism Sunset", themeInfo);
+
+        // Prism Nebula Theme
+        themeInfo = new ThemeInfo();
+        themeInfo.name = "Prism Nebula";
+        themeInfo.assetName = "night.attheme";
+        themeInfo.previewBackgroundColor = 0xff120c1e;
+        themeInfo.previewInColor = 0xff1e1333;
+        themeInfo.previewOutColor = 0xff7928ca;
+        themeInfo.sortIndex = 8;
+        themeInfo.setAccentColorOptions(
+                new int[]    { 0xFF7928CA, 0xFF651FFF, 0xFFD500F9, 0xFFAA00FF, 0xFFE040FB, 0xFF7C4DFF, 0xFFFF0080, 0xFF9C27B0 },
+                new int[]    { 0xFF7928CA, 0xFF651FFF, 0xFFD500F9, 0xFFAA00FF, 0xFFE040FB, 0xFF7C4DFF, 0xFFFF0080, 0xFF9C27B0 },
+                new int[]    { 0xFFFF0080, 0xFF2979FF, 0xFF651FFF, 0xFFFF1744, 0xFF7928CA, 0xFF00E5FF, 0xFFD500F9, 0xFFFF4081 },
+                new int[]    { 0xFF120c1e, 0xFF0d0e22, 0xFF190c20, 0xFF180b1d, 0xFF1a0e22, 0xFF110e24, 0xFF1d0a17, 0xFF170c1d },
+                new int[]    { 0xFF090510, 0xFF060713, 0xFF0e0612, 0xFF0d0510, 0xFF0e0713, 0xFF080614, 0xFF10040c, 0xFF0c0510 },
+                new int[]    { 0xFF1f1433, 0xFF161838, 0xFF271333, 0xFF26102e, 0xFF281535, 0xFF1c163b, 0xFF2d0f24, 0xFF25132e },
+                new int[]    { 0xFF0e0817, 0xFF090a19, 0xFF120818, 0xFF110714, 0xFF130919, 0xFF0c091a, 0xFF150610, 0xFF100714 },
+                new int[]    {          0,          1,          2,          3,          4,          5,          6,          7 },
+                new String[] { "O-wmAfBPSFADAAAA4zINVfD_bro", "dhf9pceaQVACAAAAbzdVo4SCiZA", "F5oWoCs7QFACAAAAgf2bD_mg8Bw", "ptuUd96JSFACAAAATobI23sPpz0", "dk_wwlghOFACAAAAfz9xrxi6euw", "fqv01SQemVIBAAAApND8LDRUhRU", "9LW_RcoOSVACAAAAFTk3DTyXN-M", "PllZ-bf_SFAEAAAA8crRfwZiDNg" },
+                new int[]    {          0,         45,        135,          0,        180,          0,         45,          0 },
+                new int[]    {         40,         45,         50,         40,         45,         35,         45,         40 }
+        );
+        sortAccents(themeInfo);
+        themes.add(themeInfo);
+        themesDict.put("Prism Nebula", themeInfo);
+
+        // Prism Aqua Theme
+        themeInfo = new ThemeInfo();
+        themeInfo.name = "Prism Aqua";
+        themeInfo.assetName = "darkblue.attheme";
+        themeInfo.previewBackgroundColor = 0xff091a24;
+        themeInfo.previewInColor = 0xff102a3a;
+        themeInfo.previewOutColor = 0xff00e5ff;
+        themeInfo.sortIndex = 9;
+        themeInfo.setAccentColorOptions(
+                new int[]    { 0xFF00E5FF, 0xFF00B0FF, 0xFF1DE9B6, 0xFF80D8FF, 0xFF00B8D4, 0xFF40C4FF, 0xFF64FFDA, 0xFF2979FF },
+                new int[]    { 0xFF00E5FF, 0xFF00B0FF, 0xFF1DE9B6, 0xFF80D8FF, 0xFF00B8D4, 0xFF40C4FF, 0xFF64FFDA, 0xFF2979FF },
+                new int[]    { 0xFF0072FF, 0xFF2979FF, 0xFF00B0FF, 0xFF00E5FF, 0xFF00E5FF, 0xFF0072FF, 0xFF00B8D4, 0xFF00E5FF },
+                new int[]    { 0xFF091a24, 0xFF081525, 0xFF071a1d, 0xFF0a1b24, 0xFF081820, 0xFF071726, 0xFF061a1b, 0xFF081426 },
+                new int[]    { 0xFF040e14, 0xFF030b14, 0xFF030d0f, 0xFF050f14, 0xFF030c11, 0xFF030b14, 0xFF020d0e, 0xFF030a14 },
+                new int[]    { 0xFF102e40, 0xFF0d243e, 0xFF0c2e33, 0xFF122d3b, 0xFF0e2936, 0xFF0d263f, 0xFF0b2d2e, 0xFF0d223f },
+                new int[]    { 0xFF07151e, 0xFF06101c, 0xFF051417, 0xFF08161e, 0xFF06131a, 0xFF05111c, 0xFF041415, 0xFF050f1c },
+                new int[]    {          0,          1,          2,          3,          4,          5,          6,          7 },
+                new String[] { "MIo6r0qGSFAFAAAAtL8TsDzNX60", "dhf9pceaQVACAAAAbzdVo4SCiZA", "RepJ5uE_SVABAAAAr4d0YhgB850", "fqv01SQemVIBAAAApND8LDRUhRU", "PllZ-bf_SFAEAAAA8crRfwZiDNg", "9iklpvIPQVABAAAAORQXKur_Eyc", "F5oWoCs7QFACAAAAgf2bD_mg8Bw", "dk_wwlghOFACAAAAfz9xrxi6euw" },
+                new int[]    {          0,         45,        135,          0,        180,          0,         45,          0 },
+                new int[]    {         40,         45,         50,         40,         45,         35,         45,         40 }
+        );
+        sortAccents(themeInfo);
+        themes.add(themeInfo);
+        themesDict.put("Prism Aqua", themeInfo);
 
         String themesString = themeConfig.getString("themes2", null);
 
@@ -10560,7 +10704,7 @@ public class Theme {
             if (accent.parentTheme.getKey().equals("Day") && accent.id == 9) {
                 return true;
             }
-            if ((accent.parentTheme.getKey().equals("Night") || accent.parentTheme.getKey().equals("Dark Blue")) && accent.id == 0) {
+            if ((accent.parentTheme.getKey().equals("Night") || accent.parentTheme.getKey().equals("Dark Blue") || accent.parentTheme.getKey().startsWith("Prism")) && accent.id == 0) {
                 return true;
             }
         }
