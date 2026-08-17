@@ -39,7 +39,11 @@ public class LauncherIconController {
         AQUA("AquaIcon", R.drawable.icon_4_background_sa, R.mipmap.icon_4_foreground_sa, R.string.AppIconAqua),
         PREMIUM("PremiumIcon", R.drawable.icon_3_background_sa, R.mipmap.icon_3_foreground_sa, R.string.AppIconPremium),
         TURBO("TurboIcon", R.drawable.icon_5_background_sa, R.mipmap.icon_5_foreground_sa, R.string.AppIconTurbo),
-        NOX("NoxIcon", R.mipmap.icon_2_background_sa, R.mipmap.icon_2_foreground_sa, R.string.AppIconNox);
+        NOX("NoxIcon", R.mipmap.icon_2_background_sa, R.mipmap.icon_2_foreground_sa, R.string.AppIconNox),
+        COBALT("CobaltIcon", R.drawable.icon_7_background_sa, R.mipmap.icon_7_foreground_sa, R.string.AppIconCobalt),
+        RUBY("RubyIcon", R.drawable.icon_8_background_sa, R.mipmap.icon_8_foreground_sa, R.string.AppIconRuby),
+        AURORA("AuroraIcon", R.drawable.icon_9_background_sa, R.mipmap.icon_9_foreground_sa, R.string.AppIconPrismAurora),
+        PURE("PureIcon", R.drawable.icon_10_background_sa, R.mipmap.icon_10_foreground_sa, R.string.AppIconPure);
 
         public final String key;
         public final int background;

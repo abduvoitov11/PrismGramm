@@ -5725,6 +5725,10 @@
     <string name="AppIconPremium">Prism Neon</string>
     <string name="AppIconTurbo">Prism Turbo</string>
     <string name="AppIconNox">Prism Stealth</string>
+    <string name="AppIconCobalt">Prism Sapphire</string>
+    <string name="AppIconRuby">Prism Ruby</string>
+    <string name="AppIconPrismAurora">Prism Aurora</string>
+    <string name="AppIconPure">Prism Frost</string>
     <string name="AppIconChangedTo">App icon has been changed to %1$s</string>
     <string name="FileTooLarge">File Too Large</string>
     <string name="PremiumPreviewAppIcon">Premium App Icon</string>
