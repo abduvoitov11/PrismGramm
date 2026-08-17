@@ -195,7 +195,15 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter implements
     }
 
     public void setDialogsType(int type) {
+        if (dialogsType == type) {
+            return;
+        }
         dialogsType = type;
+        listUpdateSeq++;
+        isCalculatingDiff = false;
+        updateListPending = false;
+        itemInternals.clear();
+        updateItemList();
         notifyDataSetChanged();
     }
 
@@ -479,11 +487,14 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter implements
         hasHints = folderId == 0 && dialogsType == DialogsActivity.DIALOGS_TYPE_DEFAULT && !isOnlySelect && !MessagesController.getInstance(currentAccount).hintDialogs.isEmpty();
     }
 
+    private int listUpdateSeq = 0;
     boolean isCalculatingDiff;
     boolean updateListPending;
     private final static boolean ALLOW_UPDATE_IN_BACKGROUND = BuildVars.DEBUG_PRIVATE_VERSION;
 
     public void updateList(Runnable saveScrollPosition) {
+        final int currentSeq = ++listUpdateSeq;
+        final int currentDialogsType = dialogsType;
         if (isCalculatingDiff) {
             updateListPending = true;
             return;
@@ -519,6 +530,9 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter implements
         if (itemInternals.size() < 50 || !ALLOW_UPDATE_IN_BACKGROUND) {
             DiffUtil.DiffResult result = DiffUtil.calculateDiff(callback);
             isCalculatingDiff = false;
+            if (currentSeq != listUpdateSeq || currentDialogsType != dialogsType) {
+                return;
+            }
             if (saveScrollPosition != null) {
                 saveScrollPosition.run();
             }
@@ -528,7 +542,8 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter implements
             Utilities.searchQueue.postRunnable(() -> {
                 DiffUtil.DiffResult result = DiffUtil.calculateDiff(callback);
                 AndroidUtilities.runOnUIThread(() -> {
-                    if (!isCalculatingDiff) {
+                    if (!isCalculatingDiff || currentSeq != listUpdateSeq || currentDialogsType != dialogsType) {
+                        isCalculatingDiff = false;
                         return;
                     }
                     isCalculatingDiff = false;
@@ -544,7 +559,6 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter implements
                 });
             });
         }
-
     }
 
     @Override
