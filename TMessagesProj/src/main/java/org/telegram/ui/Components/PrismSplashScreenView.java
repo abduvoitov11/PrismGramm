@@ -367,8 +367,8 @@ public class PrismSplashScreenView extends FrameLayout {
         // 3. Start 3D kinetic harmonic breathing tilt
         startIdlePhysics();
 
-        // 4. Auto dismiss after delay
-        postDelayed(this::dismiss, Math.max(delayMs, 1300));
+        // 4. Auto dismiss after delay (4.5 seconds)
+        postDelayed(this::dismiss, Math.max(delayMs, 4500));
     }
 
     private void startIdlePhysics() {
@@ -613,8 +613,10 @@ public class PrismSplashScreenView extends FrameLayout {
 
         public void startShimmer() {
             ValueAnimator animator = ValueAnimator.ofFloat(-1.2f, 2.2f);
-            animator.setDuration(1200);
-            animator.setStartDelay(250);
+            animator.setDuration(1400);
+            animator.setStartDelay(300);
+            animator.setRepeatCount(ValueAnimator.INFINITE);
+            animator.setRepeatMode(ValueAnimator.RESTART);
             animator.setInterpolator(CubicBezierInterpolator.EASE_OUT_QUINT);
             animator.addUpdateListener(animation -> {
                 shimmerProgress = (float) animation.getAnimatedValue();

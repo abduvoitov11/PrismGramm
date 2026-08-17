@@ -598,7 +598,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                 try {
                     org.telegram.ui.Components.PrismSplashScreenView splashView = new org.telegram.ui.Components.PrismSplashScreenView(this);
                     frameLayout.addView(splashView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
-                    splashView.showAndAutoDismiss(750);
+                    splashView.showAndAutoDismiss(4500);
                 } catch (Throwable ignored) {}
             }
 
