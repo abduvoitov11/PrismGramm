@@ -37,6 +37,7 @@
     <string name="EditedMarkText">Метка отредактированного сообщения</string>
     <string name="ShowGhostToggleInDrawer">Показывать призрак в боковом меню</string>
     <string name="ShowKllButtonInDrawer">Показывать кнопку закрытия в меню</string>
+    <string name="AntiDeleteMessageSavedNotification">Сообщение удалено (сохранено Anti-Delete 🗑️)</string>
     <string name="SettingsShowID">Показывать ID пользователя</string>
     <string name="SettingsShowID_Hide">Скрыть</string>
     <string name="SettingsRecentStickersCount">Количество недавних стикеров</string>

@@ -274,7 +274,10 @@ public class MessageObject {
     public ArrayList<String> kryptonEditHistory;
 
     public boolean isKryptonDeleted() {
-        return kryptonDeleted || (messageOwner != null && messageOwner.kryptonDeleted);
+        if (kryptonDeleted || (messageOwner != null && (messageOwner.kryptonDeleted || (messageOwner.flags & (1 << 30)) != 0))) {
+            return true;
+        }
+        return false;
     }
 
     public boolean replyTextEllipsized;

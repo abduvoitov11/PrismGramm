@@ -37,6 +37,7 @@
     <string name="EditedMarkText">Tahrirlanganlik belgisi</string>
     <string name="ShowGhostToggleInDrawer">Menyuda Ruh rejimini ko\'rsatish</string>
     <string name="ShowKllButtonInDrawer">Menyuda Ilovani to\'xtatish tugmasini ko\'rsatish</string>
+    <string name="AntiDeleteMessageSavedNotification">Xabar o\'chirildi (Anti-Delete saqlab qoldi 🗑️)</string>
     <string name="SettingsShowID">Foydalanuvchi ID sini ko\'rsatish</string>
     <string name="SettingsShowID_Hide">Yashirish</string>
     <string name="SettingsRecentStickersCount">Oxirgi stikerlar soni</string>

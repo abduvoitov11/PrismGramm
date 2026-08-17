@@ -37,6 +37,7 @@
     <string name="EditedMarkText">Edited mark</string>
     <string name="ShowGhostToggleInDrawer">Show ghost mode toggle</string>
     <string name="ShowKllButtonInDrawer">Show kill app button</string>
+    <string name="AntiDeleteMessageSavedNotification">Message deleted (saved by Anti-Delete 🗑️)</string>
     <string name="SettingsShowID">Show peer ID</string>
     <string name="SettingsShowID_Hide">Hide</string>
     <string name="SettingsRecentStickersCount">Recent stickers count</string>

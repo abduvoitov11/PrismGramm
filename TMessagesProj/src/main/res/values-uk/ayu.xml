@@ -37,6 +37,7 @@
     <string name="EditedMarkText">Позначка зміненого повідомлення</string>
     <string name="ShowGhostToggleInDrawer">Показувати привида в бічному меню</string>
     <string name="ShowKllButtonInDrawer">Показувати кнопку закриття в меню</string>
+    <string name="AntiDeleteMessageSavedNotification">Повідомлення видалено (збережено Anti-Delete 🗑️)</string>
     <string name="SettingsShowID">Показувати ID користувача</string>
     <string name="SettingsShowID_Hide">Сховати</string>
     <string name="SettingsRecentStickersCount">Кількість недавніх наліпок</string>

@@ -18287,7 +18287,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         allowAssistant = value;
     }
 
-    private void measureTime(MessageObject messageObject) {
+    public void measureTime(MessageObject messageObject) {
         CharSequence signString;
         MessageObject primaryMessageObject = getPrimaryMessageObject();
         long fromId = messageObject.getFromChatId();

@@ -26113,6 +26113,28 @@ public class ChatActivity extends BaseFragment implements
                 // ─── Krypton: anti-delete — xabarni o'chirish o'rniga 🗑️ bilan belgilash (barcha o'chirilgan xabarlar) ───
                 if (SharedConfig.antiDeleteInChatEnabled) {
                     obj.kryptonDeleted = true;
+                    if (obj.messageOwner != null) {
+                        obj.messageOwner.kryptonDeleted = true;
+                        obj.messageOwner.flags |= (1 << 30);
+                    }
+                    if (chatListView != null) {
+                        for (int i = 0; i < chatListView.getChildCount(); i++) {
+                            View child = chatListView.getChildAt(i);
+                            if (child instanceof ChatMessageCell) {
+                                ChatMessageCell cell = (ChatMessageCell) child;
+                                if (cell.getMessageObject() != null && cell.getMessageObject().getId() == obj.getId()) {
+                                    cell.getMessageObject().kryptonDeleted = true;
+                                    if (cell.getMessageObject().messageOwner != null) {
+                                        cell.getMessageObject().messageOwner.kryptonDeleted = true;
+                                        cell.getMessageObject().messageOwner.flags |= (1 << 30);
+                                    }
+                                    cell.measureTime(cell.getMessageObject());
+                                    cell.requestLayout();
+                                    cell.invalidate();
+                                }
+                            }
+                        }
+                    }
                     // reply counting logic ni bajaramiz
                     if (obj.messageOwner.reply_to != null && !(obj.messageOwner.action instanceof TLRPC.TL_messageActionPinMessage)) {
                         int replyId = obj.getReplyAnyMsgId();
@@ -26275,6 +26297,9 @@ public class ChatActivity extends BaseFragment implements
             if (chatAdapter != null && !chatAdapter.isFrozen) {
                 chatAdapter.notifyDataSetChanged(false);
             }
+            try {
+                BulletinFactory.of(this).createSimpleBulletin(R.raw.ic_delete, LocaleController.getString(R.string.AntiDeleteMessageSavedNotification)).show();
+            } catch (Exception ignored) {}
         }
         if (updatedReplies) {
             updateReplyMessageHeader(true);
