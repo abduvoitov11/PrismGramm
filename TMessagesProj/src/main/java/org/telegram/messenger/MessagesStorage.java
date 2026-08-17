@@ -14141,10 +14141,10 @@ public class MessagesStorage extends BaseController {
                     }
                     // ─── Krypton: anti-delete yoqilgan bo'lsa, xabarni o'chirish o'rniga flag bilan belgilash ───
                     if (SharedConfig.antiDeleteInChatEnabled) {
-                        database.executeFast(String.format(Locale.US, "UPDATE messages_v2 SET flags = flags | %d WHERE mid IN(%s) AND uid = %d", (1 << 30), ids, did)).stepThis().dispose();
+                        database.executeFast(String.format(Locale.US, "UPDATE messages_v2 SET flags = flags | %d WHERE mid IN(%s) AND uid = %d", (1 << 30), idsStr, did)).stepThis().dispose();
                     } else {
-                        database.executeFast(String.format(Locale.US, "DELETE FROM messages_v2 WHERE mid IN(%s) AND uid = %d", ids, did)).stepThis().dispose();
-                        database.executeFast(String.format(Locale.US, "DELETE FROM messages_topics WHERE mid IN(%s) AND uid = %d", ids, did)).stepThis().dispose();
+                        database.executeFast(String.format(Locale.US, "DELETE FROM messages_v2 WHERE mid IN(%s) AND uid = %d", idsStr, did)).stepThis().dispose();
+                        database.executeFast(String.format(Locale.US, "DELETE FROM messages_topics WHERE mid IN(%s) AND uid = %d", idsStr, did)).stepThis().dispose();
                     }
                     database.executeFast(String.format(Locale.US, "DELETE FROM polls_v2 WHERE mid IN(%s) AND uid = %d", ids, did)).stepThis().dispose();
                     database.executeFast(String.format(Locale.US, "DELETE FROM bot_keyboard WHERE mid IN(%s) AND uid = %d", ids, did)).stepThis().dispose();
