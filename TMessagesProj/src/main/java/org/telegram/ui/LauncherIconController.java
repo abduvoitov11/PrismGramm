@@ -117,7 +117,13 @@ public class LauncherIconController {
         BRONZE("BronzeIcon", R.drawable.icon_22_background_sa, R.mipmap.icon_22_foreground_sa, R.string.AppIconPrismBronze),
         MONOCHROME("MonochromeIcon", R.drawable.icon_23_background_sa, R.mipmap.icon_23_foreground_sa, R.string.AppIconPrismMonochrome),
         SPECTRUM("SpectrumIcon", R.drawable.icon_24_background_sa, R.mipmap.icon_24_foreground_sa, R.string.AppIconPrismSpectrum),
-        GLITCH("GlitchIcon", R.drawable.icon_25_background_sa, R.mipmap.icon_25_foreground_sa, R.string.AppIconPrismGlitch);
+        GLITCH("GlitchIcon", R.drawable.icon_25_background_sa, R.mipmap.icon_25_foreground_sa, R.string.AppIconPrismGlitch),
+        THUNDER("ThunderIcon", R.drawable.icon_26_background_sa, R.mipmap.icon_26_foreground_sa, R.string.AppIconPrismThunder),
+        EMERALD("EmeraldIcon", R.drawable.icon_27_background_sa, R.mipmap.icon_27_foreground_sa, R.string.AppIconPrismEmerald),
+        ECLIPSE("EclipseIcon", R.drawable.icon_28_background_sa, R.mipmap.icon_28_foreground_sa, R.string.AppIconPrismEclipse),
+        SYNTHWAVE("SynthwaveIcon", R.drawable.icon_29_background_sa, R.mipmap.icon_29_foreground_sa, R.string.AppIconPrismSynthwave),
+        GLACIER("GlacierIcon", R.drawable.icon_30_background_sa, R.mipmap.icon_30_foreground_sa, R.string.AppIconPrismGlacier),
+        NEBULA("NebulaIcon", R.drawable.icon_31_background_sa, R.mipmap.icon_31_foreground_sa, R.string.AppIconPrismNebula);
 
         public final String key;
         public final int background;

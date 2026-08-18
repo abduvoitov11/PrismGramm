@@ -62,7 +62,8 @@ import java.util.Random;
 public class PrismSplashScreenView extends FrameLayout {
 
     public enum IconTheme {
-        MATRIX, SAKURA, COSMOS, RUBY, PLASMA, SUNSET, PURE, BRONZE, TURBO, SPECTRUM, DEFAULT
+        MATRIX, SAKURA, COSMOS, RUBY, PLASMA, SUNSET, PURE, BRONZE, TURBO, SPECTRUM,
+        THUNDER, EMERALD, ECLIPSE, SYNTHWAVE, GLACIER, NEBULA, DEFAULT
     }
 
     private IconTheme iconTheme = IconTheme.DEFAULT;
@@ -225,6 +226,60 @@ public class PrismSplashScreenView extends FrameLayout {
             bgMid = 0xFF360808;
             bgBottom = 0xFF080101;
             ambientGlowColor = 0x38FF5252;
+        } else if (key.contains("thunder")) {
+            iconTheme = IconTheme.THUNDER;
+            primaryColor = 0xFFFACC15;
+            secondaryColor = 0xFF38BDF8;
+            accentGlowColor = 0xFFFFE600;
+            bgTop = 0xFF080F22;
+            bgMid = 0xFF101C3D;
+            bgBottom = 0xFF030610;
+            ambientGlowColor = 0x3AFACC15;
+        } else if (key.contains("emerald")) {
+            iconTheme = IconTheme.EMERALD;
+            primaryColor = 0xFF10B981;
+            secondaryColor = 0xFF059669;
+            accentGlowColor = 0xFF34D399;
+            bgTop = 0xFF04170E;
+            bgMid = 0xFF0A2B1B;
+            bgBottom = 0xFF020B06;
+            ambientGlowColor = 0x3A10B981;
+        } else if (key.contains("eclipse")) {
+            iconTheme = IconTheme.ECLIPSE;
+            primaryColor = 0xFFF59E0B;
+            secondaryColor = 0xFFFFFFFF;
+            accentGlowColor = 0xFFFBBF24;
+            bgTop = 0xFF0F0C07;
+            bgMid = 0xFF1F180E;
+            bgBottom = 0xFF040302;
+            ambientGlowColor = 0x3AF59E0B;
+        } else if (key.contains("synthwave")) {
+            iconTheme = IconTheme.SYNTHWAVE;
+            primaryColor = 0xFFEC4899;
+            secondaryColor = 0xFF06B6D4;
+            accentGlowColor = 0xFFF43F5E;
+            bgTop = 0xFF170826;
+            bgMid = 0xFF2B0E44;
+            bgBottom = 0xFF08020F;
+            ambientGlowColor = 0x3AEC4899;
+        } else if (key.contains("glacier")) {
+            iconTheme = IconTheme.GLACIER;
+            primaryColor = 0xFF38BDF8;
+            secondaryColor = 0xFFBAE6FD;
+            accentGlowColor = 0xFF7DD3FC;
+            bgTop = 0xFF061424;
+            bgMid = 0xFF0D253E;
+            bgBottom = 0xFF02070E;
+            ambientGlowColor = 0x3A38BDF8;
+        } else if (key.contains("nebula")) {
+            iconTheme = IconTheme.NEBULA;
+            primaryColor = 0xFF818CF8;
+            secondaryColor = 0xFFD946EF;
+            accentGlowColor = 0xFFA78BFA;
+            bgTop = 0xFF100826;
+            bgMid = 0xFF200F48;
+            bgBottom = 0xFF05020E;
+            ambientGlowColor = 0x3A818CF8;
         } else {
             iconTheme = IconTheme.SPECTRUM;
             primaryColor = 0xFF00F0FF;
@@ -248,6 +303,12 @@ public class PrismSplashScreenView extends FrameLayout {
             case PURE: return "Pure Aqua Edition";
             case BRONZE: return "Vintage Bronze Edition";
             case TURBO: return "Turbo Velocity Edition";
+            case THUNDER: return "Volt Thunderbolt Edition";
+            case EMERALD: return "Emerald Forest Edition";
+            case ECLIPSE: return "Solar Eclipse Edition";
+            case SYNTHWAVE: return "Neon Synthwave Edition";
+            case GLACIER: return "Arctic Glacier Edition";
+            case NEBULA: return "Cosmic Nebula Edition";
             default: return "Prism Spectrum Edition";
         }
     }
@@ -630,6 +691,135 @@ public class PrismSplashScreenView extends FrameLayout {
                         float lineR = AndroidUtilities.dp(30) + prog * AndroidUtilities.dp(110);
                         strokePaint.setAlpha((int) ((1f - prog) * 160));
                         canvas.drawCircle(cx, cy, lineR, strokePaint);
+                    }
+                    break;
+
+                case THUNDER:
+                    // Tesla elektr chaqmoq yoyi & energetik impulslar
+                    strokePaint.setColor(color1);
+                    strokePaint.setStrokeWidth(AndroidUtilities.dp(1.6f));
+                    for (int i = 0; i < 4; i++) {
+                        float baseAng = (float) Math.toRadians(i * 90 + progress * 0.8f);
+                        float r1 = AndroidUtilities.dp(70);
+                        float r2 = AndroidUtilities.dp(115);
+                        float x0 = cx + (float) Math.cos(baseAng) * r1;
+                        float y0 = cy + (float) Math.sin(baseAng) * r1;
+                        float midAng = baseAng + (float) Math.sin(progress * 5f + i) * 0.25f;
+                        float xMid = cx + (float) Math.cos(midAng) * (r1 + r2) * 0.5f;
+                        float yMid = cy + (float) Math.sin(midAng) * (r1 + r2) * 0.5f;
+                        float xEnd = cx + (float) Math.cos(baseAng + 0.1f) * r2;
+                        float yEnd = cy + (float) Math.sin(baseAng + 0.1f) * r2;
+                        strokePaint.setAlpha(180);
+                        canvas.drawLine(x0, y0, xMid, yMid, strokePaint);
+                        strokePaint.setColor(color2);
+                        canvas.drawLine(xMid, yMid, xEnd, yEnd, strokePaint);
+                        strokePaint.setColor(color1);
+                    }
+                    break;
+
+                case EMERALD:
+                    // Muqaddas o'rmon konsentrik halqalari va suzuvchi zumrad olovchalar
+                    strokePaint.setColor(color1);
+                    strokePaint.setStrokeWidth(AndroidUtilities.dp(1.3f));
+                    strokePaint.setAlpha(130);
+                    for (int i = 1; i <= 3; i++) {
+                        float r = AndroidUtilities.dp(55 + i * 22);
+                        canvas.drawCircle(cx, cy, r, strokePaint);
+                    }
+                    fillPaint.setColor(color3);
+                    for (int i = 0; i < 10; i++) {
+                        float ang = (float) Math.toRadians(i * 36 + progress * 0.6f);
+                        float dist = AndroidUtilities.dp(75 + (float) Math.sin(Math.toRadians(progress * 2 + i * 45)) * 25);
+                        float fx = cx + (float) Math.cos(ang) * dist;
+                        float fy = cy + (float) Math.sin(ang) * dist;
+                        fillPaint.setAlpha(190);
+                        canvas.drawCircle(fx, fy, AndroidUtilities.dp(2.5f), fillPaint);
+                    }
+                    break;
+
+                case ECLIPSE:
+                    // Quyosh tutilishi nurlari va olmos chaqnashi
+                    strokePaint.setColor(color1);
+                    strokePaint.setStrokeWidth(AndroidUtilities.dp(1.2f));
+                    strokePaint.setAlpha(150);
+                    float coronaR = AndroidUtilities.dp(88);
+                    canvas.drawCircle(cx, cy, coronaR, strokePaint);
+                    for (int a = 0; a < 360; a += 15) {
+                        float rad = (float) Math.toRadians(a + progress * 0.3f);
+                        float l = (10 + (float) Math.sin(Math.toRadians(a * 3 + progress * 2)) * 8);
+                        float x1 = cx + (float) Math.cos(rad) * (coronaR + AndroidUtilities.dp(2));
+                        float y1 = cy + (float) Math.sin(rad) * (coronaR + AndroidUtilities.dp(2));
+                        float x2 = cx + (float) Math.cos(rad) * (coronaR + AndroidUtilities.dp(2 + l));
+                        float y2 = cy + (float) Math.sin(rad) * (coronaR + AndroidUtilities.dp(2 + l));
+                        canvas.drawLine(x1, y1, x2, y2, strokePaint);
+                    }
+                    // Diamond sparkle
+                    float dAng = (float) Math.toRadians(-45);
+                    float dx = cx + (float) Math.cos(dAng) * coronaR;
+                    float dy = cy + (float) Math.sin(dAng) * coronaR;
+                    fillPaint.setColor(0xFFFFFFFF);
+                    fillPaint.setAlpha(240);
+                    canvas.drawCircle(dx, dy, AndroidUtilities.dp(4.5f), fillPaint);
+                    break;
+
+                case SYNTHWAVE:
+                    // Kiberpank gorizont lazer to'ri
+                    strokePaint.setColor(color1);
+                    strokePaint.setStrokeWidth(AndroidUtilities.dp(1.2f));
+                    strokePaint.setAlpha(140);
+                    for (int i = -3; i <= 3; i++) {
+                        float yOff = (i * 20 + (progress * 1.5f) % 20);
+                        float y = cy + AndroidUtilities.dp(yOff);
+                        float wSpan = AndroidUtilities.dp(80 - Math.abs(yOff) * 0.4f);
+                        strokePaint.setColor(i % 2 == 0 ? color1 : color2);
+                        canvas.drawLine(cx - wSpan, y, cx + wSpan, y, strokePaint);
+                    }
+                    break;
+
+                case GLACIER:
+                    // 3D Muz kristallari va aylanuvchi qor qirralari
+                    strokePaint.setColor(color1);
+                    strokePaint.setStrokeWidth(AndroidUtilities.dp(1.4f));
+                    strokePaint.setAlpha(150);
+
+                    canvas.save();
+                    camera.save();
+                    camera.rotateX(45);
+                    camera.rotateZ(progress * 0.5f);
+                    camera.getMatrix(matrix);
+                    camera.restore();
+                    matrix.preTranslate(-cx, -cy);
+                    matrix.postTranslate(cx, cy);
+                    canvas.concat(matrix);
+
+                    float hexR = AndroidUtilities.dp(85);
+                    path.reset();
+                    for (int i = 0; i < 6; i++) {
+                        float ang = (float) Math.toRadians(i * 60);
+                        float px = cx + (float) Math.cos(ang) * hexR;
+                        float py = cy + (float) Math.sin(ang) * hexR;
+                        if (i == 0) path.moveTo(px, py);
+                        else path.lineTo(px, py);
+                        canvas.drawLine(cx, cy, px, py, strokePaint);
+                    }
+                    path.close();
+                    canvas.drawPath(path, strokePaint);
+                    canvas.restore();
+                    break;
+
+                case NEBULA:
+                    // Logarifmik kosmik spiral tumanlik
+                    fillPaint.setColor(color1);
+                    for (int arm = 0; arm < 2; arm++) {
+                        for (int t = 20; t < 220; t += 12) {
+                            float rad = (float) Math.toRadians(t + arm * 180 + progress);
+                            float r = AndroidUtilities.dp(t * 0.45f);
+                            float px = cx + (float) Math.cos(rad) * r;
+                            float py = cy + (float) Math.sin(rad) * r;
+                            fillPaint.setColor(arm == 0 ? color1 : color2);
+                            fillPaint.setAlpha((int) ((1f - t / 240f) * 200));
+                            canvas.drawCircle(px, py, AndroidUtilities.dp(2.2f), fillPaint);
+                        }
                     }
                     break;
 

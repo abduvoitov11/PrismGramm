@@ -5744,6 +5744,12 @@
     <string name="AppIconPrismMonochrome">Prism Minimal</string>
     <string name="AppIconPrismSpectrum">Prism Spectrum</string>
     <string name="AppIconPrismGlitch">Prism Glitch</string>
+    <string name="AppIconPrismThunder">Prism Thunder</string>
+    <string name="AppIconPrismEmerald">Prism Emerald</string>
+    <string name="AppIconPrismEclipse">Prism Eclipse</string>
+    <string name="AppIconPrismSynthwave">Prism Synthwave</string>
+    <string name="AppIconPrismGlacier">Prism Glacier</string>
+    <string name="AppIconPrismNebula">Prism Nebula</string>
     <string name="AppIconChangedTo">App icon has been changed to %1$s</string>
     <string name="FileTooLarge">File Too Large</string>
     <string name="PremiumPreviewAppIcon">Premium App Icon</string>
