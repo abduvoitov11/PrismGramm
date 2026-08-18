@@ -1087,6 +1087,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     private Paint onceRadialCutPaint;
     private Paint onceRadialStrokePaint;
     private int onceRadialPaintColor;
+    private Paint prismGlassPaint;
+    private RectF prismGlassRect = new RectF();
 
     private StickerSetLinkIcon stickerSetIcons;
 
@@ -20500,6 +20502,32 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 if (currentBackgroundShadowDrawable != null && currentPosition == null) {
                     currentBackgroundShadowDrawable.setAlpha((int) (255 * alphaInternal));
                     currentBackgroundShadowDrawable.draw(canvas);
+                }
+
+                // ─── Prism Liquid Glass & Anti-Delete Neon Aura ───
+                if (currentBackgroundDrawable != null && currentPosition == null && !mediaBackground) {
+                    Rect bounds = currentBackgroundDrawable.getBounds();
+                    if (bounds.width() > dp(20) && bounds.height() > dp(16)) {
+                        if (prismGlassPaint == null) {
+                            prismGlassPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+                            prismGlassPaint.setStyle(Paint.Style.STROKE);
+                        }
+                        boolean isDark = Theme.isCurrentThemeDark();
+                        float rad = dp(SharedConfig.bubbleRadius);
+                        prismGlassRect.set(bounds.left + dp(1), bounds.top + dp(1), bounds.right - dp(1), bounds.bottom - dp(1));
+
+                        if (currentMessageObject != null && currentMessageObject.isKryptonDeleted()) {
+                            // Neon crimson border glow for deleted messages
+                            prismGlassPaint.setStrokeWidth(dp(1.5f));
+                            prismGlassPaint.setColor(0x88FF3B30);
+                            canvas.drawRoundRect(prismGlassRect, rad, rad, prismGlassPaint);
+                        } else {
+                            // Subtle liquid glass specular inner reflection
+                            prismGlassPaint.setStrokeWidth(dp(0.8f));
+                            prismGlassPaint.setColor(isDark ? 0x24FFFFFF : 0x40FFFFFF);
+                            canvas.drawRoundRect(prismGlassRect, rad, rad, prismGlassPaint);
+                        }
+                    }
                 }
 
                 if (transitionParams.changePinnedBottomProgress != 1f && currentPosition == null) {

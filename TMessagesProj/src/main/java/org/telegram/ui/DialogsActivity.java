@@ -190,6 +190,7 @@ import org.telegram.ui.Components.FragmentFloatingButton;
 import org.telegram.ui.Components.FragmentSearchField;
 import org.telegram.ui.Components.HintsController;
 import org.telegram.ui.Components.ImageUpdater;
+import org.telegram.ui.Components.PrismDrawerHeaderView;
 import org.telegram.ui.Components.PermissionRequest;
 import org.telegram.ui.Components.ScaleStateListAnimator;
 import org.telegram.ui.Components.UItem;
@@ -13355,47 +13356,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         }
 
         if (!isArchive()) {
-            final boolean isCurrentThemeDark;
-            if (resourceProvider != null) {
-                isCurrentThemeDark = resourceProvider.isDark();
-            } else {
-                isCurrentThemeDark = Theme.isCurrentThemeDark();
-            }
-            io.add(isCurrentThemeDark ? R.drawable.menu_day_mode_24 : R.drawable.menu_night_mode_24,
-                    getString(isCurrentThemeDark ? R.string.SwitchThemeToDay : R.string.SwitchThemeToNight), () -> {
-                if (switchingTheme) {
-                    return;
-                }
-                switchingTheme = true;
-                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("themeconfig", Activity.MODE_PRIVATE);
-                String dayThemeName = preferences.getString("lastDayTheme", "Blue");
-                if (Theme.getTheme(dayThemeName) == null || Theme.getTheme(dayThemeName).isDark()) {
-                    dayThemeName = "Blue";
-                }
-                String nightThemeName = preferences.getString("lastDarkTheme", "Dark Blue");
-                if (Theme.getTheme(nightThemeName) == null || !Theme.getTheme(nightThemeName).isDark()) {
-                    nightThemeName = "Dark Blue";
-                }
-                Theme.ThemeInfo themeInfo = Theme.getActiveTheme();
-                if (dayThemeName.equals(nightThemeName)) {
-                    if (themeInfo.isDark() || dayThemeName.equals("Dark Blue") || dayThemeName.equals("Night")) {
-                        dayThemeName = "Blue";
-                    } else {
-                        nightThemeName = "Dark Blue";
-                    }
-                }
-
-                boolean toDark;
-                if (toDark = dayThemeName.equals(themeInfo.getKey())) {
-                    themeInfo = Theme.getTheme(nightThemeName);
-                } else {
-                    themeInfo = Theme.getTheme(dayThemeName);
-                }
-                switchTheme(themeInfo, toDark);
-                Theme.turnOffAutoNight(BulletinFactory.of(this), () -> {
-                    presentFragment(new ThemeActivity(ThemeActivity.THEME_TYPE_NIGHT));
-                });
-            });
+            io.addView(new PrismDrawerHeaderView(getContext(), this, currentAccount, io::dismiss));
             io.addGap();
             io.add(R.drawable.outline_groups_24, getString(R.string.NewGroup), () -> {
                 Bundle args = new Bundle();
@@ -13406,8 +13367,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 args.putLong("user_id", UserConfig.getInstance(currentAccount).getClientUserId());
                 presentFragment(new ChatActivity(args));
             });
-            io.add(R.drawable.msg_download, "Media Downloader", () -> {
-                presentFragment(new KryptonMediaDownloaderActivity());
+            io.add(R.drawable.msg_settings_old, getString(R.string.Settings), () -> {
+                presentFragment(new SettingsActivity());
+            });
+            io.add(R.drawable.msg_customize, "PrismGramm " + getString(R.string.Settings), () -> {
+                presentFragment(new KryptonSettingsActivity());
             });
             if (ApplicationLoader.applicationLoaderInstance != null) {
                 ApplicationLoader.applicationLoaderInstance.addItemOptions(io);
@@ -13435,18 +13399,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                         }, () -> BotWebViewSheet.deleteBot(currentAccount, attachMenuBot.bot_id, null));
                     }
                 }
-            }
-            if (getUserConfig().showCallsTab) {
-                io.add(R.drawable.msg_settings_old, getString(R.string.Settings), () -> {
-                    presentFragment(new SettingsActivity());
-                });
-            }
-
-            if (com.radolyn.ayugram.AyuConfig.showGhostToggleInDrawer) {
-                boolean active = com.radolyn.ayugram.AyuConfig.isGhostModeActive();
-                io.add(R.drawable.msg_secret, active ? getString(R.string.DisableGhostMode) : getString(R.string.EnableGhostMode), () -> {
-                    com.radolyn.ayugram.AyuConfig.toggleGhostMode();
-                });
             }
 
             if (com.radolyn.ayugram.AyuConfig.showKillButtonInDrawer) {
