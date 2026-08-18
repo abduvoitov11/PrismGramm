@@ -150,19 +150,19 @@ public class FileLoadOperation {
     private final static int stateCanceled = 4;
     private final static int stateCancelling = 5;
 
-    private int downloadChunkSize = 1024 * 32;
-    private int downloadChunkSizeBig = 1024 * 128;
-    private int cdnChunkCheckSize = 1024 * 128;
-    private int maxDownloadRequests = 4;
-    private int maxDownloadRequestsBig = 4;
-    private int bigFileSizeFrom = 10 * 1024 * 1024;
+    private int downloadChunkSize = 1024 * 512;
+    private int downloadChunkSizeBig = 1024 * 1024;
+    private int cdnChunkCheckSize = 1024 * 512;
+    private int maxDownloadRequests = 16;
+    private int maxDownloadRequestsBig = 16;
+    private int bigFileSizeFrom = 1024 * 1024;
     private int maxCdnParts = (int) (FileLoader.DEFAULT_MAX_FILE_SIZE / downloadChunkSizeBig);
 
     //load small parts for stream
-    private int downloadChunkSizeAnimation = 1024 * 128;
-    private int maxDownloadRequestsAnimation = 4;
+    private int downloadChunkSizeAnimation = 1024 * 512;
+    private int maxDownloadRequestsAnimation = 12;
 
-    private final static int preloadMaxBytes = 2 * 1024 * 1024;
+    private final static int preloadMaxBytes = 8 * 1024 * 1024;
 
     private String fileName;
     private String storeFileName;
@@ -286,14 +286,20 @@ public class FileLoadOperation {
     }
 
     private void updateParams() {
-        if ((preloadPrefixSize > 0 || MessagesController.getInstance(currentAccount).getfileExperimentalParams) && !forceSmallChunk) {
+        if (!forceSmallChunk) {
+            downloadChunkSize = 1024 * 512;
+            downloadChunkSizeBig = 1024 * 1024;
+            maxDownloadRequests = 16;
+            maxDownloadRequestsBig = 16;
+            maxDownloadRequestsAnimation = 12;
+            downloadChunkSizeAnimation = 1024 * 512;
+        } else {
+            downloadChunkSize = 1024 * 128;
             downloadChunkSizeBig = 1024 * 512;
             maxDownloadRequests = 8;
             maxDownloadRequestsBig = 8;
-        } else {
-            downloadChunkSizeBig = 1024 * 128;
-            maxDownloadRequests = 4;
-            maxDownloadRequestsBig = 4;
+            maxDownloadRequestsAnimation = 8;
+            downloadChunkSizeAnimation = 1024 * 256;
         }
         maxCdnParts = (int) (FileLoader.DEFAULT_MAX_FILE_SIZE / downloadChunkSizeBig);
     }
@@ -832,8 +838,8 @@ public class FileLoadOperation {
                 if (BuildVars.LOGS_ENABLED) {
                     FileLog.d("debug_loading: restart with small chunk");
                 }
-                currentDownloadChunkSize =  1024 * 32;
-                currentMaxDownloadRequests = 4;
+                currentDownloadChunkSize =  1024 * 128;
+                currentMaxDownloadRequests = 8;
             } else if (isStory) {
                 currentDownloadChunkSize = downloadChunkSizeBig;
                 currentMaxDownloadRequests = maxDownloadRequestsBig;

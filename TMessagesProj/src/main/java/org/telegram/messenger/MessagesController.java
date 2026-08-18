@@ -180,8 +180,8 @@ public class MessagesController extends BaseController implements NotificationCe
     private LongSparseIntArray pendingUnreadCounter = new LongSparseIntArray();
     private int lastPrintingStringCount;
     private SparseArray<ChatlistUpdatesStat> chatlistFoldersUpdates = new SparseArray<>();
-    public int largeQueueMaxActiveOperations = 2;
-    public int smallQueueMaxActiveOperations = 5;
+    public int largeQueueMaxActiveOperations = 12;
+    public int smallQueueMaxActiveOperations = 20;
     public int stealthModeFuture;
     public int stealthModePast;
     public int stealthModeCooldown;
@@ -1580,7 +1580,7 @@ public class MessagesController extends BaseController implements NotificationCe
         qrLoginCamera = mainPreferences.getBoolean("qrLoginCamera", true);
         saveGifsWithStickers = mainPreferences.getBoolean("saveGifsWithStickers", false);
         filtersEnabled = mainPreferences.getBoolean("filtersEnabled", false);
-        getfileExperimentalParams = mainPreferences.getBoolean("getfileExperimentalParams", false);
+        getfileExperimentalParams = mainPreferences.getBoolean("getfileExperimentalParams", true);
         smsjobsStickyNotificationEnabled = mainPreferences.getBoolean("smsjobsStickyNotificationEnabled", false);
         showFiltersTooltip = mainPreferences.getBoolean("showFiltersTooltip", false);
         autoarchiveAvailable = mainPreferences.getBoolean("autoarchiveAvailable", false);
@@ -1643,8 +1643,8 @@ public class MessagesController extends BaseController implements NotificationCe
         giftAttachMenuIcon = mainPreferences.getBoolean("giftAttachMenuIcon", false);
         giftTextFieldIcon = mainPreferences.getBoolean("giftTextFieldIcon", false);
         checkResetLangpack = mainPreferences.getInt("checkResetLangpack", 0);
-        smallQueueMaxActiveOperations = mainPreferences.getInt("smallQueueMaxActiveOperations", 5);
-        largeQueueMaxActiveOperations = mainPreferences.getInt("largeQueueMaxActiveOperations", 2);
+        smallQueueMaxActiveOperations = mainPreferences.getInt("smallQueueMaxActiveOperations", 20);
+        largeQueueMaxActiveOperations = mainPreferences.getInt("largeQueueMaxActiveOperations", 12);
         stealthModeFuture = mainPreferences.getInt("stories_stealth_future_period", 25 * 60);
         storiesChangelogUserId = mainPreferences.getLong("stories_changelog_user_id", 777000);
         giveawayAddPeersMax = mainPreferences.getLong("giveaway_add_peers_max", 10);
