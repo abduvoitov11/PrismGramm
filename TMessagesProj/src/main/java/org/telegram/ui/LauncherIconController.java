@@ -82,6 +82,7 @@ public class LauncherIconController {
             pm.setComponentEnabledSetting(i.getComponentName(ctx), i == icon ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED :
                     PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
         }
+        org.telegram.messenger.PrismThemeController.onIconChanged(icon);
     }
 
     public enum LauncherIcon {

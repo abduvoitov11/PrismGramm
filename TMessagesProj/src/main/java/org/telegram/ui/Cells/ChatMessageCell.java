@@ -20207,7 +20207,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             return;
         }
         Rect bounds = currentBackgroundDrawable.getBounds();
-        if (bounds == null || bounds.width() <= dp(24) || bounds.height() <= dp(18)) {
+        if (bounds == null || bounds.width() <= dp(20) || bounds.height() <= dp(16)) {
             return;
         }
 
@@ -20224,6 +20224,11 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         boolean isOut = currentMessageObject.isOutOwner();
         boolean isDeleted = currentMessageObject.isKryptonDeleted();
 
+        org.telegram.messenger.PrismThemeController.IconPalette palette = org.telegram.messenger.PrismThemeController.getCurrentPalette();
+
+        Path bubblePath = currentBackgroundDrawable.getPath();
+        boolean hasPath = bubblePath != null && !bubblePath.isEmpty();
+
         prismGlassRect.set(left, top, right, bottom);
 
         // 1. Anti-Delete Crimson Neon Border & Glow
@@ -20232,45 +20237,65 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             prismGlassPaint.setStrokeWidth(dp(1.8f));
             prismGlassPaint.setShader(null);
             prismGlassPaint.setColor(0xCCFF3B30);
-            canvas.drawRoundRect(prismGlassRect, rad, rad, prismGlassPaint);
+            if (hasPath) {
+                canvas.drawPath(bubblePath, prismGlassPaint);
+            } else {
+                canvas.drawRoundRect(prismGlassRect, rad, rad, prismGlassPaint);
+            }
 
             // Subtle neon inner tint
             prismGlassPaint.setStyle(Paint.Style.FILL);
             prismGlassPaint.setColor(0x18FF3B30);
-            canvas.drawRoundRect(prismGlassRect, rad, rad, prismGlassPaint);
+            if (hasPath) {
+                canvas.drawPath(bubblePath, prismGlassPaint);
+            } else {
+                canvas.drawRoundRect(prismGlassRect, rad, rad, prismGlassPaint);
+            }
             return;
         }
 
-        // 2. Liquid Glass 3D Specular Rim (Luminous Glass Edge)
+        // 2. Liquid Glass 3D Specular Rim (Luminous Glass Edge contoured to bubble)
         prismGlassPaint.setStyle(Paint.Style.STROKE);
         prismGlassPaint.setStrokeWidth(dp(1.2f));
 
-        int topShineColor = isDark ? 0x70FFFFFF : 0x90FFFFFF;
-        int bottomShineColor = isDark ? 0x10FFFFFF : 0x20000000;
+        int primaryAccent = palette != null ? palette.primary : 0xFF00E5FF;
+        int secondaryAccent = palette != null ? palette.secondary : 0xFF007AFF;
+        int accentR = Color.red(primaryAccent);
+        int accentG = Color.green(primaryAccent);
+        int accentB = Color.blue(primaryAccent);
 
-        if (isOut) {
-            // Outgoing bubble: vibrant cyan/white highlight
-            topShineColor = isDark ? 0x88FFFFFF : 0xA0FFFFFF;
-            bottomShineColor = isDark ? 0x1500E5FF : 0x25007AFF;
-        }
+        int topShineColor = isDark ? Color.argb(0xB0, Math.min(255, accentR + 60), Math.min(255, accentG + 60), Math.min(255, accentB + 60))
+                : Color.argb(0xD0, Math.min(255, accentR + 80), Math.min(255, accentG + 80), Math.min(255, accentB + 80));
+        int midShineColor = isDark ? 0x40FFFFFF : 0x55FFFFFF;
+        int bottomShineColor = isDark ? Color.argb(0x25, Color.red(secondaryAccent), Color.green(secondaryAccent), Color.blue(secondaryAccent))
+                : Color.argb(0x35, Color.red(secondaryAccent), Color.green(secondaryAccent), Color.blue(secondaryAccent));
 
         LinearGradient rimGradient = new LinearGradient(
                 left, top,
                 right, bottom,
-                new int[]{topShineColor, 0x40FFFFFF, bottomShineColor},
-                new float[]{0f, 0.4f, 1f},
+                new int[]{topShineColor, midShineColor, bottomShineColor},
+                new float[]{0f, 0.45f, 1f},
                 Shader.TileMode.CLAMP
         );
         prismGlassPaint.setShader(rimGradient);
-        canvas.drawRoundRect(prismGlassRect, rad, rad, prismGlassPaint);
+
+        if (hasPath) {
+            canvas.drawPath(bubblePath, prismGlassPaint);
+        } else {
+            canvas.drawRoundRect(prismGlassRect, rad, rad, prismGlassPaint);
+        }
 
         // 3. Top Curved Specular Flare (Yorug'lik akslanishi - Glass Highlight)
-        float flareHeight = Math.min(dp(14), (bottom - top) * 0.35f);
+        float flareHeight = Math.min(dp(16), (bottom - top) * 0.4f);
         if (flareHeight > dp(4)) {
             canvas.save();
-            Path clipPath = new Path();
-            clipPath.addRoundRect(prismGlassRect, rad, rad, Path.Direction.CW);
-            canvas.clipPath(clipPath);
+            if (hasPath) {
+                canvas.clipPath(bubblePath);
+            } else {
+                Path clipPath = new Path();
+                clipPath.addRoundRect(prismGlassRect, rad, rad, Path.Direction.CW);
+                canvas.clipPath(clipPath);
+            }
 
             RectF flareRect = new RectF(left, top, right, top + flareHeight);
             Paint flarePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -20278,7 +20303,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             flarePaint.setShader(new LinearGradient(
                     0, top,
                     0, top + flareHeight,
-                    new int[]{isDark ? 0x40FFFFFF : 0x55FFFFFF, 0x00FFFFFF},
+                    new int[]{isDark ? Color.argb(0x55, accentR, accentG, accentB) : Color.argb(0x65, Math.min(255, accentR + 40), Math.min(255, accentG + 40), Math.min(255, accentB + 40)), 0x00FFFFFF},
                     null,
                     Shader.TileMode.CLAMP
             ));

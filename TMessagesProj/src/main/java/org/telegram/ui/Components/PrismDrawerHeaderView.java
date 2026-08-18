@@ -105,17 +105,19 @@ public class PrismDrawerHeaderView extends LinearLayout {
         nameTextView.setEllipsize(TextUtils.TruncateAt.END);
         nameRow.addView(nameTextView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT));
 
-        // Prism PRO Neon Pill Badge
+        // Prism Neon Dynamic Edition Badge
+        org.telegram.messenger.PrismThemeController.IconPalette palette = org.telegram.messenger.PrismThemeController.getCurrentPalette();
         TextView proBadge = new TextView(context);
-        proBadge.setText("PRISM");
+        proBadge.setText(palette != null ? palette.name.toUpperCase() : "PRISM");
         proBadge.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9.5f);
         proBadge.setTypeface(AndroidUtilities.bold());
-        proBadge.setTextColor(0xFF00E5FF);
+        proBadge.setTextColor(palette != null ? palette.primary : 0xFF00E5FF);
         proBadge.setPadding(AndroidUtilities.dp(5), AndroidUtilities.dp(1.5f), AndroidUtilities.dp(5), AndroidUtilities.dp(1.5f));
         GradientDrawable badgeBg = new GradientDrawable();
-        badgeBg.setColor(0x2200E5FF);
+        int prime = palette != null ? palette.primary : 0xFF00E5FF;
+        badgeBg.setColor(Color.argb(0x25, Color.red(prime), Color.green(prime), Color.blue(prime)));
         badgeBg.setCornerRadius(AndroidUtilities.dp(8));
-        badgeBg.setStroke(AndroidUtilities.dp(1), 0x8800E5FF);
+        badgeBg.setStroke(AndroidUtilities.dp(1), Color.argb(0x88, Color.red(prime), Color.green(prime), Color.blue(prime)));
         proBadge.setBackground(badgeBg);
         nameRow.addView(proBadge, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 8, 0, 0, 0));
 
@@ -303,12 +305,17 @@ public class PrismDrawerHeaderView extends LinearLayout {
             canvas.save();
             canvas.rotate(rotationAngle, cx, cy);
 
+            org.telegram.messenger.PrismThemeController.IconPalette palette = org.telegram.messenger.PrismThemeController.getCurrentPalette();
+            int c1 = palette != null ? palette.primary : 0xFF00F0FF;
+            int c2 = palette != null ? palette.secondary : 0xFF7000FF;
+            int c3 = palette != null ? palette.accentGlow : 0xFFFF007F;
+
             int[] colors = new int[]{
-                    0xFF00F0FF, // Electric Cyan
-                    0xFF7000FF, // Deep Violet
-                    0xFFFF007F, // Neon Pink
-                    0xFF00FFA3, // Emerald Mint
-                    0xFF00F0FF  // Loop back
+                    c1,
+                    c2,
+                    c3,
+                    0xFFFFFFFF,
+                    c1
             };
             auraPaint.setShader(new SweepGradient(cx, cy, colors, null));
             canvas.drawOval(auraRect, auraPaint);
