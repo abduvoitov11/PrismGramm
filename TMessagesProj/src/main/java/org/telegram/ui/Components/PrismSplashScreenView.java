@@ -13,6 +13,7 @@ import android.graphics.Path;
 import android.graphics.RadialGradient;
 import android.graphics.RectF;
 import android.graphics.Shader;
+import android.graphics.SweepGradient;
 import android.graphics.drawable.GradientDrawable;
 import android.os.SystemClock;
 import android.text.TextUtils;
@@ -43,9 +44,10 @@ import java.util.Random;
 
 /**
  * Ultra-Modern 3D Liquid Glass Splash Screen.
- * Contains 25+ distinct, bespoke animation engines and particle physics models —
- * one unique customized identity for EVERY App Icon (Matrix code rain, Singularity vortex,
- * Plasma lightning arcs, Sakura petals, Glitch RGB shift, Aurora ribbons, Lava embers, Turbo warp trails, etc.).
+ * Har bir App Icon uchun mutlaqo alohida, tubdan farq qiluvchi vizual effektlar,
+ * fizika modellari (Matrix kod yomg'iri, Singularity qora tuynuk girdobi, Sakura yaproqlari,
+ * Turbo fazoviy tezlik chiziqlari, Plasma chaqmoqlari, Lava olov uchqunlari, Glitch RGB buzilishi,
+ * Steampunk mexanik tishli g'ildiraklari, Qor va Muz kristallari va h.k.) va maxsus animatsiyalar.
  */
 public class PrismSplashScreenView extends FrameLayout {
 
@@ -69,7 +71,6 @@ public class PrismSplashScreenView extends FrameLayout {
     private final GlassShimmerOverlay shimmerOverlay;
     private final PulseRingsView pulseRingsView;
     private final CustomIconFxOverlay iconFxOverlay;
-    private final LinearLayout textContainer;
     private final TextView greetingView;
     private final TextView appTitle;
     private final TextView appSubtitle;
@@ -93,7 +94,7 @@ public class PrismSplashScreenView extends FrameLayout {
         );
         setBackground(bgDrawable);
 
-        // 2. Multi-physics Particle Simulation Layer (25+ bespoke behaviors)
+        // 2. Bespoke Physics & Background Simulation Layer
         particleCanvas = new ParticleCanvasView(context, animType, primaryColor, secondaryColor, accentGlowColor);
         addView(particleCanvas, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
@@ -103,12 +104,15 @@ public class PrismSplashScreenView extends FrameLayout {
         centerContainer.setGravity(Gravity.CENTER_HORIZONTAL);
         addView(centerContainer, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER));
 
-        // 3. Shockwave Pulse Rings & Custom FX Behind/Around 3D Icon
+        // 3. Shockwave & Custom Geometry Overlays Around 3D Icon
         FrameLayout iconWrapper = new FrameLayout(context);
-        centerContainer.addView(iconWrapper, LayoutHelper.createLinear(170, 170, Gravity.CENTER_HORIZONTAL));
+        centerContainer.addView(iconWrapper, LayoutHelper.createLinear(200, 200, Gravity.CENTER_HORIZONTAL));
 
-        pulseRingsView = new PulseRingsView(context, animType, primaryColor, secondaryColor);
+        pulseRingsView = new PulseRingsView(context, animType, primaryColor, secondaryColor, accentGlowColor);
         iconWrapper.addView(pulseRingsView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.CENTER));
+
+        iconFxOverlay = new CustomIconFxOverlay(context, animType, primaryColor, secondaryColor, accentGlowColor);
+        iconWrapper.addView(iconFxOverlay, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.CENTER));
 
         // 4. 3D Rounded Squircle Liquid Glass Icon Card
         iconCard = new FrameLayout(context) {
@@ -118,8 +122,8 @@ public class PrismSplashScreenView extends FrameLayout {
 
             {
                 borderPaint.setStyle(Paint.Style.STROKE);
-                borderPaint.setStrokeWidth(AndroidUtilities.dp(1.8f));
-                borderPaint.setColor(Color.argb(130, 255, 255, 255));
+                borderPaint.setStrokeWidth(AndroidUtilities.dp(2f));
+                borderPaint.setColor(Color.argb(160, 255, 255, 255));
             }
 
             @Override
@@ -139,8 +143,8 @@ public class PrismSplashScreenView extends FrameLayout {
                 canvas.drawRoundRect(rectF, AndroidUtilities.dp(24), AndroidUtilities.dp(24), borderPaint);
             }
         };
-        iconCard.setElevation(AndroidUtilities.dp(18));
-        iconWrapper.addView(iconCard, LayoutHelper.createFrame(94, 94, Gravity.CENTER));
+        iconCard.setElevation(AndroidUtilities.dp(20));
+        iconWrapper.addView(iconCard, LayoutHelper.createFrame(96, 96, Gravity.CENTER));
 
         iconBgView = new ImageView(context);
         iconBgView.setScaleType(ImageView.ScaleType.FIT_XY);
@@ -148,65 +152,45 @@ public class PrismSplashScreenView extends FrameLayout {
         iconCard.addView(iconBgView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
         iconFgView = new ImageView(context);
-        iconFgView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        iconFgView.setPadding(AndroidUtilities.dp(11), AndroidUtilities.dp(11), AndroidUtilities.dp(11), AndroidUtilities.dp(11));
+        iconFgView.setScaleType(ImageView.ScaleType.FIT_XY);
         iconFgView.setImageResource(currentIcon.foreground);
         iconCard.addView(iconFgView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
-        // Specular Diagonal Light Shimmer Sweep
+        // Shimmer overlay
         shimmerOverlay = new GlassShimmerOverlay(context);
         iconCard.addView(shimmerOverlay, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
-        // 5. Custom Icon Overlays (HUD, Lightning, Glitch Slices, Orbit Rings)
-        iconFxOverlay = new CustomIconFxOverlay(context, animType, primaryColor, secondaryColor);
-        iconWrapper.addView(iconFxOverlay, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.CENTER));
-
-        // 6. Personalized Greeting & Typography Section
-        textContainer = new LinearLayout(context);
+        // 5. Typography container
+        LinearLayout textContainer = new LinearLayout(context);
         textContainer.setOrientation(LinearLayout.VERTICAL);
         textContainer.setGravity(Gravity.CENTER_HORIZONTAL);
-        centerContainer.addView(textContainer, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL, 0, 18, 0, 0));
+        centerContainer.addView(textContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 20, 0, 0));
 
-        // Personalized Multilingual Time Greeting Card
-        String greetingText = generateGreetingText();
         greetingView = new TextView(context);
-        greetingView.setText(greetingText);
         greetingView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-        greetingView.setTypeface(AndroidUtilities.bold());
-        greetingView.setTextColor(0xFFFFFFFF);
+        greetingView.setTextColor(Color.argb(220, 255, 255, 255));
         greetingView.setGravity(Gravity.CENTER);
-        greetingView.setPadding(AndroidUtilities.dp(18), AndroidUtilities.dp(7), AndroidUtilities.dp(18), AndroidUtilities.dp(7));
+        greetingView.setText(generateGreetingText());
+        textContainer.addView(greetingView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0, 0, 0, 4));
 
-        GradientDrawable greetingBadge = new GradientDrawable();
-        greetingBadge.setColor(Color.argb(50, 255, 255, 255));
-        greetingBadge.setCornerRadius(AndroidUtilities.dp(18));
-        greetingBadge.setStroke(AndroidUtilities.dp(1.2f), Color.argb(90, 255, 255, 255));
-        greetingView.setBackground(greetingBadge);
-        textContainer.addView(greetingView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL));
-
-        // App Title
         appTitle = new TextView(context);
-        appTitle.setText("PrismGram");
-        appTitle.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 25);
+        appTitle.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 28);
+        appTitle.setTextColor(Color.WHITE);
         appTitle.setTypeface(AndroidUtilities.bold());
-        appTitle.setTextColor(0xFFFFFFFF);
-        appTitle.setLetterSpacing(0.04f);
-        textContainer.addView(appTitle, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL, 0, 10, 0, 0));
+        appTitle.setGravity(Gravity.CENTER);
+        appTitle.setText("PrismGramm");
+        textContainer.addView(appTitle, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0, 2, 0, 4));
 
-        // App Subtitle with customized icon edition label
         appSubtitle = new TextView(context);
-        appSubtitle.setText(getThemeEditionLabel(currentIcon));
-        appSubtitle.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
+        appSubtitle.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
         appSubtitle.setTextColor(primaryColor);
-        appSubtitle.setLetterSpacing(0.06f);
-        textContainer.addView(appSubtitle, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL, 0, 4, 0, 0));
-
-        // Tap-to-skip support
-        setOnClickListener(v -> dismiss());
+        appSubtitle.setGravity(Gravity.CENTER);
+        appSubtitle.setText("✦ " + getThemeEditionLabel(currentIcon) + " ✦");
+        textContainer.addView(appSubtitle, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT));
     }
 
     private void resolveIconTypeAndColors(LauncherIconController.LauncherIcon icon) {
-        if (icon == null) return;
+        if (icon == null) icon = LauncherIconController.LauncherIcon.DEFAULT;
         String key = icon.key.toLowerCase();
 
         if (key.contains("matrix")) {
@@ -214,206 +198,206 @@ public class PrismSplashScreenView extends FrameLayout {
             primaryColor = 0xFF00FF66;
             secondaryColor = 0xFF00E5FF;
             accentGlowColor = 0xFF39FF14;
-            bgStartColor = 0xFF03140A;
-            bgEndColor = 0xFF010804;
+            bgStartColor = 0xFF081C10;
+            bgEndColor = 0xFF030A05;
         } else if (key.contains("sunset")) {
             animType = IconAnimType.SUNSET;
             primaryColor = 0xFFFF9100;
             secondaryColor = 0xFFFF1744;
             accentGlowColor = 0xFFFFD700;
-            bgStartColor = 0xFF220E15;
-            bgEndColor = 0xFF0E0408;
+            bgStartColor = 0xFF260D17;
+            bgEndColor = 0xFF0F0408;
         } else if (key.contains("ruby")) {
             animType = IconAnimType.RUBY;
             primaryColor = 0xFFE11D48;
             secondaryColor = 0xFFBE123C;
             accentGlowColor = 0xFFFB7185;
-            bgStartColor = 0xFF1F0B13;
-            bgEndColor = 0xFF0C0307;
+            bgStartColor = 0xFF240612;
+            bgEndColor = 0xFF0D0206;
         } else if (key.contains("cosmos")) {
             animType = IconAnimType.COSMOS;
             primaryColor = 0xFF8B5CF6;
             secondaryColor = 0xFF00E5FF;
             accentGlowColor = 0xFFD946EF;
-            bgStartColor = 0xFF140B26;
-            bgEndColor = 0xFF070312;
+            bgStartColor = 0xFF14082E;
+            bgEndColor = 0xFF060212;
         } else if (key.contains("lava")) {
             animType = IconAnimType.LAVA;
             primaryColor = 0xFFFF3D00;
             secondaryColor = 0xFFFFD600;
             accentGlowColor = 0xFFFF0055;
-            bgStartColor = 0xFF240A05;
-            bgEndColor = 0xFF0F0302;
+            bgStartColor = 0xFF240A04;
+            bgEndColor = 0xFF0D0201;
         } else if (key.contains("chrome")) {
             animType = IconAnimType.CHROME;
             primaryColor = 0xFF00F0FF;
             secondaryColor = 0xFFE0E7FF;
             accentGlowColor = 0xFFFFFFFF;
-            bgStartColor = 0xFF0D141C;
-            bgEndColor = 0xFF06090D;
+            bgStartColor = 0xFF0E1A29;
+            bgEndColor = 0xFF04080F;
         } else if (key.contains("sakura")) {
             animType = IconAnimType.SAKURA;
             primaryColor = 0xFFF472B6;
             secondaryColor = 0xFFC084FC;
             accentGlowColor = 0xFFFFD1DC;
-            bgStartColor = 0xFF200C19;
-            bgEndColor = 0xFF0E040A;
+            bgStartColor = 0xFF260E20;
+            bgEndColor = 0xFF0E040C;
         } else if (key.contains("singularity")) {
             animType = IconAnimType.SINGULARITY;
             primaryColor = 0xFF7C4DFF;
             secondaryColor = 0xFFFF007F;
             accentGlowColor = 0xFF00F5FF;
-            bgStartColor = 0xFF0E0720;
-            bgEndColor = 0xFF04020A;
+            bgStartColor = 0xFF12082B;
+            bgEndColor = 0xFF04010D;
         } else if (key.contains("plasma")) {
             animType = IconAnimType.PLASMA;
             primaryColor = 0xFFD946EF;
             secondaryColor = 0xFF38BDF8;
             accentGlowColor = 0xFFF43F5E;
-            bgStartColor = 0xFF1A0722;
-            bgEndColor = 0xFF0B0210;
+            bgStartColor = 0xFF1E082E;
+            bgEndColor = 0xFF090210;
         } else if (key.contains("amethyst")) {
             animType = IconAnimType.AMETHYST;
             primaryColor = 0xFFA855F7;
             secondaryColor = 0xFFEC4899;
             accentGlowColor = 0xFFE879F9;
-            bgStartColor = 0xFF160924;
-            bgEndColor = 0xFF090310;
+            bgStartColor = 0xFF1A092C;
+            bgEndColor = 0xFF07020F;
         } else if (key.contains("cyber")) {
             animType = IconAnimType.CYBER;
-            primaryColor = 0xFF00F0FF;
-            secondaryColor = 0xFFFF007A;
-            accentGlowColor = 0xFF00FF66;
-            bgStartColor = 0xFF07121A;
-            bgEndColor = 0xFF02070C;
+            primaryColor = 0xFF00E5FF;
+            secondaryColor = 0xFFFF007F;
+            accentGlowColor = 0xFFFFEA00;
+            bgStartColor = 0xFF0A102E;
+            bgEndColor = 0xFF030514;
         } else if (key.contains("abyss")) {
             animType = IconAnimType.ABYSS;
-            primaryColor = 0xFF06B6D4;
-            secondaryColor = 0xFF3B82F6;
-            accentGlowColor = 0xFF14B8A6;
-            bgStartColor = 0xFF04121C;
-            bgEndColor = 0xFF01060B;
+            primaryColor = 0xFF0052D4;
+            secondaryColor = 0xFF4364F7;
+            accentGlowColor = 0xFF6FB1FC;
+            bgStartColor = 0xFF06112C;
+            bgEndColor = 0xFF020510;
         } else if (key.contains("bronze")) {
             animType = IconAnimType.BRONZE;
-            primaryColor = 0xFFF59E0B;
+            primaryColor = 0xFFD97706;
             secondaryColor = 0xFFB45309;
-            accentGlowColor = 0xFFFCD34D;
-            bgStartColor = 0xFF1C1309;
-            bgEndColor = 0xFF0C0702;
+            accentGlowColor = 0xFFF59E0B;
+            bgStartColor = 0xFF241506;
+            bgEndColor = 0xFF0E0702;
         } else if (key.contains("monochrome")) {
             animType = IconAnimType.MONOCHROME;
             primaryColor = 0xFFCBD5E1;
             secondaryColor = 0xFF64748B;
             accentGlowColor = 0xFFFFFFFF;
-            bgStartColor = 0xFF0A0C10;
-            bgEndColor = 0xFF030406;
+            bgStartColor = 0xFF14171C;
+            bgEndColor = 0xFF050608;
         } else if (key.contains("spectrum")) {
             animType = IconAnimType.SPECTRUM;
-            primaryColor = 0xFFFF007F;
-            secondaryColor = 0xFF00E5FF;
-            accentGlowColor = 0xFFFFEB3B;
-            bgStartColor = 0xFF120C20;
-            bgEndColor = 0xFF05030A;
+            primaryColor = 0xFFFF0055;
+            secondaryColor = 0xFF00F0FF;
+            accentGlowColor = 0xFFFFD700;
+            bgStartColor = 0xFF1C0926;
+            bgEndColor = 0xFF08020E;
         } else if (key.contains("glitch")) {
             animType = IconAnimType.GLITCH;
-            primaryColor = 0xFF00F0FF;
+            primaryColor = 0xFF00FFCC;
             secondaryColor = 0xFFFF0055;
-            accentGlowColor = 0xFF00FF66;
-            bgStartColor = 0xFF090E16;
-            bgEndColor = 0xFF030508;
+            accentGlowColor = 0xFFFFFFFF;
+            bgStartColor = 0xFF08181E;
+            bgEndColor = 0xFF02070A;
         } else if (key.contains("vintage")) {
             animType = IconAnimType.VINTAGE;
-            primaryColor = 0xFFEAB308;
-            secondaryColor = 0xFFD97706;
-            accentGlowColor = 0xFFFEF08A;
-            bgStartColor = 0xFF1A1308;
-            bgEndColor = 0xFF0B0702;
+            primaryColor = 0xFFE0A96D;
+            secondaryColor = 0xFF7D5A50;
+            accentGlowColor = 0xFFF7D1BA;
+            bgStartColor = 0xFF221812;
+            bgEndColor = 0xFF0D0906;
         } else if (key.contains("aqua")) {
             animType = IconAnimType.AQUA;
             primaryColor = 0xFF00E5FF;
-            secondaryColor = 0xFF0072FF;
-            accentGlowColor = 0xFF1DE9B6;
-            bgStartColor = 0xFF061624;
-            bgEndColor = 0xFF020810;
+            secondaryColor = 0xFF00B0FF;
+            accentGlowColor = 0xFF80D8FF;
+            bgStartColor = 0xFF061824;
+            bgEndColor = 0xFF02080E;
         } else if (key.contains("premium")) {
             animType = IconAnimType.PREMIUM;
-            primaryColor = 0xFFFF007F;
-            secondaryColor = 0xFF7C4DFF;
-            accentGlowColor = 0xFF00E5FF;
-            bgStartColor = 0xFF180720;
+            primaryColor = 0xFF9C27B0;
+            secondaryColor = 0xFFE040FB;
+            accentGlowColor = 0xFFFFFFFF;
+            bgStartColor = 0xFF1A0924;
             bgEndColor = 0xFF08020E;
         } else if (key.contains("turbo")) {
             animType = IconAnimType.TURBO;
-            primaryColor = 0xFFFF3366;
-            secondaryColor = 0xFFFF9900;
-            accentGlowColor = 0xFF00F5FF;
-            bgStartColor = 0xFF1C0812;
-            bgEndColor = 0xFF0B0206;
+            primaryColor = 0xFFFF5252;
+            secondaryColor = 0xFFFF7A00;
+            accentGlowColor = 0xFFFFAB40;
+            bgStartColor = 0xFF260A0A;
+            bgEndColor = 0xFF0E0202;
         } else if (key.contains("nox")) {
             animType = IconAnimType.NOX;
-            primaryColor = 0xFF60A5FA;
-            secondaryColor = 0xFF818CF8;
-            accentGlowColor = 0xFFE2E8F0;
-            bgStartColor = 0xFF080A0E;
-            bgEndColor = 0xFF020305;
+            primaryColor = 0xFF6366F1;
+            secondaryColor = 0xFF8B5CF6;
+            accentGlowColor = 0xFFA855F7;
+            bgStartColor = 0xFF0E0E26;
+            bgEndColor = 0xFF04040E;
         } else if (key.contains("cobalt")) {
             animType = IconAnimType.COBALT;
-            primaryColor = 0xFF2563EB;
-            secondaryColor = 0xFF06B6D4;
-            accentGlowColor = 0xFF60A5FA;
-            bgStartColor = 0xFF061124;
-            bgEndColor = 0xFF020610;
+            primaryColor = 0xFF2979FF;
+            secondaryColor = 0xFF00E5FF;
+            accentGlowColor = 0xFF448AFF;
+            bgStartColor = 0xFF071433;
+            bgEndColor = 0xFF020614;
         } else if (key.contains("aurora")) {
             animType = IconAnimType.AURORA;
-            primaryColor = 0xFF10B981;
-            secondaryColor = 0xFF8B5CF6;
-            accentGlowColor = 0xFF06B6D4;
-            bgStartColor = 0xFF071816;
+            primaryColor = 0xFF00FFA3;
+            secondaryColor = 0xFF00E5FF;
+            accentGlowColor = 0xFF7000FF;
+            bgStartColor = 0xFF071F1B;
             bgEndColor = 0xFF020A09;
         } else if (key.contains("pure")) {
             animType = IconAnimType.PURE;
-            primaryColor = 0xFF38BDF8;
-            secondaryColor = 0xFFE0E7FF;
+            primaryColor = 0xFF00E5FF;
+            secondaryColor = 0xFF7000FF;
             accentGlowColor = 0xFFFFFFFF;
-            bgStartColor = 0xFF091624;
-            bgEndColor = 0xFF030910;
+            bgStartColor = 0xFF081429;
+            bgEndColor = 0xFF020610;
         } else {
             animType = IconAnimType.DEFAULT;
             primaryColor = 0xFF00E5FF;
-            secondaryColor = 0xFF7C4DFF;
-            accentGlowColor = 0xFFFF007F;
-            bgStartColor = 0xFF0B1424;
-            bgEndColor = 0xFF040810;
+            secondaryColor = 0xFF007AFF;
+            accentGlowColor = 0xFF00F0FF;
+            bgStartColor = 0xFF0B1726;
+            bgEndColor = 0xFF040912;
         }
     }
 
     private String getThemeEditionLabel(LauncherIconController.LauncherIcon icon) {
         switch (animType) {
-            case MATRIX: return "Cyber Liquid Matrix";
-            case SUNSET: return "Molten Amber Glass";
-            case RUBY: return "Velvet Ruby Obsidian";
-            case COSMOS: return "Cosmic Multiverse Opal";
-            case LAVA: return "Volcanic Geothermal Heat";
-            case CHROME: return "Liquid Mercury Chrome";
-            case SAKURA: return "Cherry Blossom Frost";
-            case SINGULARITY: return "Event Horizon Vortex";
-            case PLASMA: return "High-Voltage Electric Arc";
+            case MATRIX: return "Cyber Digital Matrix Rain";
+            case SUNSET: return "Solar Flare & Molten Amber";
+            case RUBY: return "Crystal Diamond Velvet Ruby";
+            case COSMOS: return "Interstellar Nebula Vortex";
+            case LAVA: return "Volcanic Magma & Embers";
+            case CHROME: return "Liquid Titanium Cyber Chrome";
+            case SAKURA: return "Floating Cherry Blossom Petals";
+            case SINGULARITY: return "Event Horizon Black Hole";
+            case PLASMA: return "High-Voltage Tesla Lightning";
             case AMETHYST: return "Prismatic Amethyst Quartz";
-            case CYBER: return "Futuristic Synthwave HUD";
-            case ABYSS: return "Oceanic Bioluminescence";
+            case CYBER: return "Futuristic Synthwave HUD Grid";
+            case ABYSS: return "Deep Oceanic Bioluminescence";
             case BRONZE: return "Steampunk Clockwork Gold";
-            case MONOCHROME: return "Pure OLED Stealth Shadow";
-            case SPECTRUM: return "Chromatic Rainbow Dispersion";
-            case GLITCH: return "Cyberpunk Digital Glitch";
-            case VINTAGE: return "Golden Nostalgia Glow";
-            case AQUA: return "Frosted Glacial Ice";
-            case PREMIUM: return "Iridescent Neon Crystal";
+            case MONOCHROME: return "Pure Minimalist Shadow OLED";
+            case SPECTRUM: return "Rainbow Prismatic Dispersion";
+            case GLITCH: return "Cyberpunk Digital Glitch RGB";
+            case VINTAGE: return "Golden Nostalgia Film Grain";
+            case AQUA: return "Lagoon Ice Caustics";
+            case PREMIUM: return "Iridescent Royal Crystal Star";
             case TURBO: return "Supersonic Warp Velocity";
-            case NOX: return "Carbon Fiber Stealth";
-            case COBALT: return "Deep Royal Sapphire";
-            case AURORA: return "Northern Aurora Plasma";
-            case PURE: return "Sub-Zero Arctic Diamond";
-            default: return "iOS 26.5 Liquid Glass";
+            case NOX: return "Carbon Fiber Midnight Glow";
+            case COBALT: return "Deep Royal Cobalt Sapphire";
+            case AURORA: return "Northern Aurora Borealis Wave";
+            case PURE: return "Sub-Zero Diamond Frost";
+            default: return "Prism Liquid Glass";
         }
     }
 
@@ -442,36 +426,20 @@ public class PrismSplashScreenView extends FrameLayout {
         } catch (Throwable ignored) {}
 
         if (lang.startsWith("ru")) {
-            if (hour >= 5 && hour < 12) {
-                return "Доброе утро, " + userName + "! ☀️";
-            } else if (hour >= 12 && hour < 18) {
-                return "Добрый день, " + userName + "! 🌤️";
-            } else if (hour >= 18 && hour < 23) {
-                return "Добрый вечер, " + userName + "! 🌙";
-            } else {
-                return "Доброй ночи, " + userName + "! ✨";
-            }
+            if (hour >= 5 && hour < 12) return "Доброе утро, " + userName + "! ☀️";
+            else if (hour >= 12 && hour < 18) return "Добрый день, " + userName + "! 🌤️";
+            else if (hour >= 18 && hour < 23) return "Добрый вечер, " + userName + "! 🌙";
+            else return "Доброй ночи, " + userName + "! ✨";
         } else if (lang.startsWith("en")) {
-            if (hour >= 5 && hour < 12) {
-                return "Good morning, " + userName + "! ☀️";
-            } else if (hour >= 12 && hour < 18) {
-                return "Good afternoon, " + userName + "! 🌤️";
-            } else if (hour >= 18 && hour < 23) {
-                return "Good evening, " + userName + "! 🌙";
-            } else {
-                return "Good night, " + userName + "! ✨";
-            }
+            if (hour >= 5 && hour < 12) return "Good morning, " + userName + "! ☀️";
+            else if (hour >= 12 && hour < 18) return "Good afternoon, " + userName + "! 🌤️";
+            else if (hour >= 18 && hour < 23) return "Good evening, " + userName + "! 🌙";
+            else return "Good night, " + userName + "! ✨";
         } else {
-            // Uzbek
-            if (hour >= 5 && hour < 12) {
-                return "Xayrli tong, " + userName + "! ☀️";
-            } else if (hour >= 12 && hour < 18) {
-                return "Xayrli kun, " + userName + "! 🌤️";
-            } else if (hour >= 18 && hour < 23) {
-                return "Xayrli kech, " + userName + "! 🌙";
-            } else {
-                return "Xayrli tun, " + userName + "! ✨";
-            }
+            if (hour >= 5 && hour < 12) return "Xayrli tong, " + userName + "! ☀️";
+            else if (hour >= 12 && hour < 18) return "Xayrli kun, " + userName + "! 🌤️";
+            else if (hour >= 18 && hour < 23) return "Xayrli kech, " + userName + "! 🌙";
+            else return "Xayrli tun, " + userName + "! ✨";
         }
     }
 
@@ -520,33 +488,41 @@ public class PrismSplashScreenView extends FrameLayout {
         shimmerOverlay.startShimmer();
         startIdlePhysics();
 
-        // Stays for full 4.5 seconds
-        postDelayed(this::dismiss, Math.max(delayMs, 4500));
+        postDelayed(this::dismiss, Math.max(delayMs, 4000));
     }
 
     private void startIdlePhysics() {
         idleAnimator = ValueAnimator.ofFloat(0f, 1f);
-        idleAnimator.setDuration(2600);
+        idleAnimator.setDuration(2400);
         idleAnimator.setRepeatCount(ValueAnimator.INFINITE);
         idleAnimator.setRepeatMode(ValueAnimator.REVERSE);
         idleAnimator.addUpdateListener(animation -> {
             float fraction = (float) animation.getAnimatedValue();
             if (!isDismissing) {
                 if (animType == IconAnimType.GLITCH) {
-                    // Random micro jitter
-                    if (random.nextFloat() < 0.2f) {
-                        iconCard.setTranslationX((random.nextFloat() - 0.5f) * AndroidUtilities.dp(6));
-                        iconCard.setTranslationY((random.nextFloat() - 0.5f) * AndroidUtilities.dp(4));
+                    if (random.nextFloat() < 0.25f) {
+                        iconCard.setTranslationX((random.nextFloat() - 0.5f) * AndroidUtilities.dp(8));
+                        iconCard.setTranslationY((random.nextFloat() - 0.5f) * AndroidUtilities.dp(5));
                     } else {
                         iconCard.setTranslationX(0);
                         iconCard.setTranslationY(0);
                     }
                 } else if (animType == IconAnimType.TURBO) {
-                    // Warp stretching
-                    float scaleX = 0.96f + fraction * 0.08f;
-                    float scaleY = 1.04f - fraction * 0.08f;
+                    float scaleX = 0.94f + fraction * 0.12f;
+                    float scaleY = 1.06f - fraction * 0.12f;
                     iconCard.setScaleX(scaleX);
                     iconCard.setScaleY(scaleY);
+                } else if (animType == IconAnimType.LAVA) {
+                    float pulse = 0.96f + (float) Math.sin(fraction * Math.PI * 4) * 0.05f;
+                    iconCard.setScaleX(pulse);
+                    iconCard.setScaleY(pulse);
+                } else if (animType == IconAnimType.SAKURA) {
+                    float tiltX = (float) Math.sin(fraction * Math.PI * 2) * 4f;
+                    float tiltY = (float) Math.cos(fraction * Math.PI * 2) * 8f;
+                    float transY = (float) Math.sin(fraction * Math.PI * 2) * AndroidUtilities.dp(6);
+                    iconCard.setRotationX(tiltX);
+                    iconCard.setRotationY(tiltY);
+                    iconCard.setTranslationY(transY);
                 } else {
                     float tiltX = (float) Math.sin(fraction * Math.PI * 2) * 5.5f;
                     float tiltY = (float) Math.cos(fraction * Math.PI * 2) * 6.5f;
@@ -587,29 +563,28 @@ public class PrismSplashScreenView extends FrameLayout {
     }
 
     // ──────────────────────────────────────────────────────────────────────────
-    // 1. Particle Layer: 25+ Bespoke Physics Simulations
+    // 1. Particle Layer: Bespoke Physics & Rendering For Every Icon
     // ──────────────────────────────────────────────────────────────────────────
     private static class ParticleCanvasView extends View {
-        private static final int PARTICLE_COUNT = 42;
+        private static final int PARTICLE_COUNT = 45;
         private final List<Particle> particles = new ArrayList<>();
         private final Paint particlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        private final Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         private final IconAnimType animType;
-        private final int color1;
-        private final int color2;
-        private final int color3;
+        private final int color1, color2, color3;
         private final Random random = new Random();
         private long lastFrameTime;
+        private static final String[] MATRIX_CHARS = {"0", "1", "7", "X", "λ", "Ω", "F", "9", "A", "Ø", "§"};
 
         private static class Particle {
             float x, y;
             float vx, vy;
             float radius;
-            float alpha;
-            float rotation;
-            float vRotation;
-            float maxAlpha;
+            float alpha, maxAlpha;
+            float rotation, vRotation;
             int color;
             float extraParam;
+            String charText;
         }
 
         public ParticleCanvasView(Context context, IconAnimType type, int c1, int c2, int c3) {
@@ -618,6 +593,11 @@ public class PrismSplashScreenView extends FrameLayout {
             this.color1 = c1;
             this.color2 = c2;
             this.color3 = c3;
+
+            textPaint.setColor(c1);
+            textPaint.setTextSize(AndroidUtilities.dp(13));
+            textPaint.setTypeface(AndroidUtilities.bold());
+
             initParticles();
         }
 
@@ -634,61 +614,67 @@ public class PrismSplashScreenView extends FrameLayout {
             int h = getHeight() > 0 ? getHeight() : AndroidUtilities.displaySize.y;
 
             p.x = random.nextFloat() * w;
-            p.y = randomY ? random.nextFloat() * h : (animType == IconAnimType.MATRIX ? -30 : h + 30);
+            p.y = randomY ? random.nextFloat() * h : (animType == IconAnimType.MATRIX || animType == IconAnimType.SAKURA || animType == IconAnimType.PURE ? -30 : h + 30);
             p.radius = AndroidUtilities.dp(2 + random.nextFloat() * 5.5f);
-            p.maxAlpha = 0.35f + random.nextFloat() * 0.6f;
+            p.maxAlpha = 0.4f + random.nextFloat() * 0.55f;
             p.alpha = random.nextFloat() * p.maxAlpha;
             p.rotation = random.nextFloat() * 360f;
-            p.vRotation = (random.nextFloat() - 0.5f) * 5f;
+            p.vRotation = (random.nextFloat() - 0.5f) * 6f;
             p.extraParam = random.nextFloat() * 100f;
+            p.charText = MATRIX_CHARS[random.nextInt(MATRIX_CHARS.length)];
 
             int rnd = random.nextInt(3);
             p.color = rnd == 0 ? color1 : (rnd == 1 ? color2 : color3);
 
             switch (animType) {
                 case MATRIX:
-                    p.vx = (random.nextFloat() - 0.5f) * 0.3f;
-                    p.vy = 3.5f + random.nextFloat() * 5.5f;
+                    p.vx = 0;
+                    p.vy = 4.5f + random.nextFloat() * 6.5f;
                     break;
                 case SINGULARITY:
                     float cx = w / 2f;
                     float cy = h / 2f;
                     float angle = (float) Math.atan2(p.y - cy, p.x - cx);
-                    p.vx = -(float) Math.cos(angle) * 2f - (float) Math.sin(angle) * 3f;
-                    p.vy = -(float) Math.sin(angle) * 2f + (float) Math.cos(angle) * 3f;
+                    p.vx = -(float) Math.cos(angle) * 3f - (float) Math.sin(angle) * 4f;
+                    p.vy = -(float) Math.sin(angle) * 3f + (float) Math.cos(angle) * 4f;
                     break;
-                case COSMOS:
-                case AMETHYST:
-                    p.vx = (random.nextFloat() - 0.5f) * 2.5f;
-                    p.vy = (random.nextFloat() - 0.5f) * 2.5f;
+                case TURBO:
+                    float tcx = w / 2f;
+                    float tcy = h / 2f;
+                    float tang = (float) Math.atan2(p.y - tcy, p.x - tcx);
+                    p.vx = (float) Math.cos(tang) * (6f + random.nextFloat() * 10f);
+                    p.vy = (float) Math.sin(tang) * (6f + random.nextFloat() * 10f);
                     break;
                 case SAKURA:
-                    p.vx = 1.2f + (random.nextFloat() - 0.5f) * 1.5f;
-                    p.vy = 1.5f + random.nextFloat() * 2f;
+                    p.vx = 1.5f + (random.nextFloat() - 0.5f) * 1.5f;
+                    p.vy = 2.0f + random.nextFloat() * 2.5f;
+                    break;
+                case PURE:
+                    p.vx = (random.nextFloat() - 0.5f) * 1.5f;
+                    p.vy = 1.2f + random.nextFloat() * 2.0f;
                     break;
                 case LAVA:
                 case SUNSET:
                 case BRONZE:
-                    p.vx = (random.nextFloat() - 0.5f) * 1.8f;
-                    p.vy = -(2.0f + random.nextFloat() * 4f);
-                    break;
-                case TURBO:
-                    p.vx = (random.nextFloat() - 0.5f) * 4f;
-                    p.vy = -(4.0f + random.nextFloat() * 8f);
+                    p.vx = (random.nextFloat() - 0.5f) * 2f;
+                    p.vy = -(2.5f + random.nextFloat() * 4.5f);
                     break;
                 case GLITCH:
-                    p.vx = (random.nextFloat() - 0.5f) * 6f;
-                    p.vy = (random.nextFloat() - 0.5f) * 2f;
+                    p.vx = (random.nextFloat() - 0.5f) * 8f;
+                    p.vy = (random.nextFloat() - 0.5f) * 2.5f;
                     break;
                 case AQUA:
-                case PURE:
                 case ABYSS:
-                    p.vx = (float) Math.sin(p.y * 0.04f) * 1.5f;
-                    p.vy = -(1.8f + random.nextFloat() * 3.5f);
+                    p.vx = (float) Math.sin(p.y * 0.03f) * 2f;
+                    p.vy = -(1.8f + random.nextFloat() * 3f);
+                    break;
+                case AURORA:
+                    p.vx = 2.0f + (random.nextFloat() - 0.5f) * 2f;
+                    p.vy = (float) Math.sin(p.x * 0.02f) * 2f;
                     break;
                 default:
-                    p.vx = (random.nextFloat() - 0.5f) * 1.6f;
-                    p.vy = -(1.4f + random.nextFloat() * 2.8f);
+                    p.vx = (random.nextFloat() - 0.5f) * 2f;
+                    p.vy = -(1.5f + random.nextFloat() * 3f);
                     break;
             }
             return p;
@@ -712,19 +698,19 @@ public class PrismSplashScreenView extends FrameLayout {
                     float dx = cx - p.x;
                     float dy = cy - p.y;
                     float dist = (float) Math.sqrt(dx * dx + dy * dy);
-                    if (dist > 10) {
-                        p.vx += (dx / dist) * 40f * dt;
-                        p.vy += (dy / dist) * 40f * dt;
+                    if (dist > 15) {
+                        p.vx += (dx / dist) * 55f * dt;
+                        p.vy += (dy / dist) * 55f * dt;
                     }
                 } else if (animType == IconAnimType.SAKURA) {
-                    p.vx += (float) Math.sin((now / 500.0) + p.extraParam) * 0.1f;
+                    p.vx += (float) Math.sin((now / 400.0) + p.extraParam) * 0.15f;
                 }
 
                 p.x += p.vx * 60f * dt;
                 p.y += p.vy * 60f * dt;
                 p.rotation += p.vRotation;
 
-                if (p.y < -40 || p.y > h + 40 || p.x < -40 || p.x > w + 40) {
+                if (p.y < -50 || p.y > h + 50 || p.x < -50 || p.x > w + 50) {
                     Particle fresh = createParticle(false);
                     p.x = fresh.x;
                     p.y = fresh.y;
@@ -733,7 +719,7 @@ public class PrismSplashScreenView extends FrameLayout {
                     p.alpha = 0f;
                 } else {
                     if (p.alpha < p.maxAlpha) {
-                        p.alpha = Math.min(p.maxAlpha, p.alpha + 0.03f);
+                        p.alpha = Math.min(p.maxAlpha, p.alpha + 0.04f);
                     }
                 }
 
@@ -741,25 +727,40 @@ public class PrismSplashScreenView extends FrameLayout {
                 particlePaint.setAlpha((int) (p.alpha * 255));
 
                 if (animType == IconAnimType.MATRIX) {
-                    // Cascading digital cyber glyph bar
-                    canvas.drawRect(p.x - p.radius * 0.8f, p.y - p.radius * 2.5f, p.x + p.radius * 0.8f, p.y + p.radius * 2.5f, particlePaint);
+                    // Digital rain glyphs
+                    textPaint.setColor(p.color);
+                    textPaint.setAlpha((int) (p.alpha * 255));
+                    canvas.drawText(p.charText, p.x, p.y, textPaint);
                 } else if (animType == IconAnimType.SAKURA) {
-                    // Floating flower petal oval
+                    // Flower petal
                     canvas.save();
                     canvas.rotate(p.rotation, p.x, p.y);
-                    canvas.drawOval(p.x - p.radius * 1.5f, p.y - p.radius * 0.8f, p.x + p.radius * 1.5f, p.y + p.radius * 0.8f, particlePaint);
+                    canvas.drawOval(p.x - p.radius * 1.6f, p.y - p.radius * 0.9f, p.x + p.radius * 1.6f, p.y + p.radius * 0.9f, particlePaint);
+                    canvas.restore();
+                } else if (animType == IconAnimType.TURBO) {
+                    // Warp speed light trails
+                    canvas.save();
+                    canvas.drawLine(p.x, p.y, p.x - p.vx * 3f, p.y - p.vy * 3f, particlePaint);
                     canvas.restore();
                 } else if (animType == IconAnimType.GLITCH) {
-                    // Digital glitch horizontal scan block
-                    canvas.drawRect(p.x - p.radius * 3f, p.y - p.radius * 0.5f, p.x + p.radius * 3f, p.y + p.radius * 0.5f, particlePaint);
-                } else if (animType == IconAnimType.COSMOS || animType == IconAnimType.AMETHYST || animType == IconAnimType.PURE) {
-                    // Crystalline starburst spark
+                    // Cyberpunk horizontal scan blocks
+                    canvas.drawRect(p.x - p.radius * 4f, p.y - p.radius * 0.6f, p.x + p.radius * 4f, p.y + p.radius * 0.6f, particlePaint);
+                } else if (animType == IconAnimType.PURE) {
+                    // Snowflakes
                     canvas.save();
                     canvas.rotate(p.rotation, p.x, p.y);
-                    canvas.drawCircle(p.x, p.y, p.radius, particlePaint);
+                    canvas.drawLine(p.x - p.radius, p.y, p.x + p.radius, p.y, particlePaint);
+                    canvas.drawLine(p.x, p.y - p.radius, p.x, p.y + p.radius, particlePaint);
+                    canvas.restore();
+                } else if (animType == IconAnimType.COSMOS || animType == IconAnimType.AMETHYST || animType == IconAnimType.PREMIUM) {
+                    // 4-Point Diamond Sparkle
+                    canvas.save();
+                    canvas.rotate(p.rotation, p.x, p.y);
+                    canvas.drawCircle(p.x, p.y, p.radius * 0.8f, particlePaint);
+                    canvas.drawLine(p.x - p.radius * 1.5f, p.y, p.x + p.radius * 1.5f, p.y, particlePaint);
+                    canvas.drawLine(p.x, p.y - p.radius * 1.5f, p.x, p.y + p.radius * 1.5f, particlePaint);
                     canvas.restore();
                 } else {
-                    // Liquid glass glowing droplet
                     canvas.drawCircle(p.x, p.y, p.radius, particlePaint);
                 }
             }
@@ -768,24 +769,25 @@ public class PrismSplashScreenView extends FrameLayout {
     }
 
     // ──────────────────────────────────────────────────────────────────────────
-    // 2. Pulse Shockwave Rings Layer
+    // 2. Pulse Rings Layer: Custom Shockwave Geometries For Every Icon
     // ──────────────────────────────────────────────────────────────────────────
     private static class PulseRingsView extends View {
         private final Paint ringPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         private final IconAnimType animType;
-        private final int primaryColor;
-        private final int secondaryColor;
+        private final int primaryColor, secondaryColor, glowColor;
         private float progress;
+        private final Path hexPath = new Path();
 
-        public PulseRingsView(Context context, IconAnimType type, int c1, int c2) {
+        public PulseRingsView(Context context, IconAnimType type, int c1, int c2, int c3) {
             super(context);
             this.animType = type;
             this.primaryColor = c1;
             this.secondaryColor = c2;
+            this.glowColor = c3;
             ringPaint.setStyle(Paint.Style.STROKE);
 
             ValueAnimator animator = ValueAnimator.ofFloat(0f, 1f);
-            animator.setDuration(1800);
+            animator.setDuration(1900);
             animator.setRepeatCount(ValueAnimator.INFINITE);
             animator.addUpdateListener(animation -> {
                 progress = (float) animation.getAnimatedValue();
@@ -800,46 +802,80 @@ public class PrismSplashScreenView extends FrameLayout {
             int cy = getHeight() / 2;
             float maxRadius = getWidth() * 0.48f;
 
-            // Ring 1
             float r1 = progress * maxRadius;
-            int alpha1 = (int) ((1f - progress) * 120);
+            int a1 = (int) ((1f - progress) * 140);
             ringPaint.setColor(primaryColor);
-            ringPaint.setAlpha(alpha1);
-            ringPaint.setStrokeWidth(AndroidUtilities.dp(2.2f * (1f - progress)));
-            canvas.drawCircle(cx, cy, r1, ringPaint);
+            ringPaint.setAlpha(a1);
+            ringPaint.setStrokeWidth(AndroidUtilities.dp(2.5f * (1f - progress)));
+
+            if (animType == IconAnimType.MATRIX || animType == IconAnimType.CYBER) {
+                // Expanding Hexagon Pulse
+                drawHexagon(canvas, cx, cy, r1, ringPaint);
+            } else if (animType == IconAnimType.RUBY || animType == IconAnimType.AMETHYST) {
+                // Expanding Diamond Facet
+                canvas.save();
+                canvas.rotate(45, cx, cy);
+                canvas.drawRect(cx - r1 * 0.7f, cy - r1 * 0.7f, cx + r1 * 0.7f, cy + r1 * 0.7f, ringPaint);
+                canvas.restore();
+            } else {
+                canvas.drawCircle(cx, cy, r1, ringPaint);
+            }
 
             // Ring 2 (delayed)
             float p2 = (progress + 0.5f) % 1.0f;
             float r2 = p2 * maxRadius;
-            int alpha2 = (int) ((1f - p2) * 100);
+            int a2 = (int) ((1f - p2) * 110);
             ringPaint.setColor(secondaryColor);
-            ringPaint.setAlpha(alpha2);
-            ringPaint.setStrokeWidth(AndroidUtilities.dp(1.8f * (1f - p2)));
-            canvas.drawCircle(cx, cy, r2, ringPaint);
+            ringPaint.setAlpha(a2);
+            ringPaint.setStrokeWidth(AndroidUtilities.dp(2.0f * (1f - p2)));
+
+            if (animType == IconAnimType.MATRIX || animType == IconAnimType.CYBER) {
+                drawHexagon(canvas, cx, cy, r2, ringPaint);
+            } else if (animType == IconAnimType.RUBY || animType == IconAnimType.AMETHYST) {
+                canvas.save();
+                canvas.rotate(45, cx, cy);
+                canvas.drawRect(cx - r2 * 0.7f, cy - r2 * 0.7f, cx + r2 * 0.7f, cy + r2 * 0.7f, ringPaint);
+                canvas.restore();
+            } else {
+                canvas.drawCircle(cx, cy, r2, ringPaint);
+            }
+        }
+
+        private void drawHexagon(Canvas canvas, float cx, float cy, float radius, Paint paint) {
+            hexPath.reset();
+            for (int i = 0; i < 6; i++) {
+                double angle = Math.toRadians(60 * i - 30);
+                float x = (float) (cx + radius * Math.cos(angle));
+                float y = (float) (cy + radius * Math.sin(angle));
+                if (i == 0) hexPath.moveTo(x, y);
+                else hexPath.lineTo(x, y);
+            }
+            hexPath.close();
+            canvas.drawPath(hexPath, paint);
         }
     }
 
     // ──────────────────────────────────────────────────────────────────────────
-    // 3. Custom Icon Specific Overlays (HUD, Lightning, Cyber Crosshair, Plasma)
+    // 3. Custom Icon Specific Overlays (Tesla lightning, Solar flares, Gears, HUD)
     // ──────────────────────────────────────────────────────────────────────────
     private static class CustomIconFxOverlay extends View {
         private final Paint fxPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         private final IconAnimType animType;
-        private final int primaryColor;
-        private final int secondaryColor;
+        private final int primaryColor, secondaryColor, glowColor;
         private float angle;
         private final Random random = new Random();
 
-        public CustomIconFxOverlay(Context context, IconAnimType type, int c1, int c2) {
+        public CustomIconFxOverlay(Context context, IconAnimType type, int c1, int c2, int c3) {
             super(context);
             this.animType = type;
             this.primaryColor = c1;
             this.secondaryColor = c2;
+            this.glowColor = c3;
             fxPaint.setStyle(Paint.Style.STROKE);
-            fxPaint.setStrokeWidth(AndroidUtilities.dp(1.5f));
+            fxPaint.setStrokeWidth(AndroidUtilities.dp(1.8f));
 
             ValueAnimator animator = ValueAnimator.ofFloat(0f, 360f);
-            animator.setDuration(6000);
+            animator.setDuration(5000);
             animator.setRepeatCount(ValueAnimator.INFINITE);
             animator.addUpdateListener(animation -> {
                 angle = (float) animation.getAnimatedValue();
@@ -852,12 +888,12 @@ public class PrismSplashScreenView extends FrameLayout {
         protected void onDraw(Canvas canvas) {
             int cx = getWidth() / 2;
             int cy = getHeight() / 2;
-            float r = AndroidUtilities.dp(56);
+            float r = AndroidUtilities.dp(64);
 
             if (animType == IconAnimType.CYBER || animType == IconAnimType.MATRIX) {
-                // Cyber HUD Target Brackets
+                // Cyber HUD Target Brackets with Rotating Degree Ticks
                 fxPaint.setColor(primaryColor);
-                fxPaint.setAlpha(160);
+                fxPaint.setAlpha(170);
                 canvas.save();
                 canvas.rotate(angle, cx, cy);
                 canvas.drawArc(cx - r, cy - r, cx + r, cy + r, 15, 60, false, fxPaint);
@@ -865,31 +901,60 @@ public class PrismSplashScreenView extends FrameLayout {
                 canvas.drawArc(cx - r, cy - r, cx + r, cy + r, 195, 60, false, fxPaint);
                 canvas.drawArc(cx - r, cy - r, cx + r, cy + r, 285, 60, false, fxPaint);
                 canvas.restore();
-            } else if (animType == IconAnimType.PLASMA || animType == IconAnimType.PREMIUM) {
-                // Flashing Tesla Electric Arcs
-                if (random.nextFloat() < 0.4f) {
+            } else if (animType == IconAnimType.PLASMA || animType == IconAnimType.GLITCH) {
+                // Flashing Tesla Lightning Arcs
+                if (random.nextFloat() < 0.5f) {
                     fxPaint.setColor(primaryColor);
-                    fxPaint.setAlpha(200);
-                    float x1 = cx + (random.nextFloat() - 0.5f) * r * 1.5f;
-                    float y1 = cy + (random.nextFloat() - 0.5f) * r * 1.5f;
-                    float x2 = x1 + (random.nextFloat() - 0.5f) * AndroidUtilities.dp(24);
-                    float y2 = y1 + (random.nextFloat() - 0.5f) * AndroidUtilities.dp(24);
+                    fxPaint.setAlpha(220);
+                    float x1 = cx + (random.nextFloat() - 0.5f) * r * 1.8f;
+                    float y1 = cy + (random.nextFloat() - 0.5f) * r * 1.8f;
+                    float x2 = x1 + (random.nextFloat() - 0.5f) * AndroidUtilities.dp(30);
+                    float y2 = y1 + (random.nextFloat() - 0.5f) * AndroidUtilities.dp(30);
                     canvas.drawLine(x1, y1, x2, y2, fxPaint);
+                    canvas.drawLine(x2, y2, x2 + (random.nextFloat() - 0.5f) * AndroidUtilities.dp(20), y2 + (random.nextFloat() - 0.5f) * AndroidUtilities.dp(20), fxPaint);
                 }
             } else if (animType == IconAnimType.SINGULARITY || animType == IconAnimType.COSMOS) {
-                // Planetary Orbit Ellipse
+                // Planetary Orbit Ellipses
                 fxPaint.setColor(secondaryColor);
-                fxPaint.setAlpha(130);
+                fxPaint.setAlpha(150);
                 canvas.save();
-                canvas.rotate(angle * 0.7f, cx, cy);
-                canvas.drawOval(cx - r * 1.2f, cy - r * 0.6f, cx + r * 1.2f, cy + r * 0.6f, fxPaint);
+                canvas.rotate(angle * 0.8f, cx, cy);
+                canvas.drawOval(cx - r * 1.3f, cy - r * 0.65f, cx + r * 1.3f, cy + r * 0.65f, fxPaint);
+                canvas.restore();
+
+                canvas.save();
+                canvas.rotate(-angle * 0.6f + 45, cx, cy);
+                fxPaint.setColor(glowColor);
+                canvas.drawOval(cx - r * 1.1f, cy - r * 0.5f, cx + r * 1.1f, cy + r * 0.5f, fxPaint);
+                canvas.restore();
+            } else if (animType == IconAnimType.BRONZE || animType == IconAnimType.VINTAGE) {
+                // Steampunk Gear Rotating Teeth
+                fxPaint.setColor(primaryColor);
+                fxPaint.setAlpha(160);
+                canvas.save();
+                canvas.rotate(angle * 0.5f, cx, cy);
+                for (int i = 0; i < 8; i++) {
+                    canvas.drawLine(cx, cy - r, cx, cy - r - AndroidUtilities.dp(8), fxPaint);
+                    canvas.rotate(45, cx, cy);
+                }
+                canvas.restore();
+            } else if (animType == IconAnimType.SUNSET || animType == IconAnimType.LAVA) {
+                // Solar Corona Rays
+                fxPaint.setColor(primaryColor);
+                fxPaint.setAlpha(140);
+                canvas.save();
+                canvas.rotate(angle * 0.4f, cx, cy);
+                for (int i = 0; i < 12; i++) {
+                    canvas.drawLine(cx, cy - r, cx, cy - r - AndroidUtilities.dp(6), fxPaint);
+                    canvas.rotate(30, cx, cy);
+                }
                 canvas.restore();
             }
         }
     }
 
     // ──────────────────────────────────────────────────────────────────────────
-    // 4. Diagonal Specular Glass Shimmer Overlay (Repeating)
+    // 4. Diagonal Specular Glass Shimmer Overlay
     // ──────────────────────────────────────────────────────────────────────────
     private static class GlassShimmerOverlay extends View {
         private final Paint shimmerPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -903,8 +968,8 @@ public class PrismSplashScreenView extends FrameLayout {
 
         public void startShimmer() {
             ValueAnimator animator = ValueAnimator.ofFloat(-1.2f, 2.2f);
-            animator.setDuration(1400);
-            animator.setStartDelay(300);
+            animator.setDuration(1300);
+            animator.setStartDelay(250);
             animator.setRepeatCount(ValueAnimator.INFINITE);
             animator.setRepeatMode(ValueAnimator.RESTART);
             animator.setInterpolator(CubicBezierInterpolator.EASE_OUT_QUINT);
@@ -921,7 +986,7 @@ public class PrismSplashScreenView extends FrameLayout {
             if (w > 0 && h > 0) {
                 shimmerShader = new LinearGradient(
                         0, 0, w, h,
-                        new int[]{Color.TRANSPARENT, Color.argb(170, 255, 255, 255), Color.TRANSPARENT},
+                        new int[]{Color.TRANSPARENT, Color.argb(180, 255, 255, 255), Color.TRANSPARENT},
                         new float[]{0.3f, 0.5f, 0.7f},
                         Shader.TileMode.CLAMP
                 );
