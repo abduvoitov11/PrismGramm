@@ -785,9 +785,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 }
             }
 
-            boolean matches = photoBig != null && photoBig.local_id == fileLocation.local_id && photoBig.volume_id == fileLocation.volume_id && photoBig.dc_id == fileLocation.dc_id;
+            boolean matches = (fileLocation == null);
+            if (!matches && photoBig != null && fileLocation != null) {
+                matches = photoBig.local_id == fileLocation.local_id && photoBig.volume_id == fileLocation.volume_id && photoBig.dc_id == fileLocation.dc_id;
+            }
             int carouselMatchIndex = -1;
-            if (avatarsViewPager != null) {
+            if (avatarsViewPager != null && fileLocation != null) {
                 for (int i = 0, n = avatarsViewPager.getRealCount(); i < n; i++) {
                     ImageLocation loc = avatarsViewPager.getRealImageLocation(i);
                     if (loc != null && loc.location != null && loc.location.local_id == fileLocation.local_id && loc.location.volume_id == fileLocation.volume_id && loc.dc_id == fileLocation.dc_id) {
@@ -1138,7 +1141,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
             canvas.restore();
 
-            if (r > 0 && alpha > 0 && drawAvatar) {
+            if (r > 0 && alpha > 0 && drawAvatar && isAttachedToWindow() && (!PhotoViewer.hasInstance() || !PhotoViewer.getInstance().isVisible())) {
                 float strokeW = AndroidUtilities.dp(3.5f);
                 prismBorderRect.set(inset + strokeW / 2f, inset + strokeW / 2f, thisWidth - inset - strokeW / 2f, thisHeight - inset - strokeW / 2f);
 
