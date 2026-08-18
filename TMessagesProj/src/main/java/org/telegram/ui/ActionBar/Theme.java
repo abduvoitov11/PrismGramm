@@ -9770,6 +9770,13 @@ public class Theme {
                 || key_chat_stickerReplyLine == key || key_chat_stickerReplyNameText == key || key_chat_stickerReplyMessageText == key)) {
             return 0xffffffff;
         }
+
+        // ─── Prism Dynamic Theme Auto-Adapt Engine ───
+        int prismOverrideColor = org.telegram.messenger.PrismThemeController.getThemeColorOverride(key);
+        if (prismOverrideColor != 0) {
+            return prismOverrideColor;
+        }
+
         if (currentTheme == defaultTheme) {
             boolean useDefault;
             if (isMyMessagesBubbles(key)) {
