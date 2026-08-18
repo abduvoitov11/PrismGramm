@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="AyuPreferences">Налаштування PrismGramm</string>
-    <string name="PrismGrammSettingsSubtitle">Режим привида, Anti-Delete, Media Downloader, Regex та всі функції</string>
-    <string name="PrismGrammArchive">Архів видалених повідомлень</string>
-    <string name="PrismGrammMediaDownloader">Media Downloader (TikTok, YouTube, Insta)</string>
-    <string name="PrismGrammMediaDownloaderTitle">Media Downloader</string>
+    <string name="AyuPreferences">Налаштування Prisma</string>
+    <string name="PrismaSettingsSubtitle">Режим привида, Anti-Delete, Media Downloader, Regex та всі функції</string>
+    <string name="PrismaArchive">Архів видалених повідомлень</string>
+    <string name="PrismaMediaDownloader">Media Downloader (TikTok, YouTube, Insta)</string>
+    <string name="PrismaMediaDownloaderTitle">Media Downloader</string>
     <string name="GhostEssentialsHeader">Основні налаштування привида</string>
     <string name="DontSendReadPackets">Не читати повідомлення</string>
     <string name="DontSendOnlinePackets">Не надсилати онлайн</string>
@@ -29,7 +29,7 @@
     <string name="MessageSavingSaveReactions">Зберігати реакції</string>
     <string name="MessageSavingSaveForBots">Зберігати у чатах з ботами</string>
     <string name="QoLTogglesHeader">Корисні функції</string>
-    <string name="KeepAliveService">Фонова служба PrismGramm</string>
+    <string name="KeepAliveService">Фонова служба Prisma</string>
     <string name="DisableAds">Вимкнути рекламу</string>
     <string name="LocalPremium">Локальний Telegram Premium</string>
     <string name="CustomizationHeader">Кастомізація</string>
@@ -51,7 +51,7 @@
     <string name="RegexFiltersEdit">Редагувати фільтр</string>
     <string name="RegexFiltersAddDescription">Для перевірки регулярних виразів можна використовувати сайт regex101.com.</string>
     <string name="RegexFiltersAddError">Синтаксична помилка в Regex</string>
-    <string name="AyuSyncHeader">Синхронізація PrismGramm</string>
+    <string name="AyuSyncHeader">Синхронізація Prisma</string>
     <string name="AyuSyncStatusTitle">Статус синхронізації</string>
     <string name="AyuSyncStatusOk">підключено</string>
     <string name="AyuSyncStatusErrorDisconnected">відключено</string>
@@ -74,8 +74,8 @@
     <string name="AyuSyncOpenPreferences">Відкрити налаштування</string>
     <string name="AyuSyncDownloadAgent">Завантажити агент</string>
     <string name="WALMode">Увімкнути режим WAL (Швидкий SQLite)</string>
-    <string name="ClearAyuDatabase">Очистити базу даних PrismGramm</string>
-    <string name="ClearAyuDatabaseNotification">Базу даних PrismGramm очищено</string>
+    <string name="ClearAyuDatabase">Очистити базу даних Prisma</string>
+    <string name="ClearAyuDatabaseNotification">Базу даних Prisma очищено</string>
     <string name="EraseLocalDatabase">Стерти локальну базу даних</string>
     <string name="BetaFeatures">Бета функції</string>
     <string name="StickerConfirmation">Підтвердження надсилання наліпок</string>
@@ -105,8 +105,8 @@
     <string name="ContextCopyID">Скопіювати ID</string>
     <string name="IDCopiedToast">ID скопійовано в буфер обміну.</string>
     <string name="ContextHideMessage">Сховати</string>
-    <string name="SettingsWatermark">PrismGramm</string>
-    <string name="SettingsDescription">Клієнт PrismGramm з розширеними можливостями.</string>
+    <string name="SettingsWatermark">Prisma</string>
+    <string name="SettingsDescription">Клієнт Prisma з розширеними можливостями.</string>
     <string name="SecretMessageTecno">Телефони Tecno найкращі.</string>
     <string name="SecretMessageXiaomiSuccess">Ви користуєтесь хорошим телефоном.</string>
     <string name="SecretMessageXiaomiFailure">Встановіть кастомну прошивку.</string>

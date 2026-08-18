@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="AyuPreferences">PrismGramm Settings</string>
-    <string name="PrismGrammSettingsSubtitle">Ghost mode, Anti-Delete, Media Downloader, Regex &amp; all settings</string>
-    <string name="PrismGrammArchive">Deleted messages archive</string>
-    <string name="PrismGrammMediaDownloader">Media Downloader (TikTok, YouTube, Insta)</string>
-    <string name="PrismGrammMediaDownloaderTitle">Media Downloader</string>
+    <string name="AyuPreferences">Prisma Settings</string>
+    <string name="PrismaSettingsSubtitle">Ghost mode, Anti-Delete, Media Downloader, Regex &amp; all settings</string>
+    <string name="PrismaArchive">Deleted messages archive</string>
+    <string name="PrismaMediaDownloader">Media Downloader (TikTok, YouTube, Insta)</string>
+    <string name="PrismaMediaDownloaderTitle">Media Downloader</string>
     <string name="GhostEssentialsHeader">Ghost essentials</string>
     <string name="DontSendReadPackets">Don\'t read messages</string>
     <string name="DontSendOnlinePackets">Don\'t send online</string>
@@ -29,7 +29,7 @@
     <string name="MessageSavingSaveReactions">Save reactions</string>
     <string name="MessageSavingSaveForBots">Save in bot dialogs</string>
     <string name="QoLTogglesHeader">Useful features</string>
-    <string name="KeepAliveService">PrismGramm Push Service</string>
+    <string name="KeepAliveService">Prisma Push Service</string>
     <string name="DisableAds">Disable ads</string>
     <string name="LocalPremium">Local Telegram Premium</string>
     <string name="CustomizationHeader">Customization</string>
@@ -51,7 +51,7 @@
     <string name="RegexFiltersEdit">Edit filter</string>
     <string name="RegexFiltersAddDescription">You can use site regex101.com to fully test your regular expression.</string>
     <string name="RegexFiltersAddError">Regex syntax error</string>
-    <string name="AyuSyncHeader">PrismGramm Sync</string>
+    <string name="AyuSyncHeader">Prisma Sync</string>
     <string name="AyuSyncStatusTitle">Sync status</string>
     <string name="AyuSyncStatusOk">connected</string>
     <string name="AyuSyncStatusErrorDisconnected">disconnected</string>
@@ -74,8 +74,8 @@
     <string name="AyuSyncOpenPreferences">Open preferences</string>
     <string name="AyuSyncDownloadAgent">Download agent</string>
     <string name="WALMode">Enable WAL mode</string>
-    <string name="ClearAyuDatabase">Clear PrismGramm Database</string>
-    <string name="ClearAyuDatabaseNotification">PrismGramm database cleared</string>
+    <string name="ClearAyuDatabase">Clear Prisma Database</string>
+    <string name="ClearAyuDatabaseNotification">Prisma database cleared</string>
     <string name="EraseLocalDatabase">Erase Local Database</string>
     <string name="BetaFeatures">Beta features</string>
     <string name="StickerConfirmation">Confirmation when sending stickers</string>
@@ -105,8 +105,8 @@
     <string name="ContextCopyID">Copy ID</string>
     <string name="IDCopiedToast">ID copied to clipboard.</string>
     <string name="ContextHideMessage">Hide</string>
-    <string name="SettingsWatermark">PrismGramm</string>
-    <string name="SettingsDescription">PrismGramm client with enhanced features.</string>
+    <string name="SettingsWatermark">Prisma</string>
+    <string name="SettingsDescription">Prisma client with enhanced features.</string>
     <string name="SecretMessageTecno">Tecno phones are the best.</string>
     <string name="SecretMessageXiaomiSuccess">You\'re using a good phone.</string>
     <string name="SecretMessageXiaomiFailure">Install custom ROM.</string>

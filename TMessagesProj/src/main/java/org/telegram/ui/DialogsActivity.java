@@ -13370,7 +13370,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             io.add(R.drawable.msg_settings_old, getString(R.string.Settings), () -> {
                 presentFragment(new SettingsActivity());
             });
-            io.add(R.drawable.msg_customize, "PrismGramm " + getString(R.string.Settings), () -> {
+            io.add(R.drawable.msg_customize, "Prisma " + getString(R.string.Settings), () -> {
                 presentFragment(new KryptonSettingsActivity());
             });
             if (ApplicationLoader.applicationLoaderInstance != null) {

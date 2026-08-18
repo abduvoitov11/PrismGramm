@@ -366,7 +366,7 @@ public class KryptonMediaDownloader {
 
             DownloadManager.Request request = new DownloadManager.Request(Uri.parse(directUrl));
             request.setTitle(platformName(sourceUrl) + (isVideo ? " Video" : " Rasm"));
-            request.setDescription("PrismGramm Downloader orqali yuklanmoqda...");
+            request.setDescription("Prisma Downloader orqali yuklanmoqda...");
             request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
             request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
             request.setAllowedOverMetered(true);

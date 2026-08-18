@@ -6,7 +6,7 @@
   dan olinadi, shuning uchun bu xavfsiz va ilovani buzmaydi.
 -->
 <resources>
-    <string name="AppName">PrismGramm</string>
+    <string name="AppName">Prisma</string>
     <string name="Chats">Chatlar</string>
     <string name="Calls">Qo\'ng\'iroqlar</string>
     <string name="Contacts">Kontaktlar</string>
@@ -99,7 +99,7 @@
     <string name="TelegramFaq">Ko\'p so\'raladigan savollar</string>
     <string name="PrivacyPolicy">Maxfiylik siyosati</string>
     <string name="TermsOfService">Foydalanish shartlari</string>
-    <string name="KryptonSettings">PrismGramm Sozlamalari</string>
+    <string name="KryptonSettings">Prisma Sozlamalari</string>
     <string name="KryptonSettingsInfo">Ghost Mode, media yuklovchi, arxiv</string>
     <string name="KryptonGhostMode">Ghost Mode</string>
     <string name="KryptonGhostModeInfo">Yoqilsa, boshqalar sizning onlayn ekaningizni, yozayotganingizni yoki xabarlarini o\'qiganingizni ko\'rmaydi — shaxsiy chatlarda, guruhlarda va kanallarda. Story (hikoya) ko\'rilgani ham yashiriladi. Sizning o\'z ilovangizdagi tajribangiz esa odatdagidek qoladi.</string>

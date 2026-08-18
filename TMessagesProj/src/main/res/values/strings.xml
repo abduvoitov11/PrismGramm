@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="AppName">PrismGramm</string>
-    <string name="AppNameBeta">PrismGramm Beta</string>
+    <string name="AppName">Prisma</string>
+    <string name="AppNameBeta">Prisma Beta</string>
     <string name="LanguageName">English</string>
     <string name="English">English</string>
     <string name="LanguageNameInEnglish">English</string>
@@ -3109,7 +3109,7 @@
     <string name="FilterAddToAlertFullText">Sorry, you can\'t exlude more than 100 chats from a folder.</string>
     <!--passcode view-->
     <string name="Passcode">Passcode Lock</string>
-    <string name="KryptonSettings">PrismGramm Settings</string>
+    <string name="KryptonSettings">Prisma Settings</string>
     <string name="KryptonSettingsInfo">Ghost Mode, media downloader, anti-delete archive</string>
     <string name="KryptonGhostMode">Ghost Mode</string>
     <string name="KryptonGhostModeInfo">When enabled, others won\'t see that you\'re online, typing, or that you\'ve read their messages — in private chats, groups, and channels. Story views are hidden too. Your own chat experience stays completely normal.</string>

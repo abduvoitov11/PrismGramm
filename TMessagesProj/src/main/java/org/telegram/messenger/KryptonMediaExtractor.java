@@ -295,22 +295,22 @@ public class KryptonMediaExtractor {
             Uri collection;
             if (mimeType.startsWith("video")) {
                 if (Build.VERSION.SDK_INT >= 29) {
-                    values.put(MediaStore.Video.Media.RELATIVE_PATH, Environment.DIRECTORY_MOVIES + "/PrismGramm");
+                    values.put(MediaStore.Video.Media.RELATIVE_PATH, Environment.DIRECTORY_MOVIES + "/Prisma");
                 }
                 collection = MediaStore.Video.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
             } else if (mimeType.startsWith("image")) {
                 if (Build.VERSION.SDK_INT >= 29) {
-                    values.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + "/PrismGramm");
+                    values.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + "/Prisma");
                 }
                 collection = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
             } else if (mimeType.startsWith("audio")) {
                 if (Build.VERSION.SDK_INT >= 29) {
-                    values.put(MediaStore.Audio.Media.RELATIVE_PATH, Environment.DIRECTORY_MUSIC + "/PrismGramm");
+                    values.put(MediaStore.Audio.Media.RELATIVE_PATH, Environment.DIRECTORY_MUSIC + "/Prisma");
                 }
                 collection = MediaStore.Audio.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
             } else {
                 if (Build.VERSION.SDK_INT >= 29) {
-                    values.put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS + "/PrismGramm");
+                    values.put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS + "/Prisma");
                 }
                 collection = MediaStore.Downloads.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
             }

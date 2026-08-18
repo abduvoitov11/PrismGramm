@@ -135,7 +135,7 @@ public class IntroActivity extends BaseFragment implements NotificationCenter.No
         MessagesController.getGlobalMainSettings().edit().putLong("intro_crashed_time", System.currentTimeMillis()).apply();
 
         titles = new CharSequence[]{
-                "PrismGramm",
+                "Prisma",
                 LocaleController.getString(R.string.Page2Title),
                 LocaleController.getString(R.string.Page3Title),
                 LocaleController.getString(R.string.Page5Title),
@@ -157,7 +157,7 @@ public class IntroActivity extends BaseFragment implements NotificationCenter.No
     public View createView(Context context) {
         logoDrawable = context.getResources().getDrawable(R.drawable.logo_middle).mutate();
         logoDrawable.setBounds(0, dp(4.0f), dp(120), dp(120));
-        titles[0] = "PrismGramm";
+        titles[0] = "Prisma";
 
 
         actionBar.setAddToContainer(false);

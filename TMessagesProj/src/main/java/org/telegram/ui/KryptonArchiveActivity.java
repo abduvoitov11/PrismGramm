@@ -51,7 +51,7 @@ public class KryptonArchiveActivity extends BaseFragment {
     public View createView(Context context) {
         actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
-        actionBar.setTitle(LocaleController.getString(R.string.PrismGrammArchive));
+        actionBar.setTitle(LocaleController.getString(R.string.PrismaArchive));
         
         clearAllItem = actionBar.createMenu().addItem(MENU_CLEAR_ALL, R.drawable.msg_delete);
         clearAllItem.setContentDescription(LocaleController.getString(R.string.ClearHistory));

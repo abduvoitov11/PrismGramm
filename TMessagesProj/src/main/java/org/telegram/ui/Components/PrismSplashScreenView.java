@@ -129,7 +129,7 @@ public class PrismSplashScreenView extends FrameLayout {
         appTitle.setTextColor(Color.WHITE);
         appTitle.setTypeface(AndroidUtilities.bold());
         appTitle.setGravity(Gravity.CENTER);
-        appTitle.setText("PrismGramm");
+        appTitle.setText("Prisma");
         textContainer.addView(appTitle, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0, 2, 0, 4));
 
         appSubtitle = new TextView(context);

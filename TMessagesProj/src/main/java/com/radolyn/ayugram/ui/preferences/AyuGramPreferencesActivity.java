@@ -362,9 +362,9 @@ public class AyuGramPreferencesActivity extends BasePreferencesActivity implemen
                     if (position == messageSavingBtnRow) {
                         textCell.setText(LocaleController.getString(R.string.MessageSavingBtn), false);
                     } else if (position == archiveRow) {
-                        textCell.setTextAndIcon(LocaleController.getString(R.string.PrismGrammArchive), R.drawable.msg_archive, true);
+                        textCell.setTextAndIcon(LocaleController.getString(R.string.PrismaArchive), R.drawable.msg_archive, true);
                     } else if (position == mediaDownloaderRow) {
-                        textCell.setTextAndIcon(LocaleController.getString(R.string.PrismGrammMediaDownloader), R.drawable.msg_download, true);
+                        textCell.setTextAndIcon(LocaleController.getString(R.string.PrismaMediaDownloader), R.drawable.msg_download, true);
                     } else if (position == deletedMarkTextRow) {
                         textCell.setTextAndValue(LocaleController.getString(R.string.DeletedMarkText), AyuConfig.getDeletedMark(), true);
                     } else if (position == editedMarkTextRow) {

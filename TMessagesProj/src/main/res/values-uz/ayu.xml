@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="AyuPreferences">PrismGramm Sozlamalari</string>
-    <string name="PrismGrammSettingsSubtitle">Ruh rejimi, Anti-Delete, Media Downloader, Regex va barcha sozlamalar</string>
-    <string name="PrismGrammArchive">O\'chirilgan xabarlar arxivi</string>
-    <string name="PrismGrammMediaDownloader">Media Downloader (TikTok, YouTube, Insta)</string>
-    <string name="PrismGrammMediaDownloaderTitle">Media Downloader</string>
+    <string name="AyuPreferences">Prisma Sozlamalari</string>
+    <string name="PrismaSettingsSubtitle">Ruh rejimi, Anti-Delete, Media Downloader, Regex va barcha sozlamalar</string>
+    <string name="PrismaArchive">O\'chirilgan xabarlar arxivi</string>
+    <string name="PrismaMediaDownloader">Media Downloader (TikTok, YouTube, Insta)</string>
+    <string name="PrismaMediaDownloaderTitle">Media Downloader</string>
     <string name="GhostEssentialsHeader">Ruh rejimi asosiy sozlamalari</string>
     <string name="DontSendReadPackets">Xabarlarni o\'qilmagan qoldirish</string>
     <string name="DontSendOnlinePackets">Onlayn holatni ko\'rsatmaslik</string>
@@ -29,7 +29,7 @@
     <string name="MessageSavingSaveReactions">Reaksiyalarni saqlash</string>
     <string name="MessageSavingSaveForBots">Bot chatlarida ham saqlash</string>
     <string name="QoLTogglesHeader">Foydali funksiyalar</string>
-    <string name="KeepAliveService">PrismGramm Push Xizmati</string>
+    <string name="KeepAliveService">Prisma Push Xizmati</string>
     <string name="DisableAds">Reklamalarni o\'chirish</string>
     <string name="LocalPremium">Mahalliy Telegram Premium</string>
     <string name="CustomizationHeader">Moslashtirish</string>
@@ -51,7 +51,7 @@
     <string name="RegexFiltersEdit">Filtrni tahrirlash</string>
     <string name="RegexFiltersAddDescription">Muntazam ifodangizni tekshirish uchun regex101.com saytidan foydalanishingiz mumkin.</string>
     <string name="RegexFiltersAddError">Regex sintaksis xatosi</string>
-    <string name="AyuSyncHeader">PrismGramm Sinxronizatsiya</string>
+    <string name="AyuSyncHeader">Prisma Sinxronizatsiya</string>
     <string name="AyuSyncStatusTitle">Sinxronizatsiya holati</string>
     <string name="AyuSyncStatusOk">ulandi</string>
     <string name="AyuSyncStatusErrorDisconnected">uzildi</string>
@@ -74,8 +74,8 @@
     <string name="AyuSyncOpenPreferences">Sozlamalarni ochish</string>
     <string name="AyuSyncDownloadAgent">Agentni yuklab olish</string>
     <string name="WALMode">WAL rejimini yoqish (Tezkor SQLite)</string>
-    <string name="ClearAyuDatabase">PrismGramm ma\'lumotlar bazasini tozalash</string>
-    <string name="ClearAyuDatabaseNotification">PrismGramm ma\'lumotlar bazasi tozalandi</string>
+    <string name="ClearAyuDatabase">Prisma ma\'lumotlar bazasini tozalash</string>
+    <string name="ClearAyuDatabaseNotification">Prisma ma\'lumotlar bazasi tozalandi</string>
     <string name="EraseLocalDatabase">Mahalliy bazani to\'liq tozalash</string>
     <string name="BetaFeatures">Beta imkoniyatlar</string>
     <string name="StickerConfirmation">Stiker yuborishda tasdiqlash</string>
@@ -105,8 +105,8 @@
     <string name="ContextCopyID">ID dan nusxa olish</string>
     <string name="IDCopiedToast">ID xotiraga nusxalandi.</string>
     <string name="ContextHideMessage">Yashirish</string>
-    <string name="SettingsWatermark">PrismGramm</string>
-    <string name="SettingsDescription">Kengaytirilgan imkoniyatlarga ega PrismGramm ilovasi.</string>
+    <string name="SettingsWatermark">Prisma</string>
+    <string name="SettingsDescription">Kengaytirilgan imkoniyatlarga ega Prisma ilovasi.</string>
     <string name="SecretMessageTecno">Tecno telefonlari eng yaxshisi.</string>
     <string name="SecretMessageXiaomiSuccess">Siz ajoyib telefondan foydalanmoqdasiz.</string>
     <string name="SecretMessageXiaomiFailure">Maxsus proshivka (custom ROM) o\'rnating.</string>
