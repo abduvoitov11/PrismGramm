@@ -24,16 +24,22 @@ public class LauncherIconController {
         return i == PackageManager.COMPONENT_ENABLED_STATE_ENABLED || i == PackageManager.COMPONENT_ENABLED_STATE_DEFAULT && icon == LauncherIcon.DEFAULT;
     }
 
+    private static LauncherIcon cachedSelectedIcon = null;
     private static android.graphics.Bitmap cachedIconBitmap;
     private static LauncherIcon cachedForIcon;
 
     public static LauncherIcon getSelectedIcon() {
+        if (cachedSelectedIcon != null) {
+            return cachedSelectedIcon;
+        }
         for (LauncherIcon icon : LauncherIcon.values()) {
             if (isEnabled(icon)) {
+                cachedSelectedIcon = icon;
                 return icon;
             }
         }
-        return LauncherIcon.DEFAULT;
+        cachedSelectedIcon = LauncherIcon.DEFAULT;
+        return cachedSelectedIcon;
     }
 
     public static android.graphics.Bitmap getSelectedIconBitmap(Context context) {
@@ -74,6 +80,7 @@ public class LauncherIconController {
     }
 
     public static void setIcon(LauncherIcon icon) {
+        cachedSelectedIcon = icon;
         cachedIconBitmap = null;
         cachedForIcon = null;
         Context ctx = ApplicationLoader.applicationContext;
