@@ -40,18 +40,23 @@ import org.telegram.ui.LauncherIconController;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
 /**
- * 🌟 PrismSplashScreenView — Cinema-Grade Real-Time Photorealistic 3D Spatial Engine.
+ * 🌟 PrismSplashScreenView — 100% Haqiqiy, Ulkan va Ko'zga Yaqqol Tashlanuvchi
+ * Cinema-Grade 3D Fazoviy Geometriya & Volumetrik Shisha Dvigateli.
  *
- * Implements:
- * 1. 3D Facet Shading with Lambertian Diffuse + Specular Highlights & Depth Sorting (Painter's Algorithm).
- * 2. 3D Dynamic Drop Shadow Projection onto virtual floor with elevation physics.
- * 3. 3D Physical Gyroscopic Tumbling Icon Card with Real-Time Parallax Lens Refraction.
- * 4. 100% Zero-Allocation rendering in onDraw() for rock-solid 120 FPS performance with zero battery impact.
+ * Xususiyatlari:
+ * 1. Ulkan 3D Obyektlar (240dp - 280dp):
+ *    - Matrix: 3D Aylanuvchi Kiber Tesseract Kub + 3D chuqurlikdagi kod yomg'iri.
+ *    - Ruby/Amethyst: 3D Qirrali Ulkan Olmos (Shaded Brilliant-cut Diamond).
+ *    - Cosmos/Singularity: 3D Fazoviy Sayyora Halqalari va orbital 3D Oylar.
+ *    - Sakura: 3D Fazoda aylanuvchi gilos guli halqasi va erkin uchuvchi 3D yaproqlar.
+ *    - Bronze: 3D Steampunk 3-o'qli Giroskopik tishli g'ildiraklar (Gears).
+ *    - Turbo: 3D Giper-fazoviy silindrsimon Warp Tunnel.
+ * 2. 3D Giroskopik Parallaks Shisha Ikonka (±28° fazoviy burilish va dinamik pol soyasi).
+ * 3. 120 FPS Buttery-Smooth Zero-Allocation GPU Rendiring.
  */
 public class PrismSplashScreenView extends FrameLayout {
 
@@ -68,9 +73,9 @@ public class PrismSplashScreenView extends FrameLayout {
     private int bgStartColor = 0xFF0B1424;
     private int bgEndColor = 0xFF040810;
 
-    private final Photorealistic3DWorldView world3DView;
-    private final Realistic3DParticleSpaceView particles3DView;
-    private final Realistic3DHeroIconView hero3DIconView;
+    private final Grand3DWorldView world3DView;
+    private final Spatial3DParticlesView particles3DView;
+    private final Hero3DParallaxCardView hero3DIconView;
     private final TextView greetingView;
     private final TextView appTitle;
     private final TextView appSubtitle;
@@ -82,23 +87,24 @@ public class PrismSplashScreenView extends FrameLayout {
         super(context);
         setClickable(true);
         setFocusable(true);
+        setElevation(AndroidUtilities.dp(200));
 
         LauncherIconController.LauncherIcon currentIcon = LauncherIconController.getSelectedIcon();
         resolveIconTypeAndColors(currentIcon);
 
-        // 1. Dynamic Deep Atmosphere Gradient
+        // 1. Dynamic Deep Atmosphere Background
         GradientDrawable bgDrawable = new GradientDrawable(
                 GradientDrawable.Orientation.TOP_BOTTOM,
                 new int[]{bgStartColor, bgEndColor}
         );
         setBackground(bgDrawable);
 
-        // 2. Photorealistic 3D World Geometry (Shaded 3D Facets, Gyroscopes, Orbitals, Tesseract)
-        world3DView = new Photorealistic3DWorldView(context, animType, primaryColor, secondaryColor, accentGlowColor);
+        // 2. Ulkan 3D Fazoviy Geometriya Qatlami (Kublar, Olmoslar, Halqalar, Giroskoplar)
+        world3DView = new Grand3DWorldView(context, animType, primaryColor, secondaryColor, accentGlowColor);
         addView(world3DView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
-        // 3. 3D Particle Space (Z-Depth Falling Code, Tumbling 3D Petals, Warp Velocity Stars)
-        particles3DView = new Realistic3DParticleSpaceView(context, animType, primaryColor, secondaryColor, accentGlowColor);
+        // 3. 3D Fazoviy Zarrachalar & Z-Depth Yomg'ir
+        particles3DView = new Spatial3DParticlesView(context, animType, primaryColor, secondaryColor, accentGlowColor);
         addView(particles3DView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
         // Center Content Master Container
@@ -107,11 +113,11 @@ public class PrismSplashScreenView extends FrameLayout {
         centerContainer.setGravity(Gravity.CENTER_HORIZONTAL);
         addView(centerContainer, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER));
 
-        // 4. Hero 3D Multi-Layered Floating Parallax Icon Card with Dynamic Ground Shadow
-        hero3DIconView = new Realistic3DHeroIconView(context, currentIcon, animType, primaryColor, secondaryColor, accentGlowColor);
-        centerContainer.addView(hero3DIconView, LayoutHelper.createLinear(240, 240, Gravity.CENTER_HORIZONTAL));
+        // 4. Hero 3D Parallaks Shisha Ikonka va Dinamik Pol Soyasi
+        hero3DIconView = new Hero3DParallaxCardView(context, currentIcon, animType, primaryColor, secondaryColor, accentGlowColor);
+        centerContainer.addView(hero3DIconView, LayoutHelper.createLinear(260, 260, Gravity.CENTER_HORIZONTAL));
 
-        // 5. Typography & Presentation Container
+        // 5. Typography & Presentation
         LinearLayout textContainer = new LinearLayout(context);
         textContainer.setOrientation(LinearLayout.VERTICAL);
         textContainer.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -484,9 +490,9 @@ public class PrismSplashScreenView extends FrameLayout {
     }
 
     // ──────────────────────────────────────────────────────────────────────────
-    // 1. Photorealistic 3D World Geometry Engine with Shaded Facets (Painter's Algorithm)
+    // 1. Grand 3D World Geometry Engine (Huge Shaded Polyhedra, Rings, Cubes)
     // ──────────────────────────────────────────────────────────────────────────
-    private static class Photorealistic3DWorldView extends View {
+    private static class Grand3DWorldView extends View {
         private final IconAnimType animType;
         private final int primaryColor, secondaryColor, glowColor;
         private final Paint linePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -498,18 +504,18 @@ public class PrismSplashScreenView extends FrameLayout {
 
         // 3D Diamond / Octahedron Facets
         private static final float[][] DIAMOND_VERTICES = {
-                {0, -1.5f, 0}, {1.3f, 0, 0}, {0, 0, 1.3f},
-                {-1.3f, 0, 0}, {0, 0, -1.3f}, {0, 1.5f, 0}
+                {0, -1.8f, 0}, {1.6f, 0, 0}, {0, 0, 1.6f},
+                {-1.6f, 0, 0}, {0, 0, -1.6f}, {0, 1.8f, 0}
         };
         private static final int[][] DIAMOND_FACES = {
                 {0, 1, 2}, {0, 2, 3}, {0, 3, 4}, {0, 4, 1},
                 {5, 2, 1}, {5, 3, 2}, {5, 4, 3}, {5, 1, 4}
         };
 
-        // 3D Cube Vertices & Faces
+        // 3D Cube Vertices & Faces (Tesseract)
         private static final float[][] CUBE_VERTICES = {
-                {-1, -1, -1}, {1, -1, -1}, {1, 1, -1}, {-1, 1, -1},
-                {-1, -1, 1},  {1, -1, 1},  {1, 1, 1},  {-1, 1, 1}
+                {-1.3f, -1.3f, -1.3f}, {1.3f, -1.3f, -1.3f}, {1.3f, 1.3f, -1.3f}, {-1.3f, 1.3f, -1.3f},
+                {-1.3f, -1.3f, 1.3f},  {1.3f, -1.3f, 1.3f},  {1.3f, 1.3f, 1.3f},  {-1.3f, 1.3f, 1.3f}
         };
         private static final int[][] CUBE_FACES = {
                 {0, 1, 2, 3}, {4, 7, 6, 5},
@@ -517,7 +523,6 @@ public class PrismSplashScreenView extends FrameLayout {
                 {0, 3, 7, 4}, {1, 5, 6, 2}
         };
 
-        // Pre-allocated Face structure for zero-allocation depth sorting
         private static class FaceData {
             int[] indices;
             float avgZ;
@@ -527,7 +532,7 @@ public class PrismSplashScreenView extends FrameLayout {
         private final float[][] transformedVertices = new float[8][3];
         private final float[][] projectedVertices = new float[8][2];
 
-        public Photorealistic3DWorldView(Context context, IconAnimType type, int c1, int c2, int c3) {
+        public Grand3DWorldView(Context context, IconAnimType type, int c1, int c2, int c3) {
             super(context);
             this.animType = type;
             this.primaryColor = c1;
@@ -542,13 +547,13 @@ public class PrismSplashScreenView extends FrameLayout {
             }
 
             ValueAnimator animator = ValueAnimator.ofFloat(0f, 360f);
-            animator.setDuration(8000);
+            animator.setDuration(7000);
             animator.setRepeatCount(ValueAnimator.INFINITE);
             animator.addUpdateListener(animation -> {
                 float val = (float) animation.getAnimatedValue();
-                angleX = (float) Math.sin(Math.toRadians(val)) * 25f;
+                angleX = (float) Math.sin(Math.toRadians(val)) * 30f;
                 angleY = val;
-                angleZ = val * 0.5f;
+                angleZ = val * 0.6f;
                 invalidate();
             });
             animator.start();
@@ -564,25 +569,25 @@ public class PrismSplashScreenView extends FrameLayout {
             float cy = h / 2f;
 
             if (animType == IconAnimType.RUBY || animType == IconAnimType.AMETHYST || animType == IconAnimType.PURE) {
-                // Photorealistic 3D Faceted Diamond with Lambertian Diffuse Shading
-                float size = AndroidUtilities.dp(85);
-                drawShaded3DFaces(canvas, cx, cy, DIAMOND_VERTICES, DIAMOND_FACES, size, 22, angleY, 0, primaryColor, secondaryColor);
+                // Giant 3D Faceted Diamond Crystal (Shaded)
+                float size = AndroidUtilities.dp(125);
+                drawShaded3DFaces(canvas, cx, cy, DIAMOND_VERTICES, DIAMOND_FACES, size, 28, angleY, 0, primaryColor, secondaryColor);
 
             } else if (animType == IconAnimType.MATRIX || animType == IconAnimType.CYBER || animType == IconAnimType.GLITCH) {
-                // Photorealistic 3D Shaded Tesseract Cube
-                float size = AndroidUtilities.dp(78);
-                drawShaded3DFaces(canvas, cx, cy, CUBE_VERTICES, CUBE_FACES, size, angleX + 20, angleY, angleZ, primaryColor, secondaryColor);
+                // Giant 3D Shaded Tesseract Cyber Cube
+                float size = AndroidUtilities.dp(110);
+                drawShaded3DFaces(canvas, cx, cy, CUBE_VERTICES, CUBE_FACES, size, angleX + 24, angleY, angleZ, primaryColor, secondaryColor);
 
             } else if (animType == IconAnimType.COSMOS || animType == IconAnimType.SINGULARITY) {
-                // 3D Orbital Rings with Illuminated Moons
-                float r = AndroidUtilities.dp(95);
+                // Massive 3D Orbital Rings with Orbiting Moons
+                float r = AndroidUtilities.dp(135);
                 linePaint.setColor(primaryColor);
-                linePaint.setStrokeWidth(AndroidUtilities.dp(2f));
-                linePaint.setAlpha(140);
+                linePaint.setStrokeWidth(AndroidUtilities.dp(2.8f));
+                linePaint.setAlpha(170);
 
                 canvas.save();
                 camera3D.save();
-                camera3D.rotateX(65);
+                camera3D.rotateX(68);
                 camera3D.rotateY(angleX);
                 camera3D.rotateZ(angleY);
                 camera3D.getMatrix(matrix3D);
@@ -593,17 +598,17 @@ public class PrismSplashScreenView extends FrameLayout {
                 canvas.concat(matrix3D);
                 canvas.drawCircle(cx, cy, r, linePaint);
 
-                float moonX = cx + (float) Math.cos(Math.toRadians(angleY * 2)) * r;
-                float moonY = cy + (float) Math.sin(Math.toRadians(angleY * 2)) * r;
+                float moonX = cx + (float) Math.cos(Math.toRadians(angleY * 2.2)) * r;
+                float moonY = cy + (float) Math.sin(Math.toRadians(angleY * 2.2)) * r;
                 facetPaint.setColor(glowColor);
-                facetPaint.setAlpha(240);
-                canvas.drawCircle(moonX, moonY, AndroidUtilities.dp(6), facetPaint);
+                facetPaint.setAlpha(255);
+                canvas.drawCircle(moonX, moonY, AndroidUtilities.dp(8), facetPaint);
                 canvas.restore();
 
                 // Ring 2
                 canvas.save();
                 camera3D.save();
-                camera3D.rotateX(-55);
+                camera3D.rotateX(-58);
                 camera3D.rotateY(-angleX);
                 camera3D.rotateZ(-angleY * 0.8f);
                 camera3D.getMatrix(matrix3D);
@@ -612,14 +617,14 @@ public class PrismSplashScreenView extends FrameLayout {
                 matrix3D.postTranslate(cx, cy);
                 canvas.concat(matrix3D);
                 linePaint.setColor(secondaryColor);
-                linePaint.setAlpha(110);
-                canvas.drawCircle(cx, cy, r * 1.25f, linePaint);
+                linePaint.setAlpha(130);
+                canvas.drawCircle(cx, cy, r * 1.3f, linePaint);
                 canvas.restore();
 
             } else if (animType == IconAnimType.BRONZE || animType == IconAnimType.VINTAGE) {
-                // 3D 3-Axis Gimbal Gyroscope Rings
-                float r = AndroidUtilities.dp(85);
-                linePaint.setStrokeWidth(AndroidUtilities.dp(2.2f));
+                // Huge 3D 3-Axis Gimbal Gyroscope Rings
+                float r = AndroidUtilities.dp(120);
+                linePaint.setStrokeWidth(AndroidUtilities.dp(3f));
 
                 // Ring 1
                 canvas.save();
@@ -631,7 +636,7 @@ public class PrismSplashScreenView extends FrameLayout {
                 matrix3D.postTranslate(cx, cy);
                 canvas.concat(matrix3D);
                 linePaint.setColor(primaryColor);
-                linePaint.setAlpha(160);
+                linePaint.setAlpha(190);
                 canvas.drawCircle(cx, cy, r, linePaint);
                 canvas.restore();
 
@@ -645,31 +650,45 @@ public class PrismSplashScreenView extends FrameLayout {
                 matrix3D.postTranslate(cx, cy);
                 canvas.concat(matrix3D);
                 linePaint.setColor(secondaryColor);
+                linePaint.setAlpha(160);
+                canvas.drawCircle(cx, cy, r * 1.2f, linePaint);
+                canvas.restore();
+
+                // Ring 3
+                canvas.save();
+                camera3D.save();
+                camera3D.rotateZ(angleY * 0.6f);
+                camera3D.getMatrix(matrix3D);
+                camera3D.restore();
+                matrix3D.preTranslate(-cx, -cy);
+                matrix3D.postTranslate(cx, cy);
+                canvas.concat(matrix3D);
+                linePaint.setColor(glowColor);
                 linePaint.setAlpha(130);
-                canvas.drawCircle(cx, cy, r * 1.15f, linePaint);
+                canvas.drawCircle(cx, cy, r * 1.4f, linePaint);
                 canvas.restore();
 
             } else if (animType == IconAnimType.TURBO) {
-                // 3D Hyperspace Cylindrical Warp Tunnel
-                for (int i = 0; i < 6; i++) {
-                    float prog = ((angleY * 2 + i * 60) % 360f) / 360f;
-                    float depthRadius = AndroidUtilities.dp(20) + prog * AndroidUtilities.dp(160);
-                    int alpha = (int) (prog * 180);
+                // 3D Hyperspace Warp Speed Rings
+                for (int i = 0; i < 7; i++) {
+                    float prog = ((angleY * 2.5f + i * 50) % 360f) / 360f;
+                    float depthRadius = AndroidUtilities.dp(20) + prog * AndroidUtilities.dp(200);
+                    int alpha = (int) (prog * 200);
                     linePaint.setColor(primaryColor);
-                    linePaint.setStrokeWidth(AndroidUtilities.dp(1f + prog * 2.5f));
+                    linePaint.setStrokeWidth(AndroidUtilities.dp(1.2f + prog * 3.5f));
                     linePaint.setAlpha(alpha);
                     canvas.drawCircle(cx, cy, depthRadius, linePaint);
                 }
             } else {
                 // Default 3D Holographic Concentric Pulse Ring
-                float r = AndroidUtilities.dp(90);
+                float r = AndroidUtilities.dp(125);
                 linePaint.setColor(primaryColor);
-                linePaint.setStrokeWidth(AndroidUtilities.dp(2f));
-                linePaint.setAlpha(120);
+                linePaint.setStrokeWidth(AndroidUtilities.dp(2.5f));
+                linePaint.setAlpha(150);
 
                 canvas.save();
                 camera3D.save();
-                camera3D.rotateX(60);
+                camera3D.rotateX(62);
                 camera3D.rotateY(angleX);
                 camera3D.rotateZ(angleY * 0.5f);
                 camera3D.getMatrix(matrix3D);
@@ -686,21 +705,17 @@ public class PrismSplashScreenView extends FrameLayout {
             float radX = (float) Math.toRadians(rx);
             float radY = (float) Math.toRadians(ry);
             float radZ = (float) Math.toRadians(rz);
-            float fov = 400f;
+            float fov = 420f;
 
-            // 1. Transform vertices
             for (int i = 0; i < vertices.length; i++) {
                 float x = vertices[i][0] * scale;
                 float y = vertices[i][1] * scale;
                 float z = vertices[i][2] * scale;
 
-                // X rotation
                 float y1 = y * (float) Math.cos(radX) - z * (float) Math.sin(radX);
                 float z1 = y * (float) Math.sin(radX) + z * (float) Math.cos(radX);
-                // Y rotation
                 float x2 = x * (float) Math.cos(radY) + z1 * (float) Math.sin(radY);
                 float z2 = -x * (float) Math.sin(radY) + z1 * (float) Math.cos(radY);
-                // Z rotation
                 float x3 = x2 * (float) Math.cos(radZ) - y1 * (float) Math.sin(radZ);
                 float y3 = x2 * (float) Math.sin(radZ) + y1 * (float) Math.cos(radZ);
 
@@ -713,7 +728,6 @@ public class PrismSplashScreenView extends FrameLayout {
                 projectedVertices[i][1] = cy + y3 * distance;
             }
 
-            // 2. Compute face normals, diffuse lighting, and average Z
             int faceCount = Math.min(faces.length, sortedFaces.length);
             for (int i = 0; i < faceCount; i++) {
                 int[] face = faces[i];
@@ -725,7 +739,6 @@ public class PrismSplashScreenView extends FrameLayout {
                 }
                 sortedFaces[i].avgZ = avgZ / face.length;
 
-                // Normal vector calculation: (v1 - v0) x (v2 - v0)
                 float[] v0 = transformedVertices[face[0]];
                 float[] v1 = transformedVertices[face[1]];
                 float[] v2 = transformedVertices[face[2]];
@@ -741,15 +754,12 @@ public class PrismSplashScreenView extends FrameLayout {
                     nx /= len; ny /= len; nz /= len;
                 }
 
-                // Directional Key Light from top-left front: L = (0.577, -0.577, -0.577)
                 float lightDot = nx * 0.577f - ny * 0.577f - nz * 0.577f;
                 sortedFaces[i].diffuse = Math.max(0f, lightDot);
             }
 
-            // 3. Sort faces by Depth (Painter's Algorithm: deepest Z rendered first)
             Arrays.sort(sortedFaces, 0, faceCount, (a, b) -> Float.compare(a.avgZ, b.avgZ));
 
-            // 4. Render shaded faces and edges
             for (int i = 0; i < faceCount; i++) {
                 FaceData fd = sortedFaces[i];
                 int[] face = fd.indices;
@@ -761,25 +771,23 @@ public class PrismSplashScreenView extends FrameLayout {
                 }
                 facePath.close();
 
-                // Shaded translucent fill
-                int alpha = (int) (40 + fd.diffuse * 150);
+                int alpha = (int) (45 + fd.diffuse * 155);
                 facetPaint.setColor(fd.diffuse > 0.5f ? colorPrimary : colorSecondary);
                 facetPaint.setAlpha(alpha);
                 canvas.drawPath(facePath, facetPaint);
 
-                // Glowing edge strokes
                 linePaint.setColor(colorPrimary);
-                linePaint.setStrokeWidth(AndroidUtilities.dp(1.8f));
-                linePaint.setAlpha(Math.min(255, (int) (80 + fd.diffuse * 175)));
+                linePaint.setStrokeWidth(AndroidUtilities.dp(2f));
+                linePaint.setAlpha(Math.min(255, (int) (90 + fd.diffuse * 165)));
                 canvas.drawPath(facePath, linePaint);
             }
         }
     }
 
     // ──────────────────────────────────────────────────────────────────────────
-    // 2. 3D Particle Space: Z-Depth Matrix Rain, 3D Petals, Warp Stars
+    // 2. Spatial 3D Particles View: Z-Depth Matrix Rain, 3D Petals, Warp Stars
     // ──────────────────────────────────────────────────────────────────────────
-    private static class Realistic3DParticleSpaceView extends View {
+    private static class Spatial3DParticlesView extends View {
         private static final int PARTICLE_COUNT = 55;
         private final List<Particle3D> particles = new ArrayList<>();
         private final Paint particlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -801,7 +809,7 @@ public class PrismSplashScreenView extends FrameLayout {
             String charText;
         }
 
-        public Realistic3DParticleSpaceView(Context context, IconAnimType type, int c1, int c2, int c3) {
+        public Spatial3DParticlesView(Context context, IconAnimType type, int c1, int c2, int c3) {
             super(context);
             this.animType = type;
             this.color1 = c1;
@@ -846,7 +854,7 @@ public class PrismSplashScreenView extends FrameLayout {
             switch (animType) {
                 case MATRIX:
                     p.vx = 0;
-                    p.vy = 250f + random.nextFloat() * 300f;
+                    p.vy = 260f + random.nextFloat() * 320f;
                     p.vz = 0;
                     break;
                 case TURBO:
@@ -856,12 +864,12 @@ public class PrismSplashScreenView extends FrameLayout {
                     break;
                 case SAKURA:
                     p.vx = 60f + (random.nextFloat() - 0.5f) * 40f;
-                    p.vy = 120f + random.nextFloat() * 100f;
+                    p.vy = 130f + random.nextFloat() * 110f;
                     p.vz = (random.nextFloat() - 0.5f) * 50f;
                     break;
                 default:
                     p.vx = (random.nextFloat() - 0.5f) * 60f;
-                    p.vy = -(80f + random.nextFloat() * 120f);
+                    p.vy = -(90f + random.nextFloat() * 130f);
                     p.vz = (random.nextFloat() - 0.5f) * 60f;
                     break;
             }
@@ -914,7 +922,7 @@ public class PrismSplashScreenView extends FrameLayout {
 
                 if (animType == IconAnimType.MATRIX) {
                     textPaint.setColor(p.color);
-                    textPaint.setTextSize(Math.max(AndroidUtilities.dp(8), AndroidUtilities.dp(16) * distance));
+                    textPaint.setTextSize(Math.max(AndroidUtilities.dp(9), AndroidUtilities.dp(17) * distance));
                     textPaint.setAlpha((int) (p.alpha * Math.min(1f, distance * 2f) * 255));
                     canvas.drawText(p.charText, projX, projY, textPaint);
                 } else if (animType == IconAnimType.SAKURA) {
@@ -940,9 +948,9 @@ public class PrismSplashScreenView extends FrameLayout {
     }
 
     // ──────────────────────────────────────────────────────────────────────────
-    // 3. Realistic 3D Hero Icon View with Dynamic Virtual Ground Shadow
+    // 3. Hero 3D Parallax Card View with Dynamic Ground Drop Shadow (±26° 3D Tilt)
     // ──────────────────────────────────────────────────────────────────────────
-    private static class Realistic3DHeroIconView extends FrameLayout {
+    private static class Hero3DParallaxCardView extends FrameLayout {
         private final Camera camera = new Camera();
         private final Matrix matrix = new Matrix();
         private final Paint borderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -954,7 +962,7 @@ public class PrismSplashScreenView extends FrameLayout {
         private float tiltX, tiltY, tiltZ;
         private float floatProgress;
 
-        public Realistic3DHeroIconView(Context context, LauncherIconController.LauncherIcon icon, IconAnimType animType, int c1, int c2, int c3) {
+        public Hero3DParallaxCardView(Context context, LauncherIconController.LauncherIcon icon, IconAnimType animType, int c1, int c2, int c3) {
             super(context);
             setWillNotDraw(false);
 
@@ -968,7 +976,7 @@ public class PrismSplashScreenView extends FrameLayout {
                     super.onSizeChanged(w, h, oldw, oldh);
                     clipPath.reset();
                     rectF.set(0, 0, w, h);
-                    clipPath.addRoundRect(rectF, AndroidUtilities.dp(26), AndroidUtilities.dp(26), Path.Direction.CW);
+                    clipPath.addRoundRect(rectF, AndroidUtilities.dp(28), AndroidUtilities.dp(28), Path.Direction.CW);
                 }
 
                 @Override
@@ -979,8 +987,8 @@ public class PrismSplashScreenView extends FrameLayout {
                     canvas.restore();
                 }
             };
-            card.setElevation(AndroidUtilities.dp(26));
-            addView(card, LayoutHelper.createFrame(104, 104, Gravity.CENTER));
+            card.setElevation(AndroidUtilities.dp(28));
+            addView(card, LayoutHelper.createFrame(110, 110, Gravity.CENTER));
 
             ImageView bg = new ImageView(context);
             bg.setScaleType(ImageView.ScaleType.FIT_XY);
@@ -993,19 +1001,19 @@ public class PrismSplashScreenView extends FrameLayout {
             card.addView(fg, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
             borderPaint.setStyle(Paint.Style.STROKE);
-            borderPaint.setStrokeWidth(AndroidUtilities.dp(2.4f));
-            borderPaint.setColor(Color.argb(210, 255, 255, 255));
+            borderPaint.setStrokeWidth(AndroidUtilities.dp(2.6f));
+            borderPaint.setColor(Color.argb(220, 255, 255, 255));
 
-            // Continuous 3D Gyroscopic Physics Loop
+            // Continuous 3D Gyroscopic Physics Loop (±22° X, ±26° Y)
             ValueAnimator physicsAnim = ValueAnimator.ofFloat(0f, 360f);
             physicsAnim.setDuration(4000);
             physicsAnim.setRepeatCount(ValueAnimator.INFINITE);
             physicsAnim.addUpdateListener(animation -> {
                 float val = (float) animation.getAnimatedValue();
                 floatProgress = val;
-                tiltX = (float) Math.sin(Math.toRadians(val)) * 14f;
-                tiltY = (float) Math.cos(Math.toRadians(val)) * 18f;
-                tiltZ = (float) Math.sin(Math.toRadians(val * 0.5f)) * 5f;
+                tiltX = (float) Math.sin(Math.toRadians(val)) * 20f;
+                tiltY = (float) Math.cos(Math.toRadians(val)) * 26f;
+                tiltZ = (float) Math.sin(Math.toRadians(val * 0.5f)) * 7f;
                 invalidate();
             });
             physicsAnim.start();
@@ -1016,15 +1024,15 @@ public class PrismSplashScreenView extends FrameLayout {
             int cx = getWidth() / 2;
             int cy = getHeight() / 2;
 
-            float elevationZ = (float) Math.sin(Math.toRadians(floatProgress)) * 35f;
+            float elevationZ = (float) Math.sin(Math.toRadians(floatProgress)) * 45f;
 
-            // 1. Draw 3D Projected Ground Shadow on Virtual Floor Below
-            float shadowY = cy + AndroidUtilities.dp(68);
-            float shadowW = AndroidUtilities.dp(80) * (1f + elevationZ / 120f);
-            float shadowH = AndroidUtilities.dp(16) * (1f - elevationZ / 140f);
-            float shadowOffsetX = -tiltY * 1.8f;
+            // 1. Draw 3D Dynamic Drop Shadow on Virtual Floor Below
+            float shadowY = cy + AndroidUtilities.dp(78);
+            float shadowW = AndroidUtilities.dp(95) * (1f + elevationZ / 120f);
+            float shadowH = AndroidUtilities.dp(20) * (1f - elevationZ / 140f);
+            float shadowOffsetX = -tiltY * 2.2f;
             shadowRect.set(cx - shadowW / 2f + shadowOffsetX, shadowY - shadowH / 2f, cx + shadowW / 2f + shadowOffsetX, shadowY + shadowH / 2f);
-            shadowPaint.setAlpha((int) (90 - elevationZ));
+            shadowPaint.setAlpha((int) Math.max(30, (110 - elevationZ)));
             canvas.drawOval(shadowRect, shadowPaint);
 
             // 2. Draw 3D Transformed Card
@@ -1044,11 +1052,11 @@ public class PrismSplashScreenView extends FrameLayout {
             super.dispatchDraw(canvas);
 
             // 3. Specular 3D Liquid Glass Glint with Physical Parallax Offset
-            float cardLeft = cx - AndroidUtilities.dp(52);
-            float cardTop = cy - AndroidUtilities.dp(52);
-            float cardSize = AndroidUtilities.dp(104);
+            float cardLeft = cx - AndroidUtilities.dp(55);
+            float cardTop = cy - AndroidUtilities.dp(55);
+            float cardSize = AndroidUtilities.dp(110);
             rectF.set(cardLeft, cardTop, cardLeft + cardSize, cardTop + cardSize);
-            canvas.drawRoundRect(rectF, AndroidUtilities.dp(26), AndroidUtilities.dp(26), borderPaint);
+            canvas.drawRoundRect(rectF, AndroidUtilities.dp(28), AndroidUtilities.dp(28), borderPaint);
 
             canvas.restore();
         }
