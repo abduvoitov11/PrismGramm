@@ -74,6 +74,7 @@ public class AyuConfig {
             sendOnlinePackets = preferences.getBoolean("sendOnlinePackets", true);
             sendUploadProgress = preferences.getBoolean("sendUploadProgress", true);
             sendOfflinePacketAfterOnline = preferences.getBoolean("sendOfflinePacketAfterOnline", false);
+            org.telegram.messenger.SharedConfig.ghostModeEnabled = isGhostModeActive();
 
             markReadAfterSend = preferences.getBoolean("markReadAfterSend", true);
             useScheduledMessages = preferences.getBoolean("useScheduledMessages", false);
@@ -132,10 +133,21 @@ public class AyuConfig {
         sendUploadProgress = !enabled;
         sendOfflinePacketAfterOnline = enabled;
 
-        AyuConfig.editor.putBoolean("sendReadPackets", AyuConfig.sendReadPackets).apply();
-        AyuConfig.editor.putBoolean("sendOnlinePackets", AyuConfig.sendOnlinePackets).apply();
-        AyuConfig.editor.putBoolean("sendUploadProgress", AyuConfig.sendUploadProgress).apply();
-        AyuConfig.editor.putBoolean("sendOfflinePacketAfterOnline", AyuConfig.sendOfflinePacketAfterOnline).apply();
+        if (AyuConfig.editor != null) {
+            AyuConfig.editor.putBoolean("sendReadPackets", AyuConfig.sendReadPackets);
+            AyuConfig.editor.putBoolean("sendOnlinePackets", AyuConfig.sendOnlinePackets);
+            AyuConfig.editor.putBoolean("sendUploadProgress", AyuConfig.sendUploadProgress);
+            AyuConfig.editor.putBoolean("sendOfflinePacketAfterOnline", AyuConfig.sendOfflinePacketAfterOnline);
+            AyuConfig.editor.apply();
+        }
+
+        org.telegram.messenger.SharedConfig.ghostModeEnabled = enabled;
+        try {
+            if (org.telegram.messenger.ApplicationLoader.applicationContext != null) {
+                org.telegram.messenger.ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE)
+                        .edit().putBoolean("krypton_ghostMode", enabled).apply();
+            }
+        } catch (Throwable ignored) {}
     }
 
     public static void toggleGhostMode() {

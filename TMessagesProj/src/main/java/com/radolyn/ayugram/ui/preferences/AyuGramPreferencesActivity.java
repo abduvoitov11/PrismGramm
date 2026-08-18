@@ -154,6 +154,13 @@ public class AyuGramPreferencesActivity extends BasePreferencesActivity implemen
 
     private void updateGhostViews() {
         var isActive = AyuConfig.isGhostModeActive();
+        org.telegram.messenger.SharedConfig.ghostModeEnabled = isActive;
+        try {
+            if (org.telegram.messenger.ApplicationLoader.applicationContext != null) {
+                org.telegram.messenger.ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", android.app.Activity.MODE_PRIVATE)
+                        .edit().putBoolean("krypton_ghostMode", isActive).apply();
+            }
+        } catch (Throwable ignored) {}
 
         listAdapter.notifyItemChanged(ghostModeToggleRow, payload);
         listAdapter.notifyItemChanged(sendReadPacketsRow, !isActive);

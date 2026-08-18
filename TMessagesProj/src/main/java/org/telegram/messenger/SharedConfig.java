@@ -678,7 +678,12 @@ public class SharedConfig {
             storiesColumnsCount = preferences.getInt("storiesColumnsCount", 3);
             fastScrollHintCount = preferences.getInt("fastScrollHintCount", 3);
             dontAskManageStorage = preferences.getBoolean("dontAskManageStorage", false);
-            ghostModeEnabled = preferences.getBoolean("krypton_ghostMode", false);
+            if (preferences.contains("krypton_ghostMode")) {
+                ghostModeEnabled = preferences.getBoolean("krypton_ghostMode", false);
+                com.radolyn.ayugram.AyuConfig.setGhostMode(ghostModeEnabled);
+            } else {
+                ghostModeEnabled = com.radolyn.ayugram.AyuConfig.isGhostModeActive();
+            }
             mediaDownloaderEnabled = preferences.getBoolean("krypton_mediaDownloader", true);
             hideSponsoredAds = preferences.getBoolean("krypton_hideAds", true);
             antiDeleteInChatEnabled = preferences.getBoolean("krypton_antiDeleteInChat", true);
@@ -689,8 +694,6 @@ public class SharedConfig {
             localProfileEmojiId = preferences.getLong("krypton_localProfileEmojiId", 0);
             localNameColorId = preferences.getInt("krypton_localNameColorId", -2);
             localNameEmojiId = preferences.getLong("krypton_localNameEmojiId", 0);
-
-            com.radolyn.ayugram.AyuConfig.setGhostMode(ghostModeEnabled);
             com.radolyn.ayugram.AyuConfig.saveDeletedMessages = antiDeleteInChatEnabled;
             com.radolyn.ayugram.AyuConfig.saveMessagesHistory = editHistoryEnabled;
             com.radolyn.ayugram.AyuConfig.saveMedia = saveDeletedMediaEnabled;
