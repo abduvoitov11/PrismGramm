@@ -14360,7 +14360,7 @@ public class MessagesStorage extends BaseController {
             if (!messages.isEmpty()) {
                 if (channelId != 0) {
                     dialogsToUpdate.add(-channelId);
-                    state = database.executeFast("UPDATE dialogs SET (last_mid, last_mid_group) = (SELECT mid, group_id FROM messages_v2 WHERE uid = ? AND (flags & " + (1 << 30) + ") = 0 AND date = (SELECT MAX(date) FROM messages_v2 WHERE uid = ? AND (flags & " + (1 << 30) + ") = 0)) WHERE did = ?");
+                    state = database.executeFast("UPDATE dialogs SET (last_mid, last_mid_group) = (SELECT mid, group_id FROM messages_v2 WHERE uid = ? AND (flags & " + (1 << 30) + ") = 0 ORDER BY date DESC, mid DESC LIMIT 1) WHERE did = ?");
                 } else {
                     if (originalDialogId == 0) {
                         String ids = TextUtils.join(",", messages);
@@ -14373,7 +14373,7 @@ public class MessagesStorage extends BaseController {
                     } else {
                         dialogsToUpdate.add(originalDialogId);
                     }
-                    state = database.executeFast("UPDATE dialogs SET (last_mid, last_mid_group) = (SELECT mid, group_id FROM messages_v2 WHERE uid = ? AND (flags & " + (1 << 30) + ") = 0 AND date = (SELECT MAX(date) FROM messages_v2 WHERE uid = ? AND (flags & " + (1 << 30) + ") = 0 AND date != 0)) WHERE did = ?");
+                    state = database.executeFast("UPDATE dialogs SET (last_mid, last_mid_group) = (SELECT mid, group_id FROM messages_v2 WHERE uid = ? AND (flags & " + (1 << 30) + ") = 0 ORDER BY date DESC, mid DESC LIMIT 1) WHERE did = ?");
                 }
                 database.beginTransaction();
                 for (int a = 0; a < dialogsToUpdate.size(); a++) {
@@ -14381,7 +14381,6 @@ public class MessagesStorage extends BaseController {
                     state.requery();
                     state.bindLong(1, did);
                     state.bindLong(2, did);
-                    state.bindLong(3, did);
                     state.step();
                 }
                 state.dispose();

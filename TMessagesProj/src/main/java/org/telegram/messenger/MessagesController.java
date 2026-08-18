@@ -9316,17 +9316,14 @@ public class MessagesController extends BaseController implements NotificationCe
                 }
                 getMessagesStorage().markMessagesAsDeleted(dialogId, messages, true, false, ChatActivity.MODE_QUICK_REPLIES, topicId);
             } else {
-                if (channelId == 0) {
-                    for (int a = 0; a < messages.size(); a++) {
-                        Integer id = messages.get(a);
-                        MessageObject obj = dialogMessagesByIds.get(id);
-                        if (obj != null) {
-                            obj.deleted = true;
-                        }
+                for (int a = 0; a < messages.size(); a++) {
+                    Integer id = messages.get(a);
+                    MessageObject obj = dialogMessagesByIds.get(id);
+                    if (obj != null) {
+                        obj.deleted = true;
                     }
-                } else {
-                    markDialogMessageAsDeleted(dialogId, messages);
                 }
+                markDialogMessageAsDeleted(dialogId, messages);
                 getMessagesStorage().markMessagesAsDeleted(dialogId, messages, true, forAll, 0, topicId);
                 getMessagesStorage().updateDialogsWithDeletedMessages(dialogId, channelId, messages, null);
             }
@@ -13916,7 +13913,7 @@ public class MessagesController extends BaseController implements NotificationCe
                             FileLog.d("processDialogsUpdate oldMsgDeleted " + oldMsgsDeleted);
                         }
                         if (oldMsgs == null || currentDialog.top_message > 0) {
-                            if (oldMsgsDeleted || value.top_message > currentDialog.top_message || (oldMsgs == null) != (newMsgs == null) || oldMsgs != null && newMsgs != null && oldMsgs.size() != newMsgs.size()) {
+                            if (oldMsgsDeleted || value.top_message != currentDialog.top_message || (oldMsgs == null) != (newMsgs == null) || oldMsgs != null && newMsgs != null && oldMsgs.size() != newMsgs.size()) {
                                 dialogs_dict.put(key, value);
                                 dialogMessage.put(key, newMsgs);
                                 for (int i = 0; oldMsgs != null && i < oldMsgs.size(); ++i) {
@@ -13958,7 +13955,7 @@ public class MessagesController extends BaseController implements NotificationCe
                                 }
                             }
                         } else {
-                            if (oldMsgsDeleted || messagesMaxDate(newMsgs) > messagesMaxDate(oldMsgs)) {
+                            if (oldMsgsDeleted || value.top_message != currentDialog.top_message || messagesMaxDate(newMsgs) > messagesMaxDate(oldMsgs)) {
                                 dialogs_dict.put(key, value);
                                 dialogMessage.put(key, newMsgs);
                                 if (oldMsgs != null) {
