@@ -3113,6 +3113,12 @@
     <string name="KryptonSettingsInfo">Ghost Mode, media downloader, anti-delete archive</string>
     <string name="KryptonGhostMode">Ghost Mode</string>
     <string name="KryptonGhostModeInfo">When enabled, others won\'t see that you\'re online, typing, or that you\'ve read their messages — in private chats, groups, and channels. Story views are hidden too. Your own chat experience stays completely normal.</string>
+    <string name="PrismChipGhost">Ghost</string>
+    <string name="PrismChipMedia">Media</string>
+    <string name="PrismChipArchive">Archive</string>
+    <string name="PrismChipDayMode">Day</string>
+    <string name="PrismChipNightMode">Night</string>
+    <string name="PrismPremium">Prism Premium</string>
     <string name="ChangePasscode">Change Passcode</string>
     <string name="ChangePasscodeInfo">When you set up an additional passcode, a lock icon will appear on the chats page. Tap it to lock and unlock your Telegram app.\n\nNote: if you forget the passcode, you\'ll need to delete and reinstall the app. All secret chats will be lost.</string>
     <string name="ChangePasscodeInfoShort">When you set up a passcode, a lock icon will apear on the chats page. Tap it to lock and unlock the app.</string>

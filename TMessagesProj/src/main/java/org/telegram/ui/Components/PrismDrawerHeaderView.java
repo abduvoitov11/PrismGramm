@@ -141,7 +141,7 @@ public class PrismDrawerHeaderView extends LinearLayout {
 
         // Chip 1: Ghost Mode (Ruh rejimi)
         boolean isGhost = com.radolyn.ayugram.AyuConfig.isGhostModeActive();
-        ghostChip = new QuickChipView(context, R.drawable.msg_secret, "Ghost", isGhost ? 0xFF00E676 : 0xFF9E9E9E, isGhost);
+        ghostChip = new QuickChipView(context, R.drawable.msg_secret, LocaleController.getString(R.string.PrismChipGhost), isGhost ? 0xFF00E676 : 0xFF9E9E9E, isGhost);
         ghostChip.setOnClickListener(v -> {
             com.radolyn.ayugram.AyuConfig.toggleGhostMode();
             boolean active = com.radolyn.ayugram.AyuConfig.isGhostModeActive();
@@ -150,7 +150,7 @@ public class PrismDrawerHeaderView extends LinearLayout {
         chipsGrid.addView(ghostChip, LayoutHelper.createLinear(0, LayoutHelper.WRAP_CONTENT, 1.0f, 0, 0, 4, 0));
 
         // Chip 2: Media Downloader
-        downloaderChip = new QuickChipView(context, R.drawable.msg_download, "Media", 0xFF00B0FF, false);
+        downloaderChip = new QuickChipView(context, R.drawable.msg_download, LocaleController.getString(R.string.PrismChipMedia), 0xFF00B0FF, false);
         downloaderChip.setOnClickListener(v -> {
             if (onDismissMenu != null) onDismissMenu.run();
             if (parentFragment != null) {
@@ -160,7 +160,7 @@ public class PrismDrawerHeaderView extends LinearLayout {
         chipsGrid.addView(downloaderChip, LayoutHelper.createLinear(0, LayoutHelper.WRAP_CONTENT, 1.0f, 2, 0, 2, 0));
 
         // Chip 3: Deleted Messages Archive
-        archiveChip = new QuickChipView(context, R.drawable.msg_delete, "Arxiv", 0xFFFF5252, false);
+        archiveChip = new QuickChipView(context, R.drawable.msg_delete, LocaleController.getString(R.string.PrismChipArchive), 0xFFFF5252, false);
         archiveChip.setOnClickListener(v -> {
             if (onDismissMenu != null) onDismissMenu.run();
             if (parentFragment != null) {
@@ -171,7 +171,9 @@ public class PrismDrawerHeaderView extends LinearLayout {
 
         // Chip 4: Theme Toggle (Day / Night)
         boolean isDark = Theme.isCurrentThemeDark();
-        themeChip = new QuickChipView(context, isDark ? R.drawable.menu_day_mode_24 : R.drawable.menu_night_mode_24, isDark ? "Kunduzgi" : "Tungi", 0xFFFFAB00, isDark);
+        themeChip = new QuickChipView(context, isDark ? R.drawable.menu_day_mode_24 : R.drawable.menu_night_mode_24,
+                isDark ? LocaleController.getString(R.string.PrismChipDayMode) : LocaleController.getString(R.string.PrismChipNightMode),
+                0xFFFFAB00, isDark);
         themeChip.setOnClickListener(v -> {
             if (onDismissMenu != null) onDismissMenu.run();
             toggleTheme();
@@ -192,7 +194,7 @@ public class PrismDrawerHeaderView extends LinearLayout {
             } else if (!TextUtils.isEmpty(user.phone)) {
                 subtitleTextView.setText("+" + user.phone);
             } else {
-                subtitleTextView.setText("Prism Premium");
+                subtitleTextView.setText(LocaleController.getString(R.string.PrismPremium));
             }
 
             avatarContainer.setUser(user);
