@@ -6815,6 +6815,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 if (user.photo.dc_id != 0) {
                     user.photo.photo_big.dc_id = user.photo.dc_id;
                 }
+                if (carouselImageLocation == null) {
+                    carouselImageLocation = ImageLocation.getForUserOrChat(currentAccount, user, ImageLocation.TYPE_BIG);
+                }
                 TLRPC.FileLocation fileLocation = carouselImageLocation != null && carouselImageLocation.location != null ? carouselImageLocation.location : user.photo.photo_big;
                 TLRPC.Photo photo = carouselPhoto;
                 if (photo == null && userInfo != null) {
@@ -6839,10 +6842,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             }
         } else if (chatId != 0) {
             TLRPC.Chat chat = getMessagesController().getChat(chatId);
-            if (chat.photo != null && chat.photo.photo_big != null) {
+            if (chat != null && chat.photo != null && chat.photo.photo_big != null) {
                 PhotoViewer.getInstance().setParentActivity(ProfileActivity.this);
                 if (chat.photo.dc_id != 0) {
                     chat.photo.photo_big.dc_id = chat.photo.dc_id;
+                }
+                if (carouselImageLocation == null) {
+                    carouselImageLocation = ImageLocation.getForUserOrChat(currentAccount, chat, ImageLocation.TYPE_BIG);
                 }
                 TLRPC.FileLocation fileLocation = carouselImageLocation != null && carouselImageLocation.location != null ? carouselImageLocation.location : chat.photo.photo_big;
                 TLRPC.Photo photo = carouselPhoto;

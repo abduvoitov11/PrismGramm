@@ -14434,16 +14434,32 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         } else if (fileLocation != null) {
             avatarsDialogId = object != null ? object.dialogId : 0;
             canEditAvatar = object != null && object.canEdit;
-            if (imageLocation == null && avatarsDialogId != 0) {
-                if (avatarsDialogId > 0) {
-                    TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(avatarsDialogId);
-                    imageLocation = ImageLocation.getForUserOrChat(currentAccount, user, ImageLocation.TYPE_BIG);
-                } else {
-                    TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(-avatarsDialogId);
-                    imageLocation = ImageLocation.getForUserOrChat(currentAccount, chat, ImageLocation.TYPE_BIG);
+            if (imageLocation == null) {
+                if (avatarsDialogId != 0) {
+                    if (avatarsDialogId > 0) {
+                        TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(avatarsDialogId);
+                        imageLocation = ImageLocation.getForUserOrChat(currentAccount, user, ImageLocation.TYPE_BIG);
+                    } else {
+                        TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(-avatarsDialogId);
+                        imageLocation = ImageLocation.getForUserOrChat(currentAccount, chat, ImageLocation.TYPE_BIG);
+                    }
+                }
+                if (imageLocation == null && currentDialogId != 0) {
+                    avatarsDialogId = currentDialogId;
+                    if (avatarsDialogId > 0) {
+                        TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(avatarsDialogId);
+                        imageLocation = ImageLocation.getForUserOrChat(currentAccount, user, ImageLocation.TYPE_BIG);
+                    } else {
+                        TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(-avatarsDialogId);
+                        imageLocation = ImageLocation.getForUserOrChat(currentAccount, chat, ImageLocation.TYPE_BIG);
+                    }
+                }
+                if (imageLocation == null) {
+                    imageLocation = ImageLocation.getForLocal(fileLocation);
                 }
             }
             if (imageLocation == null) {
+                closePhoto(false, false);
                 return;
             }
             imagesArrLocations.add(imageLocation);
