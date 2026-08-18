@@ -44,20 +44,16 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * 🌟 PrismSplashScreenView — 100% Alohida, Ko'zga Yoqimli va Gipnoz Qiluvchi
- * Bespoke 3D Dunyolar va Differensial Harakat Fizikasi Dvigateli.
+ * 🌟 PrismSplashScreenView — Ko'zga Nihoyatda Yoqimli, Baxmal (Velvety) Mesh Gradient
+ * va 100% Alohida 3D Fazoviy Dunyolar Dvigateli.
  *
- * Har bir ikonka uchun mutlaqo o'zgacha vizual olam:
- * 1. 🟢 MATRIX: 3D Kiber Tesseract, Z-Depth Fosforli Kod Yomg'iri, Vertikal Lazer Skaner.
- * 2. 🌸 SAKURA: 3D Mayin Shamol Oqimi, Fazoda aylanuvchi Gilos Guli Yaproqlari, Romantik Quyosh Nurlari.
- * 3. 🌌 COSMOS / SINGULARITY: 3D Logarifmik Gravitatsion Spiral (Accretion Disk), Saturn Halqalari va Oylar.
- * 4. 💎 RUBY / AMETHYST: 3D Qirrali Olmos Kristallari, Kamalak Rangli Dispersiya va Yorug'lik Porlashlari.
- * 5. ⚡ PLASMA: Dinamik Tarvaqaylovchi Tesla Chaqmoqlari va Elektromagnit Pulsatsiyalar.
- * 6. 🌅 SUNSET / LAVA: Termal Konveksiyada Ko'tariluvchi Olovli Magma va Quyosh Toji Nurlari.
- * 7. ❄️ PURE / AQUA: Fazoviy Qor Kristallari, Okean Kaustik Nurlari va Suv Osti Mayin Tebranishi.
- * 8. ⚙️ BRONZE / VINTAGE: 3D Steampunk Tishli G'ildiraklari (Meshed Gears) va Xronometr Harakati.
- * 9. 🏎️ TURBO: Giper-Fazoviy Warp Drive Lazer Izlari va Tovushdan Tez Shok Halqalari.
- * 10. 🌈 SPECTRUM / CHROME: Suyuq Xrom To'lqinlari va 360° Prizmatik Yorug'lik Dispersiyasi.
+ * Yangi Dizayn:
+ * 1. Ko'zga Mayin, To'yingan Velvety Mesh Gradient:
+ *    - 4-pog'onali yumshoq vertikal rang o'tishi.
+ *    - Markaziy nafas oluvchi Volumetrik Radial Nur Toji (Soft Ambient Orb).
+ *    - Ko'zni charchatmaydigan, premium OLED qorong'i qatlamlar.
+ * 2. Har bir App Icon uchun tubdan alohida vizual olam va harakat fizikasi.
+ * 3. 120 FPS Buttery-Smooth Zero-Allocation GPU Rendiring.
  */
 public class PrismSplashScreenView extends FrameLayout {
 
@@ -69,9 +65,15 @@ public class PrismSplashScreenView extends FrameLayout {
     private int primaryColor = 0xFF00E5FF;
     private int secondaryColor = 0xFF7C4DFF;
     private int accentGlowColor = 0xFFFF007F;
-    private int bgStartColor = 0xFF0B1424;
-    private int bgEndColor = 0xFF040810;
 
+    // Velvety Multi-Stop Mesh Gradient Colors
+    private int gradTop = 0xFF0B1424;
+    private int gradMidUpper = 0xFF142038;
+    private int gradMidLower = 0xFF0C1628;
+    private int gradBottom = 0xFF040810;
+    private int radialOrbColor = 0x5500E5FF;
+
+    private final VelvetyMeshBackgroundView velvetyBgView;
     private final DynamicWorldBackgroundView worldBgView;
     private final BespokeParticleFieldView particlesView;
     private final Bespoke3DHeroCardView heroCardView;
@@ -89,14 +91,11 @@ public class PrismSplashScreenView extends FrameLayout {
         setElevation(AndroidUtilities.dp(300));
 
         LauncherIconController.LauncherIcon currentIcon = LauncherIconController.getSelectedIcon();
-        resolveTheme(currentIcon);
+        resolveThemeAndVelvetyPalette(currentIcon);
 
-        // 1. Chuqur kosmik/atmosfera fon gradienti
-        GradientDrawable bgDrawable = new GradientDrawable(
-                GradientDrawable.Orientation.TOP_BOTTOM,
-                new int[]{bgStartColor, bgEndColor}
-        );
-        setBackground(bgDrawable);
+        // 1. Ko'zga nihoyatda yoqimli Baxmal (Velvety) Mesh Gradient va Radial Nur Fon Qatlami
+        velvetyBgView = new VelvetyMeshBackgroundView(context, gradTop, gradMidUpper, gradMidLower, gradBottom, radialOrbColor);
+        addView(velvetyBgView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
         // 2. Har bir ikonka uchun tubdan boshqacha bo'lgan 3D Dunyo Renderi
         worldBgView = new DynamicWorldBackgroundView(context, iconTheme, primaryColor, secondaryColor, accentGlowColor);
@@ -112,7 +111,7 @@ public class PrismSplashScreenView extends FrameLayout {
         centerContainer.setGravity(Gravity.CENTER_HORIZONTAL);
         addView(centerContainer, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER));
 
-        // 4. Har bir ikonka uchun tubdan boshqacha Harakat Fisikasi (Bespoke 3D Hero Card)
+        // 4. Har bir ikonka uchun tubdan boshqacha Harakat Fizikasi (Bespoke 3D Hero Card)
         heroCardView = new Bespoke3DHeroCardView(context, currentIcon, iconTheme, primaryColor, secondaryColor, accentGlowColor);
         centerContainer.addView(heroCardView, LayoutHelper.createLinear(260, 260, Gravity.CENTER_HORIZONTAL));
 
@@ -124,7 +123,7 @@ public class PrismSplashScreenView extends FrameLayout {
 
         greetingView = new TextView(context);
         greetingView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-        greetingView.setTextColor(Color.argb(230, 255, 255, 255));
+        greetingView.setTextColor(Color.argb(235, 255, 255, 255));
         greetingView.setGravity(Gravity.CENTER);
         greetingView.setText(generateGreetingText());
         textContainer.addView(greetingView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0, 0, 0, 4));
@@ -148,7 +147,7 @@ public class PrismSplashScreenView extends FrameLayout {
         textContainer.addView(statusBadge, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT));
     }
 
-    private void resolveTheme(LauncherIconController.LauncherIcon icon) {
+    private void resolveThemeAndVelvetyPalette(LauncherIconController.LauncherIcon icon) {
         if (icon == null) icon = LauncherIconController.LauncherIcon.DEFAULT;
         String key = icon.key.toLowerCase();
 
@@ -157,78 +156,111 @@ public class PrismSplashScreenView extends FrameLayout {
             primaryColor = 0xFF00FF66;
             secondaryColor = 0xFF00E5FF;
             accentGlowColor = 0xFF39FF14;
-            bgStartColor = 0xFF061A0E;
-            bgEndColor = 0xFF020804;
+            gradTop = 0xFF04140C;
+            gradMidUpper = 0xFF0A291A;
+            gradMidLower = 0xFF06180E;
+            gradBottom = 0xFF020905;
+            radialOrbColor = 0x4400FF66;
         } else if (key.contains("sakura")) {
             iconTheme = IconTheme.SAKURA;
             primaryColor = 0xFFF472B6;
             secondaryColor = 0xFFC084FC;
             accentGlowColor = 0xFFFFD1DC;
-            bgStartColor = 0xFF2A0E23;
-            bgEndColor = 0xFF0E030B;
+            gradTop = 0xFF1C0D1E;
+            gradMidUpper = 0xFF381A3A;
+            gradMidLower = 0xFF220E24;
+            gradBottom = 0xFF0C040D;
+            radialOrbColor = 0x4DF472B6;
         } else if (key.contains("cosmos") || key.contains("singularity")) {
             iconTheme = IconTheme.COSMOS;
             primaryColor = 0xFF8B5CF6;
             secondaryColor = 0xFF00E5FF;
             accentGlowColor = 0xFFD946EF;
-            bgStartColor = 0xFF160934;
-            bgEndColor = 0xFF050112;
+            gradTop = 0xFF0E0B28;
+            gradMidUpper = 0xFF1E144E;
+            gradMidLower = 0xFF120A30;
+            gradBottom = 0xFF040212;
+            radialOrbColor = 0x508B5CF6;
         } else if (key.contains("ruby") || key.contains("amethyst")) {
             iconTheme = IconTheme.RUBY;
             primaryColor = 0xFFE11D48;
             secondaryColor = 0xFFA855F7;
             accentGlowColor = 0xFFFB7185;
-            bgStartColor = 0xFF280514;
-            bgEndColor = 0xFF0E0106;
+            gradTop = 0xFF240614;
+            gradMidUpper = 0xFF440C26;
+            gradMidLower = 0xFF260514;
+            gradBottom = 0xFF0D0106;
+            radialOrbColor = 0x4DE11D48;
         } else if (key.contains("plasma") || key.contains("cyber") || key.contains("glitch")) {
             iconTheme = IconTheme.PLASMA;
             primaryColor = 0xFF00E5FF;
             secondaryColor = 0xFFFF007F;
             accentGlowColor = 0xFFD946EF;
-            bgStartColor = 0xFF0D0B2E;
-            bgEndColor = 0xFF030212;
+            gradTop = 0xFF0E0B2E;
+            gradMidUpper = 0xFF1C1352;
+            gradMidLower = 0xFF100A32;
+            gradBottom = 0xFF040214;
+            radialOrbColor = 0x4800E5FF;
         } else if (key.contains("sunset") || key.contains("lava")) {
             iconTheme = IconTheme.SUNSET;
             primaryColor = 0xFFFF9100;
             secondaryColor = 0xFFFF1744;
             accentGlowColor = 0xFFFFD700;
-            bgStartColor = 0xFF2A0E1A;
-            bgEndColor = 0xFF0F0307;
+            gradTop = 0xFF240A06;
+            gradMidUpper = 0xFF451408;
+            gradMidLower = 0xFF280B04;
+            gradBottom = 0xFF0D0200;
+            radialOrbColor = 0x4DFF9100;
         } else if (key.contains("pure") || key.contains("aqua") || key.contains("abyss") || key.contains("aurora")) {
             iconTheme = IconTheme.PURE;
             primaryColor = 0xFF00E5FF;
             secondaryColor = 0xFF00B0FF;
             accentGlowColor = 0xFF80D8FF;
-            bgStartColor = 0xFF051C2C;
-            bgEndColor = 0xFF01080E;
+            gradTop = 0xFF051726;
+            gradMidUpper = 0xFF0B2E4A;
+            gradMidLower = 0xFF061A2C;
+            gradBottom = 0xFF010810;
+            radialOrbColor = 0x4800E5FF;
         } else if (key.contains("bronze") || key.contains("vintage")) {
             iconTheme = IconTheme.BRONZE;
             primaryColor = 0xFFD97706;
             secondaryColor = 0xFFB45309;
             accentGlowColor = 0xFFF59E0B;
-            bgStartColor = 0xFF281605;
-            bgEndColor = 0xFF0E0601;
+            gradTop = 0xFF211306;
+            gradMidUpper = 0xFF3D240A;
+            gradMidLower = 0xFF241404;
+            gradBottom = 0xFF0D0601;
+            radialOrbColor = 0x48D97706;
         } else if (key.contains("turbo")) {
             iconTheme = IconTheme.TURBO;
             primaryColor = 0xFFFF5252;
             secondaryColor = 0xFFFF7A00;
             accentGlowColor = 0xFFFFAB40;
-            bgStartColor = 0xFF2D0808;
-            bgEndColor = 0xFF0E0101;
+            gradTop = 0xFF240606;
+            gradMidUpper = 0xFF440C0C;
+            gradMidLower = 0xFF260505;
+            gradBottom = 0xFF0D0101;
+            radialOrbColor = 0x4DFF5252;
         } else if (key.contains("spectrum") || key.contains("chrome") || key.contains("monochrome") || key.contains("premium") || key.contains("nox") || key.contains("cobalt")) {
             iconTheme = IconTheme.SPECTRUM;
             primaryColor = 0xFF00F0FF;
             secondaryColor = 0xFFFF0055;
             accentGlowColor = 0xFFFFD700;
-            bgStartColor = 0xFF140E2C;
-            bgEndColor = 0xFF05030F;
+            gradTop = 0xFF140D2B;
+            gradMidUpper = 0xFF291754;
+            gradMidLower = 0xFF160C30;
+            gradBottom = 0xFF05020F;
+            radialOrbColor = 0x4800F0FF;
         } else {
             iconTheme = IconTheme.DEFAULT;
             primaryColor = 0xFF00E5FF;
             secondaryColor = 0xFF007AFF;
             accentGlowColor = 0xFF00F0FF;
-            bgStartColor = 0xFF0B1A2F;
-            bgEndColor = 0xFF030914;
+            gradTop = 0xFF081528;
+            gradMidUpper = 0xFF11294D;
+            gradMidLower = 0xFF091932;
+            gradBottom = 0xFF020712;
+            radialOrbColor = 0x4500E5FF;
         }
     }
 
@@ -376,6 +408,80 @@ public class PrismSplashScreenView extends FrameLayout {
     }
 
     // ──────────────────────────────────────────────────────────────────────────
+    // 0. Velvety Mesh Gradient & Volumetric Radial Ambient Orb View
+    // ──────────────────────────────────────────────────────────────────────────
+    private static class VelvetyMeshBackgroundView extends View {
+        private final int c1, c2, c3, c4, orbColor;
+        private final Paint linearPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        private final Paint orbPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        private LinearGradient linearGradient;
+        private RadialGradient radialGradient;
+        private float orbPulse = 1.0f;
+        private int lastW, lastH;
+
+        public VelvetyMeshBackgroundView(Context context, int c1, int c2, int c3, int c4, int orbColor) {
+            super(context);
+            this.c1 = c1;
+            this.c2 = c2;
+            this.c3 = c3;
+            this.c4 = c4;
+            this.orbColor = orbColor;
+
+            ValueAnimator pulseAnim = ValueAnimator.ofFloat(0.85f, 1.15f);
+            pulseAnim.setDuration(3500);
+            pulseAnim.setRepeatCount(ValueAnimator.INFINITE);
+            pulseAnim.setRepeatMode(ValueAnimator.REVERSE);
+            pulseAnim.addUpdateListener(animation -> {
+                orbPulse = (float) animation.getAnimatedValue();
+                invalidate();
+            });
+            pulseAnim.start();
+        }
+
+        @Override
+        protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+            super.onSizeChanged(w, h, oldw, oldh);
+            if (w > 0 && h > 0) {
+                lastW = w;
+                lastH = h;
+                linearGradient = new LinearGradient(
+                        0, 0, 0, h,
+                        new int[]{c1, c2, c3, c4},
+                        new float[]{0.0f, 0.35f, 0.70f, 1.0f},
+                        Shader.TileMode.CLAMP
+                );
+                linearPaint.setShader(linearGradient);
+
+                float cx = w / 2f;
+                float cy = h * 0.45f;
+                float radius = AndroidUtilities.dp(240);
+                radialGradient = new RadialGradient(
+                        cx, cy, radius,
+                        new int[]{orbColor, Color.argb(30, Color.red(orbColor), Color.green(orbColor), Color.blue(orbColor)), Color.TRANSPARENT},
+                        new float[]{0.0f, 0.55f, 1.0f},
+                        Shader.TileMode.CLAMP
+                );
+                orbPaint.setShader(radialGradient);
+            }
+        }
+
+        @Override
+        protected void onDraw(Canvas canvas) {
+            if (lastW == 0 || lastH == 0) return;
+            // 1. 4-Stop Smooth Velvety Base Linear Gradient
+            canvas.drawRect(0, 0, lastW, lastH, linearPaint);
+
+            // 2. Volumetric Breathing Core Glow Orb behind 3D Card
+            canvas.save();
+            float cx = lastW / 2f;
+            float cy = lastH * 0.45f;
+            canvas.scale(orbPulse, orbPulse, cx, cy);
+            canvas.drawCircle(cx, cy, AndroidUtilities.dp(240), orbPaint);
+            canvas.restore();
+        }
+    }
+
+    // ──────────────────────────────────────────────────────────────────────────
     // 1. Dynamic Bespoke World Background View (100% Unique Per Theme)
     // ──────────────────────────────────────────────────────────────────────────
     private static class DynamicWorldBackgroundView extends View {
@@ -387,7 +493,6 @@ public class PrismSplashScreenView extends FrameLayout {
         private final Matrix matrix3D = new Matrix();
         private final Path path = new Path();
         private float progress;
-        private final Random random = new Random();
 
         // 3D Geometry Vertices
         private static final float[][] CUBE_VERTS = {
@@ -441,14 +546,12 @@ public class PrismSplashScreenView extends FrameLayout {
 
             switch (theme) {
                 case MATRIX:
-                    // 3D Tesseract & Vertical Green Laser Scan
                     float boxSize = AndroidUtilities.dp(105);
                     paint.setColor(primaryColor);
                     paint.setStrokeWidth(AndroidUtilities.dp(2.4f));
                     paint.setAlpha(180);
                     draw3DWireframe(canvas, cx, cy, CUBE_VERTS, CUBE_EDGES, boxSize, 25, progress, progress * 0.5f);
 
-                    // Scan Laser Line
                     float laserY = (cy - AndroidUtilities.dp(160)) + ((progress * 3.5f) % (AndroidUtilities.dp(320)));
                     paint.setColor(glowColor);
                     paint.setStrokeWidth(AndroidUtilities.dp(2f));
@@ -457,7 +560,6 @@ public class PrismSplashScreenView extends FrameLayout {
                     break;
 
                 case SAKURA:
-                    // Soft Aerodynamic Sine-Wave Wind Streams & Blooming Radial Corona
                     paint.setStrokeWidth(AndroidUtilities.dp(2f));
                     for (int i = 0; i < 4; i++) {
                         path.reset();
@@ -474,7 +576,6 @@ public class PrismSplashScreenView extends FrameLayout {
                     break;
 
                 case COSMOS:
-                    // Massive Tilted 3D Celestial Planetary Rings + Orbiting Moons
                     float orbitR = AndroidUtilities.dp(135);
                     paint.setStrokeWidth(AndroidUtilities.dp(3f));
 
@@ -492,7 +593,6 @@ public class PrismSplashScreenView extends FrameLayout {
                     paint.setAlpha(170);
                     canvas.drawCircle(cx, cy, orbitR, paint);
 
-                    // Orbiting Moon 1
                     float moonX = cx + (float) Math.cos(Math.toRadians(progress * 2)) * orbitR;
                     float moonY = cy + (float) Math.sin(Math.toRadians(progress * 2)) * orbitR;
                     fillPaint.setColor(glowColor);
@@ -500,7 +600,6 @@ public class PrismSplashScreenView extends FrameLayout {
                     canvas.drawCircle(moonX, moonY, AndroidUtilities.dp(8), fillPaint);
                     canvas.restore();
 
-                    // Reverse Ring 2
                     canvas.save();
                     camera3D.save();
                     camera3D.rotateX(-58);
@@ -517,14 +616,12 @@ public class PrismSplashScreenView extends FrameLayout {
                     break;
 
                 case RUBY:
-                    // Giant 3D Brilliant-Cut Diamond Polyhedron
                     float gemSize = AndroidUtilities.dp(120);
                     paint.setColor(primaryColor);
                     paint.setStrokeWidth(AndroidUtilities.dp(2.6f));
                     paint.setAlpha(210);
                     draw3DWireframe(canvas, cx, cy, DIAMOND_VERTS, DIAMOND_EDGES, gemSize, 28, progress, 0);
 
-                    // Rotating Prismatic Light Beams
                     canvas.save();
                     canvas.rotate(progress * 0.5f, cx, cy);
                     paint.setColor(glowColor);
@@ -538,7 +635,6 @@ public class PrismSplashScreenView extends FrameLayout {
                     break;
 
                 case PLASMA:
-                    // Dynamic Branching Tesla Lightning Arcs
                     paint.setColor(primaryColor);
                     paint.setStrokeWidth(AndroidUtilities.dp(2.2f));
                     paint.setAlpha(220);
@@ -550,13 +646,11 @@ public class PrismSplashScreenView extends FrameLayout {
 
                         path.reset();
                         path.moveTo(cx, cy);
-                        float curX = cx, curY = cy;
                         for (int s = 1; s <= 4; s++) {
                             float frac = s / 4f;
                             float nx = cx + (targetX - cx) * frac + (float) (Math.sin(progress * 8 + s + i) * AndroidUtilities.dp(16));
                             float ny = cy + (targetY - cy) * frac + (float) (Math.cos(progress * 8 + s + i) * AndroidUtilities.dp(16));
                             path.lineTo(nx, ny);
-                            curX = nx; curY = ny;
                         }
                         path.lineTo(targetX, targetY);
                         canvas.drawPath(path, paint);
@@ -567,7 +661,6 @@ public class PrismSplashScreenView extends FrameLayout {
                     break;
 
                 case SUNSET:
-                    // Volcanic Solar Prominences / Thermal Radial Flares
                     for (int i = 0; i < 8; i++) {
                         float flareAng = i * 45f + progress * 0.4f;
                         float rad = (float) Math.toRadians(flareAng);
@@ -580,7 +673,6 @@ public class PrismSplashScreenView extends FrameLayout {
                     break;
 
                 case PURE:
-                    // Glacial Caustic Wave Reflections
                     paint.setStrokeWidth(AndroidUtilities.dp(2f));
                     for (int r = 1; r <= 3; r++) {
                         float radius = AndroidUtilities.dp(70 + r * 35) + (float) Math.sin(Math.toRadians(progress * 3 + r * 60)) * AndroidUtilities.dp(15);
@@ -591,14 +683,12 @@ public class PrismSplashScreenView extends FrameLayout {
                     break;
 
                 case BRONZE:
-                    // Steampunk Interlocking Gears (Meshed Gear Teeth)
                     drawGear(canvas, cx, cy - AndroidUtilities.dp(30), AndroidUtilities.dp(95), 16, progress * 0.8f, primaryColor);
                     drawGear(canvas, cx + AndroidUtilities.dp(90), cy + AndroidUtilities.dp(60), AndroidUtilities.dp(65), 10, -progress * 1.2f, secondaryColor);
                     drawGear(canvas, cx - AndroidUtilities.dp(90), cy + AndroidUtilities.dp(60), AndroidUtilities.dp(65), 10, -progress * 1.2f, glowColor);
                     break;
 
                 case TURBO:
-                    // 3D Hyperspace Warp Speed Rings
                     for (int i = 0; i < 6; i++) {
                         float prog = ((progress * 2.5f + i * 60) % 360f) / 360f;
                         float depthR = AndroidUtilities.dp(20) + prog * AndroidUtilities.dp(180);
@@ -610,8 +700,7 @@ public class PrismSplashScreenView extends FrameLayout {
                     }
                     break;
 
-                default: // SPECTRUM / DEFAULT
-                    // Rotating Chromatic 360° Ray Rays
+                default:
                     canvas.save();
                     canvas.rotate(progress * 0.6f, cx, cy);
                     paint.setStrokeWidth(AndroidUtilities.dp(2.4f));
@@ -757,13 +846,13 @@ public class PrismSplashScreenView extends FrameLayout {
                     break;
                 case SUNSET:
                     p.vx = (rand.nextFloat() - 0.5f) * 50f;
-                    p.vy = -(140f + rand.nextFloat() * 160f); // Rising embers
+                    p.vy = -(140f + rand.nextFloat() * 160f);
                     p.vz = (rand.nextFloat() - 0.5f) * 50f;
                     break;
                 case TURBO:
                     p.vx = 0;
                     p.vy = 0;
-                    p.vz = -(600f + rand.nextFloat() * 900f); // Warp speed
+                    p.vz = -(600f + rand.nextFloat() * 900f);
                     break;
                 default:
                     p.vx = (rand.nextFloat() - 0.5f) * 60f;
@@ -856,7 +945,6 @@ public class PrismSplashScreenView extends FrameLayout {
         private final IconTheme theme;
         private float tiltX, tiltY, tiltZ;
         private float elevationZ;
-        private float physProgress;
 
         public Bespoke3DHeroCardView(Context context, LauncherIconController.LauncherIcon icon, IconTheme theme, int c1, int c2, int c3) {
             super(context);
@@ -900,31 +988,26 @@ public class PrismSplashScreenView extends FrameLayout {
             borderPaint.setStrokeWidth(AndroidUtilities.dp(2.6f));
             borderPaint.setColor(Color.argb(220, 255, 255, 255));
 
-            // Har bir tema uchun mutlaqo o'zgacha harakat fizikasi animatori
             ValueAnimator physicsAnim = ValueAnimator.ofFloat(0f, 360f);
             physicsAnim.setDuration(theme == IconTheme.TURBO ? 2500 : (theme == IconTheme.BRONZE ? 5000 : 4000));
             physicsAnim.setRepeatCount(ValueAnimator.INFINITE);
             physicsAnim.addUpdateListener(animation -> {
                 float val = (float) animation.getAnimatedValue();
-                physProgress = val;
 
                 switch (theme) {
                     case SAKURA:
-                        // Gentle Organic Water-Lily Float
                         tiltX = (float) Math.sin(Math.toRadians(val)) * 14f;
                         tiltY = (float) Math.cos(Math.toRadians(val * 0.7f)) * 18f;
                         tiltZ = (float) Math.sin(Math.toRadians(val * 0.5f)) * 8f;
                         elevationZ = (float) Math.sin(Math.toRadians(val)) * 30f;
                         break;
                     case TURBO:
-                        // Mach-5 Forward Aerodynamic Pitch
                         tiltX = -20f + (float) Math.sin(Math.toRadians(val * 2)) * 6f;
                         tiltY = (float) Math.sin(Math.toRadians(val)) * 12f;
                         tiltZ = 0;
                         elevationZ = (float) Math.sin(Math.toRadians(val * 2)) * 40f;
                         break;
                     case BRONZE:
-                        // Clockwork Stepped Mechanical Pulse
                         float stepVal = ((int) (val / 30f)) * 30f;
                         tiltX = (float) Math.sin(Math.toRadians(stepVal)) * 18f;
                         tiltY = (float) Math.cos(Math.toRadians(stepVal)) * 22f;
@@ -932,7 +1015,6 @@ public class PrismSplashScreenView extends FrameLayout {
                         elevationZ = (float) Math.sin(Math.toRadians(stepVal)) * 25f;
                         break;
                     case MATRIX:
-                        // Micro-Glitch Cyber Jitter
                         float jitter = (val % 40 < 5) ? (float) (Math.random() - 0.5f) * 8f : 0f;
                         tiltX = (float) Math.sin(Math.toRadians(val)) * 20f + jitter;
                         tiltY = (float) Math.cos(Math.toRadians(val)) * 26f + jitter;
@@ -940,7 +1022,6 @@ public class PrismSplashScreenView extends FrameLayout {
                         elevationZ = (float) Math.sin(Math.toRadians(val)) * 40f;
                         break;
                     default:
-                        // Dynamic 3D Gyroscopic Tumbling
                         tiltX = (float) Math.sin(Math.toRadians(val)) * 20f;
                         tiltY = (float) Math.cos(Math.toRadians(val)) * 26f;
                         tiltZ = (float) Math.sin(Math.toRadians(val * 0.5f)) * 7f;
@@ -957,7 +1038,6 @@ public class PrismSplashScreenView extends FrameLayout {
             int cx = getWidth() / 2;
             int cy = getHeight() / 2;
 
-            // 1. Dinamik Pol Soyasi
             float shadowY = cy + AndroidUtilities.dp(78);
             float shadowW = AndroidUtilities.dp(95) * (1f + elevationZ / 120f);
             float shadowH = AndroidUtilities.dp(20) * (1f - elevationZ / 140f);
@@ -966,7 +1046,6 @@ public class PrismSplashScreenView extends FrameLayout {
             shadowPaint.setAlpha((int) Math.max(30, (110 - elevationZ)));
             canvas.drawOval(shadowRect, shadowPaint);
 
-            // 2. 3D Fazoviy Transformatsiya
             canvas.save();
             camera.save();
             camera.rotateX(tiltX);
@@ -982,7 +1061,6 @@ public class PrismSplashScreenView extends FrameLayout {
 
             super.dispatchDraw(canvas);
 
-            // 3. Shisha Yaltirashi
             float cardLeft = cx - AndroidUtilities.dp(55);
             float cardTop = cy - AndroidUtilities.dp(55);
             float cardSize = AndroidUtilities.dp(110);
