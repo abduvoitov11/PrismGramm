@@ -43,11 +43,8 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Ultra-Modern 3D Liquid Glass Splash Screen.
- * Har bir App Icon uchun mutlaqo alohida, tubdan farq qiluvchi vizual effektlar,
- * fizika modellari (Matrix kod yomg'iri, Singularity qora tuynuk girdobi, Sakura yaproqlari,
- * Turbo fazoviy tezlik chiziqlari, Plasma chaqmoqlari, Lava olov uchqunlari, Glitch RGB buzilishi,
- * Steampunk mexanik tishli g'ildiraklari, Qor va Muz kristallari va h.k.) va maxsus animatsiyalar.
+ * PrismSplashScreenView — Har bir App Icon uchun mutlaqo alohida, tubdan farq qiluvchi
+ * AAA-darajadagi vizual muhit, fizika simulyatsiyalari va 3D effektlar dvigateli.
  */
 public class PrismSplashScreenView extends FrameLayout {
 
@@ -64,16 +61,18 @@ public class PrismSplashScreenView extends FrameLayout {
     private int bgStartColor = 0xFF0B1424;
     private int bgEndColor = 0xFF040810;
 
+    private final EnvironmentFxView envFxView;
     private final ParticleCanvasView particleCanvas;
+    private final FrameLayout iconWrapper;
     private final FrameLayout iconCard;
     private final ImageView iconBgView;
     private final ImageView iconFgView;
     private final GlassShimmerOverlay shimmerOverlay;
-    private final PulseRingsView pulseRingsView;
-    private final CustomIconFxOverlay iconFxOverlay;
+    private final CustomIconAuraView iconAuraView;
     private final TextView greetingView;
     private final TextView appTitle;
     private final TextView appSubtitle;
+    private final TextView systemStatusBadge;
 
     private ValueAnimator idleAnimator;
     private boolean isDismissing = false;
@@ -87,14 +86,18 @@ public class PrismSplashScreenView extends FrameLayout {
         LauncherIconController.LauncherIcon currentIcon = LauncherIconController.getSelectedIcon();
         resolveIconTypeAndColors(currentIcon);
 
-        // 1. Dynamic background gradient
+        // 1. Dynamic background base
         GradientDrawable bgDrawable = new GradientDrawable(
                 GradientDrawable.Orientation.TOP_BOTTOM,
                 new int[]{bgStartColor, bgEndColor}
         );
         setBackground(bgDrawable);
 
-        // 2. Bespoke Physics & Background Simulation Layer
+        // 2. Atmospheric & Environment World Renderer (Grid, Waves, Auroras, Magma, Caustics)
+        envFxView = new EnvironmentFxView(context, animType, primaryColor, secondaryColor, accentGlowColor);
+        addView(envFxView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
+
+        // 3. Multi-physics Particle Simulation Layer (Rain, Petals, Vortex, Lightning, Stars)
         particleCanvas = new ParticleCanvasView(context, animType, primaryColor, secondaryColor, accentGlowColor);
         addView(particleCanvas, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
@@ -104,17 +107,14 @@ public class PrismSplashScreenView extends FrameLayout {
         centerContainer.setGravity(Gravity.CENTER_HORIZONTAL);
         addView(centerContainer, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER));
 
-        // 3. Shockwave & Custom Geometry Overlays Around 3D Icon
-        FrameLayout iconWrapper = new FrameLayout(context);
-        centerContainer.addView(iconWrapper, LayoutHelper.createLinear(200, 200, Gravity.CENTER_HORIZONTAL));
+        // 4. Center 3D Icon Presentation with bespoke theme aura & geometry
+        iconWrapper = new FrameLayout(context);
+        centerContainer.addView(iconWrapper, LayoutHelper.createLinear(210, 210, Gravity.CENTER_HORIZONTAL));
 
-        pulseRingsView = new PulseRingsView(context, animType, primaryColor, secondaryColor, accentGlowColor);
-        iconWrapper.addView(pulseRingsView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.CENTER));
+        iconAuraView = new CustomIconAuraView(context, animType, primaryColor, secondaryColor, accentGlowColor);
+        iconWrapper.addView(iconAuraView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.CENTER));
 
-        iconFxOverlay = new CustomIconFxOverlay(context, animType, primaryColor, secondaryColor, accentGlowColor);
-        iconWrapper.addView(iconFxOverlay, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.CENTER));
-
-        // 4. 3D Rounded Squircle Liquid Glass Icon Card
+        // 3D Rounded Squircle Liquid Glass Icon Card
         iconCard = new FrameLayout(context) {
             private final Path clipPath = new Path();
             private final RectF rectF = new RectF();
@@ -122,8 +122,8 @@ public class PrismSplashScreenView extends FrameLayout {
 
             {
                 borderPaint.setStyle(Paint.Style.STROKE);
-                borderPaint.setStrokeWidth(AndroidUtilities.dp(2f));
-                borderPaint.setColor(Color.argb(160, 255, 255, 255));
+                borderPaint.setStrokeWidth(AndroidUtilities.dp(2.2f));
+                borderPaint.setColor(Color.argb(190, 255, 255, 255));
             }
 
             @Override
@@ -143,8 +143,8 @@ public class PrismSplashScreenView extends FrameLayout {
                 canvas.drawRoundRect(rectF, AndroidUtilities.dp(24), AndroidUtilities.dp(24), borderPaint);
             }
         };
-        iconCard.setElevation(AndroidUtilities.dp(20));
-        iconWrapper.addView(iconCard, LayoutHelper.createFrame(96, 96, Gravity.CENTER));
+        iconCard.setElevation(AndroidUtilities.dp(22));
+        iconWrapper.addView(iconCard, LayoutHelper.createFrame(98, 98, Gravity.CENTER));
 
         iconBgView = new ImageView(context);
         iconBgView.setScaleType(ImageView.ScaleType.FIT_XY);
@@ -156,7 +156,6 @@ public class PrismSplashScreenView extends FrameLayout {
         iconFgView.setImageResource(currentIcon.foreground);
         iconCard.addView(iconFgView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
-        // Shimmer overlay
         shimmerOverlay = new GlassShimmerOverlay(context);
         iconCard.addView(shimmerOverlay, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
@@ -164,11 +163,11 @@ public class PrismSplashScreenView extends FrameLayout {
         LinearLayout textContainer = new LinearLayout(context);
         textContainer.setOrientation(LinearLayout.VERTICAL);
         textContainer.setGravity(Gravity.CENTER_HORIZONTAL);
-        centerContainer.addView(textContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 20, 0, 0));
+        centerContainer.addView(textContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 18, 0, 0));
 
         greetingView = new TextView(context);
         greetingView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-        greetingView.setTextColor(Color.argb(220, 255, 255, 255));
+        greetingView.setTextColor(Color.argb(230, 255, 255, 255));
         greetingView.setGravity(Gravity.CENTER);
         greetingView.setText(generateGreetingText());
         textContainer.addView(greetingView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0, 0, 0, 4));
@@ -186,7 +185,21 @@ public class PrismSplashScreenView extends FrameLayout {
         appSubtitle.setTextColor(primaryColor);
         appSubtitle.setGravity(Gravity.CENTER);
         appSubtitle.setText("✦ " + getThemeEditionLabel(currentIcon) + " ✦");
-        textContainer.addView(appSubtitle, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT));
+        textContainer.addView(appSubtitle, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0, 0, 0, 6));
+
+        systemStatusBadge = new TextView(context);
+        systemStatusBadge.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 11);
+        systemStatusBadge.setTextColor(Color.argb(180, 255, 255, 255));
+        systemStatusBadge.setTypeface(AndroidUtilities.bold());
+        systemStatusBadge.setGravity(Gravity.CENTER);
+        systemStatusBadge.setPadding(AndroidUtilities.dp(10), AndroidUtilities.dp(4), AndroidUtilities.dp(10), AndroidUtilities.dp(4));
+        GradientDrawable badgeBg = new GradientDrawable();
+        badgeBg.setColor(Color.argb(45, Color.red(primaryColor), Color.green(primaryColor), Color.blue(primaryColor)));
+        badgeBg.setStroke(AndroidUtilities.dp(1), Color.argb(100, Color.red(primaryColor), Color.green(primaryColor), Color.blue(primaryColor)));
+        badgeBg.setCornerRadius(AndroidUtilities.dp(10));
+        systemStatusBadge.setBackground(badgeBg);
+        systemStatusBadge.setText(getStatusBadgeText());
+        textContainer.addView(systemStatusBadge, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT));
     }
 
     private void resolveIconTypeAndColors(LauncherIconController.LauncherIcon icon) {
@@ -198,182 +211,182 @@ public class PrismSplashScreenView extends FrameLayout {
             primaryColor = 0xFF00FF66;
             secondaryColor = 0xFF00E5FF;
             accentGlowColor = 0xFF39FF14;
-            bgStartColor = 0xFF081C10;
-            bgEndColor = 0xFF030A05;
+            bgStartColor = 0xFF061A0E;
+            bgEndColor = 0xFF020804;
         } else if (key.contains("sunset")) {
             animType = IconAnimType.SUNSET;
             primaryColor = 0xFFFF9100;
             secondaryColor = 0xFFFF1744;
             accentGlowColor = 0xFFFFD700;
-            bgStartColor = 0xFF260D17;
-            bgEndColor = 0xFF0F0408;
+            bgStartColor = 0xFF280D18;
+            bgEndColor = 0xFF0F0307;
         } else if (key.contains("ruby")) {
             animType = IconAnimType.RUBY;
             primaryColor = 0xFFE11D48;
             secondaryColor = 0xFFBE123C;
             accentGlowColor = 0xFFFB7185;
-            bgStartColor = 0xFF240612;
-            bgEndColor = 0xFF0D0206;
+            bgStartColor = 0xFF250512;
+            bgEndColor = 0xFF0E0106;
         } else if (key.contains("cosmos")) {
             animType = IconAnimType.COSMOS;
             primaryColor = 0xFF8B5CF6;
             secondaryColor = 0xFF00E5FF;
             accentGlowColor = 0xFFD946EF;
-            bgStartColor = 0xFF14082E;
-            bgEndColor = 0xFF060212;
+            bgStartColor = 0xFF140830;
+            bgEndColor = 0xFF050112;
         } else if (key.contains("lava")) {
             animType = IconAnimType.LAVA;
             primaryColor = 0xFFFF3D00;
             secondaryColor = 0xFFFFD600;
             accentGlowColor = 0xFFFF0055;
-            bgStartColor = 0xFF240A04;
-            bgEndColor = 0xFF0D0201;
+            bgStartColor = 0xFF260903;
+            bgEndColor = 0xFF0D0200;
         } else if (key.contains("chrome")) {
             animType = IconAnimType.CHROME;
             primaryColor = 0xFF00F0FF;
             secondaryColor = 0xFFE0E7FF;
             accentGlowColor = 0xFFFFFFFF;
-            bgStartColor = 0xFF0E1A29;
-            bgEndColor = 0xFF04080F;
+            bgStartColor = 0xFF0D1C2E;
+            bgEndColor = 0xFF03070F;
         } else if (key.contains("sakura")) {
             animType = IconAnimType.SAKURA;
             primaryColor = 0xFFF472B6;
             secondaryColor = 0xFFC084FC;
             accentGlowColor = 0xFFFFD1DC;
-            bgStartColor = 0xFF260E20;
-            bgEndColor = 0xFF0E040C;
+            bgStartColor = 0xFF280D21;
+            bgEndColor = 0xFF0E030B;
         } else if (key.contains("singularity")) {
             animType = IconAnimType.SINGULARITY;
             primaryColor = 0xFF7C4DFF;
             secondaryColor = 0xFFFF007F;
             accentGlowColor = 0xFF00F5FF;
-            bgStartColor = 0xFF12082B;
-            bgEndColor = 0xFF04010D;
+            bgStartColor = 0xFF12072D;
+            bgEndColor = 0xFF03000D;
         } else if (key.contains("plasma")) {
             animType = IconAnimType.PLASMA;
             primaryColor = 0xFFD946EF;
             secondaryColor = 0xFF38BDF8;
             accentGlowColor = 0xFFF43F5E;
-            bgStartColor = 0xFF1E082E;
-            bgEndColor = 0xFF090210;
+            bgStartColor = 0xFF200730;
+            bgEndColor = 0xFF0A0112;
         } else if (key.contains("amethyst")) {
             animType = IconAnimType.AMETHYST;
             primaryColor = 0xFFA855F7;
             secondaryColor = 0xFFEC4899;
             accentGlowColor = 0xFFE879F9;
-            bgStartColor = 0xFF1A092C;
-            bgEndColor = 0xFF07020F;
+            bgStartColor = 0xFF1C082E;
+            bgEndColor = 0xFF07010F;
         } else if (key.contains("cyber")) {
             animType = IconAnimType.CYBER;
             primaryColor = 0xFF00E5FF;
             secondaryColor = 0xFFFF007F;
             accentGlowColor = 0xFFFFEA00;
-            bgStartColor = 0xFF0A102E;
-            bgEndColor = 0xFF030514;
+            bgStartColor = 0xFF0A0F33;
+            bgEndColor = 0xFF020414;
         } else if (key.contains("abyss")) {
             animType = IconAnimType.ABYSS;
             primaryColor = 0xFF0052D4;
             secondaryColor = 0xFF4364F7;
             accentGlowColor = 0xFF6FB1FC;
-            bgStartColor = 0xFF06112C;
-            bgEndColor = 0xFF020510;
+            bgStartColor = 0xFF05112E;
+            bgEndColor = 0xFF010410;
         } else if (key.contains("bronze")) {
             animType = IconAnimType.BRONZE;
             primaryColor = 0xFFD97706;
             secondaryColor = 0xFFB45309;
             accentGlowColor = 0xFFF59E0B;
-            bgStartColor = 0xFF241506;
-            bgEndColor = 0xFF0E0702;
+            bgStartColor = 0xFF261505;
+            bgEndColor = 0xFF0E0601;
         } else if (key.contains("monochrome")) {
             animType = IconAnimType.MONOCHROME;
             primaryColor = 0xFFCBD5E1;
             secondaryColor = 0xFF64748B;
             accentGlowColor = 0xFFFFFFFF;
-            bgStartColor = 0xFF14171C;
+            bgStartColor = 0xFF14171E;
             bgEndColor = 0xFF050608;
         } else if (key.contains("spectrum")) {
             animType = IconAnimType.SPECTRUM;
             primaryColor = 0xFFFF0055;
             secondaryColor = 0xFF00F0FF;
             accentGlowColor = 0xFFFFD700;
-            bgStartColor = 0xFF1C0926;
-            bgEndColor = 0xFF08020E;
+            bgStartColor = 0xFF1E082A;
+            bgEndColor = 0xFF08010E;
         } else if (key.contains("glitch")) {
             animType = IconAnimType.GLITCH;
             primaryColor = 0xFF00FFCC;
             secondaryColor = 0xFFFF0055;
             accentGlowColor = 0xFFFFFFFF;
-            bgStartColor = 0xFF08181E;
+            bgStartColor = 0xFF071920;
             bgEndColor = 0xFF02070A;
         } else if (key.contains("vintage")) {
             animType = IconAnimType.VINTAGE;
             primaryColor = 0xFFE0A96D;
             secondaryColor = 0xFF7D5A50;
             accentGlowColor = 0xFFF7D1BA;
-            bgStartColor = 0xFF221812;
-            bgEndColor = 0xFF0D0906;
+            bgStartColor = 0xFF241810;
+            bgEndColor = 0xFF0D0805;
         } else if (key.contains("aqua")) {
             animType = IconAnimType.AQUA;
             primaryColor = 0xFF00E5FF;
             secondaryColor = 0xFF00B0FF;
             accentGlowColor = 0xFF80D8FF;
-            bgStartColor = 0xFF061824;
-            bgEndColor = 0xFF02080E;
+            bgStartColor = 0xFF051926;
+            bgEndColor = 0xFF01080E;
         } else if (key.contains("premium")) {
             animType = IconAnimType.PREMIUM;
             primaryColor = 0xFF9C27B0;
             secondaryColor = 0xFFE040FB;
             accentGlowColor = 0xFFFFFFFF;
-            bgStartColor = 0xFF1A0924;
-            bgEndColor = 0xFF08020E;
+            bgStartColor = 0xFF1B0826;
+            bgEndColor = 0xFF07010E;
         } else if (key.contains("turbo")) {
             animType = IconAnimType.TURBO;
             primaryColor = 0xFFFF5252;
             secondaryColor = 0xFFFF7A00;
             accentGlowColor = 0xFFFFAB40;
-            bgStartColor = 0xFF260A0A;
-            bgEndColor = 0xFF0E0202;
+            bgStartColor = 0xFF290808;
+            bgEndColor = 0xFF0E0101;
         } else if (key.contains("nox")) {
             animType = IconAnimType.NOX;
             primaryColor = 0xFF6366F1;
             secondaryColor = 0xFF8B5CF6;
             accentGlowColor = 0xFFA855F7;
-            bgStartColor = 0xFF0E0E26;
-            bgEndColor = 0xFF04040E;
+            bgStartColor = 0xFF0E0E2B;
+            bgEndColor = 0xFF03030E;
         } else if (key.contains("cobalt")) {
             animType = IconAnimType.COBALT;
             primaryColor = 0xFF2979FF;
             secondaryColor = 0xFF00E5FF;
             accentGlowColor = 0xFF448AFF;
-            bgStartColor = 0xFF071433;
-            bgEndColor = 0xFF020614;
+            bgStartColor = 0xFF071438;
+            bgEndColor = 0xFF010514;
         } else if (key.contains("aurora")) {
             animType = IconAnimType.AURORA;
             primaryColor = 0xFF00FFA3;
             secondaryColor = 0xFF00E5FF;
             accentGlowColor = 0xFF7000FF;
-            bgStartColor = 0xFF071F1B;
-            bgEndColor = 0xFF020A09;
+            bgStartColor = 0xFF06221D;
+            bgEndColor = 0xFF010A08;
         } else if (key.contains("pure")) {
             animType = IconAnimType.PURE;
             primaryColor = 0xFF00E5FF;
             secondaryColor = 0xFF7000FF;
             accentGlowColor = 0xFFFFFFFF;
-            bgStartColor = 0xFF081429;
-            bgEndColor = 0xFF020610;
+            bgStartColor = 0xFF07152E;
+            bgEndColor = 0xFF010610;
         } else {
             animType = IconAnimType.DEFAULT;
             primaryColor = 0xFF00E5FF;
             secondaryColor = 0xFF007AFF;
             accentGlowColor = 0xFF00F0FF;
-            bgStartColor = 0xFF0B1726;
-            bgEndColor = 0xFF040912;
+            bgStartColor = 0xFF0A182B;
+            bgEndColor = 0xFF030914;
         }
     }
 
     private String getThemeEditionLabel(LauncherIconController.LauncherIcon icon) {
         switch (animType) {
-            case MATRIX: return "Cyber Digital Matrix Rain";
+            case MATRIX: return "Cyber Liquid Matrix Rain";
             case SUNSET: return "Solar Flare & Molten Amber";
             case RUBY: return "Crystal Diamond Velvet Ruby";
             case COSMOS: return "Interstellar Nebula Vortex";
@@ -398,6 +411,24 @@ public class PrismSplashScreenView extends FrameLayout {
             case AURORA: return "Northern Aurora Borealis Wave";
             case PURE: return "Sub-Zero Diamond Frost";
             default: return "Prism Liquid Glass";
+        }
+    }
+
+    private String getStatusBadgeText() {
+        switch (animType) {
+            case MATRIX: return "SYS // QUANTUM ENCRYPTION [ONLINE]";
+            case SINGULARITY: return "PHYSICS // GRAVITATIONAL CORE [ACTIVE]";
+            case TURBO: return "WARP // HYPER-VELOCITY ENGINE [100%]";
+            case CYBER: return "HUD // NEURAL SYNC PROTOCOL [READY]";
+            case PLASMA: return "POWER // TESLA REACTOR [OPTIMAL]";
+            case SAKURA: return "ZEN // BLOSSOM HARMONY [ACTIVE]";
+            case LAVA: return "GEOTHERMAL // MAGMA HEAT [PEAK]";
+            case RUBY: return "LUXURY // CRYSTAL MATRIX [LOCKED]";
+            case COSMOS: return "ORBIT // NEBULA DYNAMICS [ONLINE]";
+            case GLITCH: return "SEC // SIGNAL DEVIATION [CLEAN]";
+            case AURORA: return "ATMOSPHERE // IONIC WAVE [STABLE]";
+            case BRONZE: return "CHRONO // CLOCKWORK RATIO [1:1]";
+            default: return "PRISM // LIQUID GLASS [ENGAGED]";
         }
     }
 
@@ -454,6 +485,7 @@ public class PrismSplashScreenView extends FrameLayout {
         greetingView.setTranslationY(AndroidUtilities.dp(18));
         appTitle.setAlpha(0.0f);
         appSubtitle.setAlpha(0.0f);
+        systemStatusBadge.setAlpha(0.0f);
 
         iconCard.animate()
                 .scaleX(1.0f)
@@ -483,6 +515,12 @@ public class PrismSplashScreenView extends FrameLayout {
                 .alpha(1.0f)
                 .setDuration(500)
                 .setStartDelay(360)
+                .start();
+
+        systemStatusBadge.animate()
+                .alpha(1.0f)
+                .setDuration(500)
+                .setStartDelay(420)
                 .start();
 
         shimmerOverlay.startShimmer();
@@ -563,10 +601,87 @@ public class PrismSplashScreenView extends FrameLayout {
     }
 
     // ──────────────────────────────────────────────────────────────────────────
-    // 1. Particle Layer: Bespoke Physics & Rendering For Every Icon
+    // 1. Environment FX View: Perspective Grid, Waves, Horizon Sun, Aurora Curtains
+    // ──────────────────────────────────────────────────────────────────────────
+    private static class EnvironmentFxView extends View {
+        private final IconAnimType animType;
+        private final int primaryColor, secondaryColor, glowColor;
+        private final Paint envPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        private final Path envPath = new Path();
+        private float animProgress;
+
+        public EnvironmentFxView(Context context, IconAnimType type, int c1, int c2, int c3) {
+            super(context);
+            this.animType = type;
+            this.primaryColor = c1;
+            this.secondaryColor = c2;
+            this.glowColor = c3;
+
+            ValueAnimator animator = ValueAnimator.ofFloat(0f, 1f);
+            animator.setDuration(4000);
+            animator.setRepeatCount(ValueAnimator.INFINITE);
+            animator.addUpdateListener(animation -> {
+                animProgress = (float) animation.getAnimatedValue();
+                invalidate();
+            });
+            animator.start();
+        }
+
+        @Override
+        protected void onDraw(Canvas canvas) {
+            int w = getWidth();
+            int h = getHeight();
+            if (w == 0 || h == 0) return;
+
+            if (animType == IconAnimType.CYBER || animType == IconAnimType.MATRIX) {
+                // 3D Synthwave Horizon Grid
+                envPaint.setColor(primaryColor);
+                envPaint.setStrokeWidth(AndroidUtilities.dp(1.2f));
+                envPaint.setStyle(Paint.Style.STROKE);
+                envPaint.setAlpha(45);
+
+                float horizonY = h * 0.65f;
+                // Horizontal perspective lines
+                for (int i = 1; i <= 8; i++) {
+                    float y = horizonY + (float) Math.pow(i / 8.0, 2.2) * (h - horizonY);
+                    canvas.drawLine(0, y, w, y, envPaint);
+                }
+                // Vanishing point perspective lines
+                float vpX = w / 2f;
+                for (int i = -6; i <= 6; i++) {
+                    float bottomX = vpX + i * (w / 6f);
+                    canvas.drawLine(vpX, horizonY, bottomX, h, envPaint);
+                }
+            } else if (animType == IconAnimType.SUNSET) {
+                // Horizon Solar Rays
+                envPaint.setStyle(Paint.Style.FILL);
+                envPaint.setColor(primaryColor);
+                envPaint.setAlpha(25);
+                float sunY = h * 0.60f;
+                canvas.drawCircle(w / 2f, sunY, AndroidUtilities.dp(120), envPaint);
+            } else if (animType == IconAnimType.AURORA) {
+                // Undulating Northern Lights Curtains
+                envPaint.setStyle(Paint.Style.FILL);
+                envPaint.setColor(primaryColor);
+                envPaint.setAlpha(35);
+                envPath.reset();
+                envPath.moveTo(0, 0);
+                for (int x = 0; x <= w; x += 20) {
+                    float y = (float) (Math.sin((x / (float) w * Math.PI * 3) + animProgress * Math.PI * 2) * AndroidUtilities.dp(40) + h * 0.25f);
+                    envPath.lineTo(x, y);
+                }
+                envPath.lineTo(w, 0);
+                envPath.close();
+                canvas.drawPath(envPath, envPaint);
+            }
+        }
+    }
+
+    // ──────────────────────────────────────────────────────────────────────────
+    // 2. Particle Layer: Bespoke Physics & Rendering For Every Icon
     // ──────────────────────────────────────────────────────────────────────────
     private static class ParticleCanvasView extends View {
-        private static final int PARTICLE_COUNT = 45;
+        private static final int PARTICLE_COUNT = 48;
         private final List<Particle> particles = new ArrayList<>();
         private final Paint particlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         private final Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -574,7 +689,7 @@ public class PrismSplashScreenView extends FrameLayout {
         private final int color1, color2, color3;
         private final Random random = new Random();
         private long lastFrameTime;
-        private static final String[] MATRIX_CHARS = {"0", "1", "7", "X", "λ", "Ω", "F", "9", "A", "Ø", "§"};
+        private static final String[] MATRIX_CHARS = {"0", "1", "7", "X", "λ", "Ω", "F", "9", "A", "Ø", "§", "K"};
 
         private static class Particle {
             float x, y;
@@ -629,24 +744,24 @@ public class PrismSplashScreenView extends FrameLayout {
             switch (animType) {
                 case MATRIX:
                     p.vx = 0;
-                    p.vy = 4.5f + random.nextFloat() * 6.5f;
+                    p.vy = 4.5f + random.nextFloat() * 7f;
                     break;
                 case SINGULARITY:
                     float cx = w / 2f;
                     float cy = h / 2f;
                     float angle = (float) Math.atan2(p.y - cy, p.x - cx);
-                    p.vx = -(float) Math.cos(angle) * 3f - (float) Math.sin(angle) * 4f;
-                    p.vy = -(float) Math.sin(angle) * 3f + (float) Math.cos(angle) * 4f;
+                    p.vx = -(float) Math.cos(angle) * 3.5f - (float) Math.sin(angle) * 4.5f;
+                    p.vy = -(float) Math.sin(angle) * 3.5f + (float) Math.cos(angle) * 4.5f;
                     break;
                 case TURBO:
                     float tcx = w / 2f;
                     float tcy = h / 2f;
                     float tang = (float) Math.atan2(p.y - tcy, p.x - tcx);
-                    p.vx = (float) Math.cos(tang) * (6f + random.nextFloat() * 10f);
-                    p.vy = (float) Math.sin(tang) * (6f + random.nextFloat() * 10f);
+                    p.vx = (float) Math.cos(tang) * (7f + random.nextFloat() * 12f);
+                    p.vy = (float) Math.sin(tang) * (7f + random.nextFloat() * 12f);
                     break;
                 case SAKURA:
-                    p.vx = 1.5f + (random.nextFloat() - 0.5f) * 1.5f;
+                    p.vx = 1.6f + (random.nextFloat() - 0.5f) * 1.5f;
                     p.vy = 2.0f + random.nextFloat() * 2.5f;
                     break;
                 case PURE:
@@ -699,8 +814,8 @@ public class PrismSplashScreenView extends FrameLayout {
                     float dy = cy - p.y;
                     float dist = (float) Math.sqrt(dx * dx + dy * dy);
                     if (dist > 15) {
-                        p.vx += (dx / dist) * 55f * dt;
-                        p.vy += (dy / dist) * 55f * dt;
+                        p.vx += (dx / dist) * 60f * dt;
+                        p.vy += (dy / dist) * 60f * dt;
                     }
                 } else if (animType == IconAnimType.SAKURA) {
                     p.vx += (float) Math.sin((now / 400.0) + p.extraParam) * 0.15f;
@@ -727,33 +842,27 @@ public class PrismSplashScreenView extends FrameLayout {
                 particlePaint.setAlpha((int) (p.alpha * 255));
 
                 if (animType == IconAnimType.MATRIX) {
-                    // Digital rain glyphs
                     textPaint.setColor(p.color);
                     textPaint.setAlpha((int) (p.alpha * 255));
                     canvas.drawText(p.charText, p.x, p.y, textPaint);
                 } else if (animType == IconAnimType.SAKURA) {
-                    // Flower petal
                     canvas.save();
                     canvas.rotate(p.rotation, p.x, p.y);
                     canvas.drawOval(p.x - p.radius * 1.6f, p.y - p.radius * 0.9f, p.x + p.radius * 1.6f, p.y + p.radius * 0.9f, particlePaint);
                     canvas.restore();
                 } else if (animType == IconAnimType.TURBO) {
-                    // Warp speed light trails
                     canvas.save();
-                    canvas.drawLine(p.x, p.y, p.x - p.vx * 3f, p.y - p.vy * 3f, particlePaint);
+                    canvas.drawLine(p.x, p.y, p.x - p.vx * 3.5f, p.y - p.vy * 3.5f, particlePaint);
                     canvas.restore();
                 } else if (animType == IconAnimType.GLITCH) {
-                    // Cyberpunk horizontal scan blocks
                     canvas.drawRect(p.x - p.radius * 4f, p.y - p.radius * 0.6f, p.x + p.radius * 4f, p.y + p.radius * 0.6f, particlePaint);
                 } else if (animType == IconAnimType.PURE) {
-                    // Snowflakes
                     canvas.save();
                     canvas.rotate(p.rotation, p.x, p.y);
                     canvas.drawLine(p.x - p.radius, p.y, p.x + p.radius, p.y, particlePaint);
                     canvas.drawLine(p.x, p.y - p.radius, p.x, p.y + p.radius, particlePaint);
                     canvas.restore();
                 } else if (animType == IconAnimType.COSMOS || animType == IconAnimType.AMETHYST || animType == IconAnimType.PREMIUM) {
-                    // 4-Point Diamond Sparkle
                     canvas.save();
                     canvas.rotate(p.rotation, p.x, p.y);
                     canvas.drawCircle(p.x, p.y, p.radius * 0.8f, particlePaint);
@@ -769,31 +878,46 @@ public class PrismSplashScreenView extends FrameLayout {
     }
 
     // ──────────────────────────────────────────────────────────────────────────
-    // 2. Pulse Rings Layer: Custom Shockwave Geometries For Every Icon
+    // 3. Custom Icon Aura View: Shockwave Geometries & Orbitals
     // ──────────────────────────────────────────────────────────────────────────
-    private static class PulseRingsView extends View {
+    private static class CustomIconAuraView extends View {
         private final Paint ringPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        private final Paint fxPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         private final IconAnimType animType;
         private final int primaryColor, secondaryColor, glowColor;
-        private float progress;
+        private float ringProgress;
+        private float rotationAngle;
         private final Path hexPath = new Path();
+        private final Random random = new Random();
 
-        public PulseRingsView(Context context, IconAnimType type, int c1, int c2, int c3) {
+        public CustomIconAuraView(Context context, IconAnimType type, int c1, int c2, int c3) {
             super(context);
             this.animType = type;
             this.primaryColor = c1;
             this.secondaryColor = c2;
             this.glowColor = c3;
-            ringPaint.setStyle(Paint.Style.STROKE);
 
-            ValueAnimator animator = ValueAnimator.ofFloat(0f, 1f);
-            animator.setDuration(1900);
-            animator.setRepeatCount(ValueAnimator.INFINITE);
-            animator.addUpdateListener(animation -> {
-                progress = (float) animation.getAnimatedValue();
+            ringPaint.setStyle(Paint.Style.STROKE);
+            fxPaint.setStyle(Paint.Style.STROKE);
+            fxPaint.setStrokeWidth(AndroidUtilities.dp(1.8f));
+
+            ValueAnimator ringAnim = ValueAnimator.ofFloat(0f, 1f);
+            ringAnim.setDuration(1900);
+            ringAnim.setRepeatCount(ValueAnimator.INFINITE);
+            ringAnim.addUpdateListener(animation -> {
+                ringProgress = (float) animation.getAnimatedValue();
                 invalidate();
             });
-            animator.start();
+            ringAnim.start();
+
+            ValueAnimator rotAnim = ValueAnimator.ofFloat(0f, 360f);
+            rotAnim.setDuration(5000);
+            rotAnim.setRepeatCount(ValueAnimator.INFINITE);
+            rotAnim.addUpdateListener(animation -> {
+                rotationAngle = (float) animation.getAnimatedValue();
+                invalidate();
+            });
+            rotAnim.start();
         }
 
         @Override
@@ -801,18 +925,18 @@ public class PrismSplashScreenView extends FrameLayout {
             int cx = getWidth() / 2;
             int cy = getHeight() / 2;
             float maxRadius = getWidth() * 0.48f;
+            float r = AndroidUtilities.dp(66);
 
-            float r1 = progress * maxRadius;
-            int a1 = (int) ((1f - progress) * 140);
+            // 1. Shockwave Pulse
+            float r1 = ringProgress * maxRadius;
+            int a1 = (int) ((1f - ringProgress) * 140);
             ringPaint.setColor(primaryColor);
             ringPaint.setAlpha(a1);
-            ringPaint.setStrokeWidth(AndroidUtilities.dp(2.5f * (1f - progress)));
+            ringPaint.setStrokeWidth(AndroidUtilities.dp(2.5f * (1f - ringProgress)));
 
             if (animType == IconAnimType.MATRIX || animType == IconAnimType.CYBER) {
-                // Expanding Hexagon Pulse
                 drawHexagon(canvas, cx, cy, r1, ringPaint);
             } else if (animType == IconAnimType.RUBY || animType == IconAnimType.AMETHYST) {
-                // Expanding Diamond Facet
                 canvas.save();
                 canvas.rotate(45, cx, cy);
                 canvas.drawRect(cx - r1 * 0.7f, cy - r1 * 0.7f, cx + r1 * 0.7f, cy + r1 * 0.7f, ringPaint);
@@ -821,23 +945,61 @@ public class PrismSplashScreenView extends FrameLayout {
                 canvas.drawCircle(cx, cy, r1, ringPaint);
             }
 
-            // Ring 2 (delayed)
-            float p2 = (progress + 0.5f) % 1.0f;
-            float r2 = p2 * maxRadius;
-            int a2 = (int) ((1f - p2) * 110);
-            ringPaint.setColor(secondaryColor);
-            ringPaint.setAlpha(a2);
-            ringPaint.setStrokeWidth(AndroidUtilities.dp(2.0f * (1f - p2)));
-
-            if (animType == IconAnimType.MATRIX || animType == IconAnimType.CYBER) {
-                drawHexagon(canvas, cx, cy, r2, ringPaint);
-            } else if (animType == IconAnimType.RUBY || animType == IconAnimType.AMETHYST) {
+            // 2. Specialized Overlays
+            if (animType == IconAnimType.CYBER || animType == IconAnimType.MATRIX) {
+                fxPaint.setColor(primaryColor);
+                fxPaint.setAlpha(180);
                 canvas.save();
-                canvas.rotate(45, cx, cy);
-                canvas.drawRect(cx - r2 * 0.7f, cy - r2 * 0.7f, cx + r2 * 0.7f, cy + r2 * 0.7f, ringPaint);
+                canvas.rotate(rotationAngle, cx, cy);
+                canvas.drawArc(cx - r, cy - r, cx + r, cy + r, 15, 60, false, fxPaint);
+                canvas.drawArc(cx - r, cy - r, cx + r, cy + r, 105, 60, false, fxPaint);
+                canvas.drawArc(cx - r, cy - r, cx + r, cy + r, 195, 60, false, fxPaint);
+                canvas.drawArc(cx - r, cy - r, cx + r, cy + r, 285, 60, false, fxPaint);
                 canvas.restore();
-            } else {
-                canvas.drawCircle(cx, cy, r2, ringPaint);
+            } else if (animType == IconAnimType.PLASMA || animType == IconAnimType.GLITCH) {
+                if (random.nextFloat() < 0.5f) {
+                    fxPaint.setColor(primaryColor);
+                    fxPaint.setAlpha(220);
+                    float x1 = cx + (random.nextFloat() - 0.5f) * r * 1.8f;
+                    float y1 = cy + (random.nextFloat() - 0.5f) * r * 1.8f;
+                    float x2 = x1 + (random.nextFloat() - 0.5f) * AndroidUtilities.dp(30);
+                    float y2 = y1 + (random.nextFloat() - 0.5f) * AndroidUtilities.dp(30);
+                    canvas.drawLine(x1, y1, x2, y2, fxPaint);
+                    canvas.drawLine(x2, y2, x2 + (random.nextFloat() - 0.5f) * AndroidUtilities.dp(20), y2 + (random.nextFloat() - 0.5f) * AndroidUtilities.dp(20), fxPaint);
+                }
+            } else if (animType == IconAnimType.SINGULARITY || animType == IconAnimType.COSMOS) {
+                fxPaint.setColor(secondaryColor);
+                fxPaint.setAlpha(150);
+                canvas.save();
+                canvas.rotate(rotationAngle * 0.8f, cx, cy);
+                canvas.drawOval(cx - r * 1.3f, cy - r * 0.65f, cx + r * 1.3f, cy + r * 0.65f, fxPaint);
+                canvas.restore();
+
+                canvas.save();
+                canvas.rotate(-rotationAngle * 0.6f + 45, cx, cy);
+                fxPaint.setColor(glowColor);
+                canvas.drawOval(cx - r * 1.1f, cy - r * 0.5f, cx + r * 1.1f, cy + r * 0.5f, fxPaint);
+                canvas.restore();
+            } else if (animType == IconAnimType.BRONZE || animType == IconAnimType.VINTAGE) {
+                fxPaint.setColor(primaryColor);
+                fxPaint.setAlpha(160);
+                canvas.save();
+                canvas.rotate(rotationAngle * 0.5f, cx, cy);
+                for (int i = 0; i < 8; i++) {
+                    canvas.drawLine(cx, cy - r, cx, cy - r - AndroidUtilities.dp(8), fxPaint);
+                    canvas.rotate(45, cx, cy);
+                }
+                canvas.restore();
+            } else if (animType == IconAnimType.SUNSET || animType == IconAnimType.LAVA) {
+                fxPaint.setColor(primaryColor);
+                fxPaint.setAlpha(140);
+                canvas.save();
+                canvas.rotate(rotationAngle * 0.4f, cx, cy);
+                for (int i = 0; i < 12; i++) {
+                    canvas.drawLine(cx, cy - r, cx, cy - r - AndroidUtilities.dp(6), fxPaint);
+                    canvas.rotate(30, cx, cy);
+                }
+                canvas.restore();
             }
         }
 
@@ -852,104 +1014,6 @@ public class PrismSplashScreenView extends FrameLayout {
             }
             hexPath.close();
             canvas.drawPath(hexPath, paint);
-        }
-    }
-
-    // ──────────────────────────────────────────────────────────────────────────
-    // 3. Custom Icon Specific Overlays (Tesla lightning, Solar flares, Gears, HUD)
-    // ──────────────────────────────────────────────────────────────────────────
-    private static class CustomIconFxOverlay extends View {
-        private final Paint fxPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        private final IconAnimType animType;
-        private final int primaryColor, secondaryColor, glowColor;
-        private float angle;
-        private final Random random = new Random();
-
-        public CustomIconFxOverlay(Context context, IconAnimType type, int c1, int c2, int c3) {
-            super(context);
-            this.animType = type;
-            this.primaryColor = c1;
-            this.secondaryColor = c2;
-            this.glowColor = c3;
-            fxPaint.setStyle(Paint.Style.STROKE);
-            fxPaint.setStrokeWidth(AndroidUtilities.dp(1.8f));
-
-            ValueAnimator animator = ValueAnimator.ofFloat(0f, 360f);
-            animator.setDuration(5000);
-            animator.setRepeatCount(ValueAnimator.INFINITE);
-            animator.addUpdateListener(animation -> {
-                angle = (float) animation.getAnimatedValue();
-                invalidate();
-            });
-            animator.start();
-        }
-
-        @Override
-        protected void onDraw(Canvas canvas) {
-            int cx = getWidth() / 2;
-            int cy = getHeight() / 2;
-            float r = AndroidUtilities.dp(64);
-
-            if (animType == IconAnimType.CYBER || animType == IconAnimType.MATRIX) {
-                // Cyber HUD Target Brackets with Rotating Degree Ticks
-                fxPaint.setColor(primaryColor);
-                fxPaint.setAlpha(170);
-                canvas.save();
-                canvas.rotate(angle, cx, cy);
-                canvas.drawArc(cx - r, cy - r, cx + r, cy + r, 15, 60, false, fxPaint);
-                canvas.drawArc(cx - r, cy - r, cx + r, cy + r, 105, 60, false, fxPaint);
-                canvas.drawArc(cx - r, cy - r, cx + r, cy + r, 195, 60, false, fxPaint);
-                canvas.drawArc(cx - r, cy - r, cx + r, cy + r, 285, 60, false, fxPaint);
-                canvas.restore();
-            } else if (animType == IconAnimType.PLASMA || animType == IconAnimType.GLITCH) {
-                // Flashing Tesla Lightning Arcs
-                if (random.nextFloat() < 0.5f) {
-                    fxPaint.setColor(primaryColor);
-                    fxPaint.setAlpha(220);
-                    float x1 = cx + (random.nextFloat() - 0.5f) * r * 1.8f;
-                    float y1 = cy + (random.nextFloat() - 0.5f) * r * 1.8f;
-                    float x2 = x1 + (random.nextFloat() - 0.5f) * AndroidUtilities.dp(30);
-                    float y2 = y1 + (random.nextFloat() - 0.5f) * AndroidUtilities.dp(30);
-                    canvas.drawLine(x1, y1, x2, y2, fxPaint);
-                    canvas.drawLine(x2, y2, x2 + (random.nextFloat() - 0.5f) * AndroidUtilities.dp(20), y2 + (random.nextFloat() - 0.5f) * AndroidUtilities.dp(20), fxPaint);
-                }
-            } else if (animType == IconAnimType.SINGULARITY || animType == IconAnimType.COSMOS) {
-                // Planetary Orbit Ellipses
-                fxPaint.setColor(secondaryColor);
-                fxPaint.setAlpha(150);
-                canvas.save();
-                canvas.rotate(angle * 0.8f, cx, cy);
-                canvas.drawOval(cx - r * 1.3f, cy - r * 0.65f, cx + r * 1.3f, cy + r * 0.65f, fxPaint);
-                canvas.restore();
-
-                canvas.save();
-                canvas.rotate(-angle * 0.6f + 45, cx, cy);
-                fxPaint.setColor(glowColor);
-                canvas.drawOval(cx - r * 1.1f, cy - r * 0.5f, cx + r * 1.1f, cy + r * 0.5f, fxPaint);
-                canvas.restore();
-            } else if (animType == IconAnimType.BRONZE || animType == IconAnimType.VINTAGE) {
-                // Steampunk Gear Rotating Teeth
-                fxPaint.setColor(primaryColor);
-                fxPaint.setAlpha(160);
-                canvas.save();
-                canvas.rotate(angle * 0.5f, cx, cy);
-                for (int i = 0; i < 8; i++) {
-                    canvas.drawLine(cx, cy - r, cx, cy - r - AndroidUtilities.dp(8), fxPaint);
-                    canvas.rotate(45, cx, cy);
-                }
-                canvas.restore();
-            } else if (animType == IconAnimType.SUNSET || animType == IconAnimType.LAVA) {
-                // Solar Corona Rays
-                fxPaint.setColor(primaryColor);
-                fxPaint.setAlpha(140);
-                canvas.save();
-                canvas.rotate(angle * 0.4f, cx, cy);
-                for (int i = 0; i < 12; i++) {
-                    canvas.drawLine(cx, cy - r, cx, cy - r - AndroidUtilities.dp(6), fxPaint);
-                    canvas.rotate(30, cx, cy);
-                }
-                canvas.restore();
-            }
         }
     }
 
