@@ -88,7 +88,10 @@
     <string name="GhostModeEnabled">Ruh rejimi yoqildi</string>
     <string name="GhostModeDisabled">Ruh rejimi o\'chirildi</string>
     <string name="EditsHistoryTitle">Tahrirlar tarixi</string>
-    <string name="EditsHistoryMenuText">Tarix</string>
+    <string name="EditsHistoryMenuText">Tahrirlar tarixi</string>
+    <string name="EditsHistoryEmpty">Ushbu xabar uchun tahrirlar tarixi topilmadi.</string>
+    <string name="EditsHistoryVersion">%1$d-versiya (Eski matn):</string>
+    <string name="EditsHistoryCurrent">Hozirgi (amaldagi) matn:</string>
     <string name="ReadUntilMenuText">Shungacha o\'qilgan qilish</string>
     <string name="DeleteKeepLocally">Mahalliy saqlab qolish</string>
     <string name="BoxActionReset">Tiklash</string>

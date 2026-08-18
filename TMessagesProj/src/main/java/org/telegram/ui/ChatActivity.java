@@ -45739,7 +45739,7 @@ public class ChatActivity extends BaseFragment implements
                     icons.add(R.drawable.msg_edit);
                 }
                 if (selectedObject != null && selectedObject.messageOwner != null && (selectedObject.messageOwner.edit_date != 0 || selectedObject.isKryptonDeleted())) {
-                    items.add("Tahrirlar tarixi");
+                    items.add(LocaleController.getString("EditsHistoryMenuText", R.string.EditsHistoryMenuText));
                     options.add(OPTION_EDIT_HISTORY);
                     icons.add(R.drawable.msg_edit);
                 }
@@ -46802,7 +46802,7 @@ public class ChatActivity extends BaseFragment implements
             AndroidUtilities.runOnUIThread(() -> {
                 if (getParentActivity() == null) return;
                 org.telegram.ui.ActionBar.AlertDialog.Builder builder = new org.telegram.ui.ActionBar.AlertDialog.Builder(getParentActivity());
-                builder.setTitle("Tahrirlar tarixi");
+                builder.setTitle(LocaleController.getString("EditsHistoryTitle", R.string.EditsHistoryTitle));
 
                 // Agar amaldagi matn ham saqlangan bo'lsa, uni oxirgi element bo'lsa olib tashlaymiz
                 while (!edits.isEmpty() && currentText.equals(edits.get(edits.size() - 1))) {
@@ -46810,14 +46810,14 @@ public class ChatActivity extends BaseFragment implements
                 }
 
                 if (edits.isEmpty()) {
-                    builder.setMessage("Ushbu xabar uchun tahrirlar tarixi topilmadi.");
+                    builder.setMessage(LocaleController.getString("EditsHistoryEmpty", R.string.EditsHistoryEmpty));
                 } else {
                     StringBuilder sb = new StringBuilder();
                     for (int i = 0; i < edits.size(); i++) {
-                        sb.append("📜 ").append(i + 1).append("-versiya (Eski matn):\n").append(edits.get(i));
+                        sb.append("📜 ").append(LocaleController.formatString("EditsHistoryVersion", R.string.EditsHistoryVersion, i + 1)).append("\n").append(edits.get(i));
                         sb.append("\n\n-------------------\n\n");
                     }
-                    sb.append("✏️ Hozirgi (amaldagi) matn:\n").append(currentText);
+                    sb.append("✏️ ").append(LocaleController.getString("EditsHistoryCurrent", R.string.EditsHistoryCurrent)).append("\n").append(currentText);
                     builder.setMessage(sb.toString());
                 }
 

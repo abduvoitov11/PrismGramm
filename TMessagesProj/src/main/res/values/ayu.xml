@@ -88,7 +88,10 @@
     <string name="GhostModeEnabled">Ghost mode turned on</string>
     <string name="GhostModeDisabled">Ghost mode turned off</string>
     <string name="EditsHistoryTitle">Edits history</string>
-    <string name="EditsHistoryMenuText">History</string>
+    <string name="EditsHistoryMenuText">Edit history</string>
+    <string name="EditsHistoryEmpty">No edit history found for this message.</string>
+    <string name="EditsHistoryVersion">%1$d. Version (Old text):</string>
+    <string name="EditsHistoryCurrent">Current text:</string>
     <string name="ReadUntilMenuText">Read until</string>
     <string name="DeleteKeepLocally">Keep locally</string>
     <string name="BoxActionReset">Reset</string>

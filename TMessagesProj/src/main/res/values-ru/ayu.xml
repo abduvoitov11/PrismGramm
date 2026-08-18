@@ -88,7 +88,10 @@
     <string name="GhostModeEnabled">Режим призрака включен</string>
     <string name="GhostModeDisabled">Режим призрака выключен</string>
     <string name="EditsHistoryTitle">История изменений</string>
-    <string name="EditsHistoryMenuText">История</string>
+    <string name="EditsHistoryMenuText">История изменений</string>
+    <string name="EditsHistoryEmpty">История изменений для этого сообщения не найдена.</string>
+    <string name="EditsHistoryVersion">%1$d-я версия (Предыдущий текст):</string>
+    <string name="EditsHistoryCurrent">Текущий текст:</string>
     <string name="ReadUntilMenuText">Прочитать до этого места</string>
     <string name="DeleteKeepLocally">Сохранить локально</string>
     <string name="BoxActionReset">Сбросить</string>

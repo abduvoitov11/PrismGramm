@@ -88,7 +88,10 @@
     <string name="GhostModeEnabled">Режим привида увімкнено</string>
     <string name="GhostModeDisabled">Режим привида вимкнено</string>
     <string name="EditsHistoryTitle">Історія змін</string>
-    <string name="EditsHistoryMenuText">Історія</string>
+    <string name="EditsHistoryMenuText">Історія змін</string>
+    <string name="EditsHistoryEmpty">Історію змін для цього повідомлення не знайдено.</string>
+    <string name="EditsHistoryVersion">%1$d-а версія (Попередній текст):</string>
+    <string name="EditsHistoryCurrent">Поточний текст:</string>
     <string name="ReadUntilMenuText">Прочитати до цього місця</string>
     <string name="DeleteKeepLocally">Зберегти локально</string>
     <string name="BoxActionReset">Скинути</string>
