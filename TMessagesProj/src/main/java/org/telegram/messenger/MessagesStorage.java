@@ -7730,7 +7730,7 @@ public class MessagesStorage extends BaseController {
                         TLRPC.Message message = TLRPC.Message.TLdeserialize(data, data.readInt32(false), false);
                         data.reuse();
                         int dbFlags = cursor.intValue(1);
-                        if ((dbFlags & (1 << 30)) != 0 || (SharedConfig.antiDeleteInChatEnabled && KryptonArchive.isMessageDeleted(database, dialogId, (int) msgId))) {
+                        if ((dbFlags & (1 << 30)) != 0 || (SharedConfig.antiDeleteInChatEnabled && dialogId != getUserConfig().getClientUserId() && KryptonArchive.isMessageDeleted(database, dialogId, (int) msgId))) {
                             message.kryptonDeleted = true;
                             message.flags |= (1 << 30);
                         }
@@ -9427,7 +9427,7 @@ public class MessagesStorage extends BaseController {
                 int maxId = Integer.MIN_VALUE;
                 ArrayList<Long> messageIdsToFix = null;
 
-                java.util.HashSet<Integer> kryptonDeletedMids = SharedConfig.antiDeleteInChatEnabled ? KryptonArchive.getDeletedMids(database, dialogId) : null;
+                java.util.HashSet<Integer> kryptonDeletedMids = (SharedConfig.antiDeleteInChatEnabled && dialogId != currentUserId) ? KryptonArchive.getDeletedMids(database, dialogId) : null;
                 if (cursor != null) {
                     while (cursor.next()) {
                         messagesCount++;
@@ -13874,7 +13874,7 @@ public class MessagesStorage extends BaseController {
                             if (message != null) {
                                 message.readAttachPath(data, currentUser);
                             }
-                            if (SharedConfig.antiDeleteInChatEnabled && message != null) {
+                            if (SharedConfig.antiDeleteInChatEnabled && message != null && did != getUserConfig().getClientUserId()) {
                                 try {
                                     KryptonArchive.archiveDeleted(database, did, mid, message);
                                 } catch (Exception kryptonEx) {
@@ -14140,7 +14140,8 @@ public class MessagesStorage extends BaseController {
                         cursor = null;
                     }
                     // ─── Krypton: anti-delete yoqilgan bo'lsa, xabarni o'chirish o'rniga flag bilan belgilash ───
-                    if (SharedConfig.antiDeleteInChatEnabled) {
+                    boolean isSavedMessages = (did == getUserConfig().getClientUserId());
+                    if (SharedConfig.antiDeleteInChatEnabled && !isSavedMessages) {
                         database.executeFast(String.format(Locale.US, "UPDATE messages_v2 SET flags = flags | %d WHERE mid IN(%s) AND uid = %d", (1 << 30), idsStr, did)).stepThis().dispose();
                     } else {
                         database.executeFast(String.format(Locale.US, "DELETE FROM messages_v2 WHERE mid IN(%s) AND uid = %d", idsStr, did)).stepThis().dispose();
@@ -14359,7 +14360,7 @@ public class MessagesStorage extends BaseController {
             if (!messages.isEmpty()) {
                 if (channelId != 0) {
                     dialogsToUpdate.add(-channelId);
-                    state = database.executeFast("UPDATE dialogs SET (last_mid, last_mid_group) = (SELECT mid, group_id FROM messages_v2 WHERE uid = ? AND date = (SELECT MAX(date) FROM messages_v2 WHERE uid = ?)) WHERE did = ?");
+                    state = database.executeFast("UPDATE dialogs SET (last_mid, last_mid_group) = (SELECT mid, group_id FROM messages_v2 WHERE uid = ? AND (flags & " + (1 << 30) + ") = 0 AND date = (SELECT MAX(date) FROM messages_v2 WHERE uid = ? AND (flags & " + (1 << 30) + ") = 0)) WHERE did = ?");
                 } else {
                     if (originalDialogId == 0) {
                         String ids = TextUtils.join(",", messages);
@@ -14372,7 +14373,7 @@ public class MessagesStorage extends BaseController {
                     } else {
                         dialogsToUpdate.add(originalDialogId);
                     }
-                    state = database.executeFast("UPDATE dialogs SET (last_mid, last_mid_group) = (SELECT mid, group_id FROM messages_v2 WHERE uid = ? AND date = (SELECT MAX(date) FROM messages_v2 WHERE uid = ? AND date != 0)) WHERE did = ?");
+                    state = database.executeFast("UPDATE dialogs SET (last_mid, last_mid_group) = (SELECT mid, group_id FROM messages_v2 WHERE uid = ? AND (flags & " + (1 << 30) + ") = 0 AND date = (SELECT MAX(date) FROM messages_v2 WHERE uid = ? AND (flags & " + (1 << 30) + ") = 0 AND date != 0)) WHERE did = ?");
                 }
                 database.beginTransaction();
                 for (int a = 0; a < dialogsToUpdate.size(); a++) {
@@ -14622,7 +14623,7 @@ public class MessagesStorage extends BaseController {
                         if (message != null) {
                             message.readAttachPath(data, getUserConfig().clientUserId);
                         }
-                        if (SharedConfig.antiDeleteInChatEnabled && message != null) {
+                        if (SharedConfig.antiDeleteInChatEnabled && message != null && did != getUserConfig().getClientUserId()) {
                             try {
                                 KryptonArchive.archiveDeleted(database, did, message.id, message);
                             } catch (Exception kryptonEx) {
@@ -14707,7 +14708,8 @@ public class MessagesStorage extends BaseController {
             }
 
             // ─── Krypton: anti-delete yoqilgan bo'lsa, xabarni o'chirish o'rniga flag bilan belgilash ───
-            if (SharedConfig.antiDeleteInChatEnabled) {
+            boolean isSavedMessages = (-channelId == getUserConfig().getClientUserId());
+            if (SharedConfig.antiDeleteInChatEnabled && !isSavedMessages) {
                 database.executeFast(String.format(Locale.US, "UPDATE messages_v2 SET flags = flags | %d WHERE uid = %d AND mid <= %d", (1 << 30), -channelId, mid)).stepThis().dispose();
             } else {
                 database.executeFast(String.format(Locale.US, "DELETE FROM messages_v2 WHERE uid = %d AND mid <= %d", -channelId, mid)).stepThis().dispose();

@@ -20389,7 +20389,8 @@ public class ChatActivity extends BaseFragment implements
                 toggleIsAllChats();
             }
 
-            if (SharedConfig.antiDeleteInChatEnabled && oldMessages != null && !oldMessages.isEmpty()) {
+            final boolean isSaved = getDialogId() == getUserConfig().getClientUserId() || chatMode == MODE_SAVED;
+            if (SharedConfig.antiDeleteInChatEnabled && !isSaved && oldMessages != null && !oldMessages.isEmpty()) {
                 try {
                     java.util.HashSet<Integer> newIds = new java.util.HashSet<>();
                     for (int i = 0; i < messArr.size(); i++) {
@@ -26153,8 +26154,9 @@ public class ChatActivity extends BaseFragment implements
                 updateReplyMessageOwners(mid, null);
             }
             if (obj != null) {
-                // ─── Krypton: anti-delete — xabarni o'chirish o'rniga 🗑️ bilan belgilash (barcha o'chirilgan xabarlar) ───
-                if (SharedConfig.antiDeleteInChatEnabled) {
+                final boolean isSaved = getDialogId() == getUserConfig().getClientUserId() || chatMode == MODE_SAVED;
+                // ─── Krypton: anti-delete — xabarni o'chirish o'rniga 🗑️ bilan belgilash (Saved Messages bo'lmagan chatlarda) ───
+                if (SharedConfig.antiDeleteInChatEnabled && !isSaved) {
                     obj.kryptonDeleted = true;
                     if (obj.messageOwner != null) {
                         obj.messageOwner.kryptonDeleted = true;
@@ -26334,8 +26336,9 @@ public class ChatActivity extends BaseFragment implements
                 }
             }
         }
+        final boolean isSaved = getDialogId() == getUserConfig().getClientUserId() || chatMode == MODE_SAVED;
         // ─── Krypton: agar anti-delete bilan belgilangan xabarlar bo'lsa, UI ni yangilash ───
-        if (updated && SharedConfig.antiDeleteInChatEnabled) {
+        if (updated && SharedConfig.antiDeleteInChatEnabled && !isSaved) {
             updateVisibleRows();
             if (chatAdapter != null && !chatAdapter.isFrozen) {
                 chatAdapter.notifyDataSetChanged(false);
