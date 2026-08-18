@@ -362,6 +362,11 @@ public class SharedConfig {
     public static boolean saveDeletedMediaEnabled = true;
     // Krypton: Mahalliy Premium custom emoji status document_id
     public static long localCustomEmojiStatusId = 0;
+    // Krypton: Mahalliy Premium custom profile & name colors
+    public static int localProfileColorId = -2;
+    public static long localProfileEmojiId = 0;
+    public static int localNameColorId = -2;
+    public static long localNameEmojiId = 0;
     public static boolean multipleReactionsPromoShowed;
 
     public static boolean isFloatingDebugActive;
@@ -680,6 +685,10 @@ public class SharedConfig {
             editHistoryEnabled = preferences.getBoolean("krypton_editHistory", true);
             saveDeletedMediaEnabled = preferences.getBoolean("krypton_saveDeletedMedia", true);
             localCustomEmojiStatusId = preferences.getLong("krypton_localCustomEmojiStatusId", 0);
+            localProfileColorId = preferences.getInt("krypton_localProfileColorId", -2);
+            localProfileEmojiId = preferences.getLong("krypton_localProfileEmojiId", 0);
+            localNameColorId = preferences.getInt("krypton_localNameColorId", -2);
+            localNameEmojiId = preferences.getLong("krypton_localNameEmojiId", 0);
 
             com.radolyn.ayugram.AyuConfig.setGhostMode(ghostModeEnabled);
             com.radolyn.ayugram.AyuConfig.saveDeletedMessages = antiDeleteInChatEnabled;
@@ -1838,6 +1847,24 @@ public class SharedConfig {
     public static void setLocalCustomEmojiStatusId(long docId) {
         localCustomEmojiStatusId = docId;
         ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE).edit().putLong("krypton_localCustomEmojiStatusId", localCustomEmojiStatusId).apply();
+    }
+
+    public static void setLocalProfileColor(int colorId, long emojiId) {
+        localProfileColorId = colorId;
+        localProfileEmojiId = emojiId;
+        ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE).edit()
+                .putInt("krypton_localProfileColorId", localProfileColorId)
+                .putLong("krypton_localProfileEmojiId", localProfileEmojiId)
+                .apply();
+    }
+
+    public static void setLocalNameColor(int colorId, long emojiId) {
+        localNameColorId = colorId;
+        localNameEmojiId = emojiId;
+        ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE).edit()
+                .putInt("krypton_localNameColorId", localNameColorId)
+                .putLong("krypton_localNameEmojiId", localNameEmojiId)
+                .apply();
     }
 
     public static boolean canBlurChat() {

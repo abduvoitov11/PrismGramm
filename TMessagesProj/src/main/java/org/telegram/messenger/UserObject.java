@@ -196,17 +196,26 @@ public class UserObject {
 
     public static int getColorId(TLRPC.User user) {
         if (user == null) return 0;
+        if (user.self && com.radolyn.ayugram.AyuConfig.localPremium && SharedConfig.localNameColorId >= 0) {
+            return SharedConfig.localNameColorId;
+        }
         if (user.color instanceof TLRPC.TL_peerColor && (user.color.flags & 1) != 0) return user.color.color;
         return (int) (user.id % 7);
     }
 
     public static long getEmojiId(TLRPC.User user) {
+        if (user != null && user.self && com.radolyn.ayugram.AyuConfig.localPremium && SharedConfig.localNameEmojiId != 0) {
+            return SharedConfig.localNameEmojiId;
+        }
         if (user != null && user.color instanceof TLRPC.TL_peerColor && (user.color.flags & 2) != 0) return user.color.background_emoji_id;
         return 0;
     }
 
     public static int getProfileColorId(TLRPC.User user) {
         if (user == null) return 0;
+        if (user.self && com.radolyn.ayugram.AyuConfig.localPremium && SharedConfig.localProfileColorId >= -1) {
+            return SharedConfig.localProfileColorId;
+        }
         if (user.profile_color instanceof TLRPC.TL_peerColor && (user.profile_color.flags & 1) != 0) return user.profile_color.color;
         return -1;
     }
@@ -215,13 +224,73 @@ public class UserObject {
         if (user != null && user.emoji_status instanceof TLRPC.TL_emojiStatusCollectible) {
             return ((TLRPC.TL_emojiStatusCollectible) user.emoji_status).pattern_document_id;
         }
+        if (user != null && user.self && com.radolyn.ayugram.AyuConfig.localPremium && SharedConfig.localProfileEmojiId != 0) {
+            return SharedConfig.localProfileEmojiId;
+        }
         if (user != null && user.profile_color != null && (user.profile_color.flags & 2) != 0) return user.profile_color.background_emoji_id;
         return 0;
     }
 
     public static long getOnlyProfileEmojiId(TLRPC.User user) {
+        if (user != null && user.self && com.radolyn.ayugram.AyuConfig.localPremium && SharedConfig.localProfileEmojiId != 0) {
+            return SharedConfig.localProfileEmojiId;
+        }
         if (user != null && user.profile_color instanceof TLRPC.TL_peerColor && (user.profile_color.flags & 2) != 0) return user.profile_color.background_emoji_id;
         return 0;
+    }
+
+    public static void applyLocalPremiumSettings(TLRPC.User user) {
+        if (user == null || !com.radolyn.ayugram.AyuConfig.localPremium) {
+            return;
+        }
+        user.premium = true;
+
+        if (SharedConfig.localCustomEmojiStatusId > 0) {
+            if (user.emoji_status == null || getEmojiStatusDocumentId(user) == null || getEmojiStatusDocumentId(user) != SharedConfig.localCustomEmojiStatusId) {
+                TLRPC.TL_emojiStatus st = new TLRPC.TL_emojiStatus();
+                st.document_id = SharedConfig.localCustomEmojiStatusId;
+                user.emoji_status = st;
+            }
+        } else if (SharedConfig.localCustomEmojiStatusId == -1) {
+            user.emoji_status = new TLRPC.TL_emojiStatusEmpty();
+        }
+
+        if (SharedConfig.localProfileColorId >= -1) {
+            if (SharedConfig.localProfileColorId == -1) {
+                user.profile_color = null;
+                user.flags2 &= ~512;
+            } else {
+                if (user.profile_color == null) {
+                    user.profile_color = new TLRPC.TL_peerColor();
+                }
+                user.flags2 |= 512;
+                user.profile_color.flags |= 1;
+                user.profile_color.color = SharedConfig.localProfileColorId;
+                if (SharedConfig.localProfileEmojiId != 0) {
+                    user.profile_color.flags |= 2;
+                    user.profile_color.background_emoji_id = SharedConfig.localProfileEmojiId;
+                } else {
+                    user.profile_color.flags &= ~2;
+                    user.profile_color.background_emoji_id = 0;
+                }
+            }
+        }
+
+        if (SharedConfig.localNameColorId >= 0) {
+            if (user.color == null) {
+                user.color = new TLRPC.TL_peerColor();
+            }
+            user.flags2 |= 256;
+            user.color.flags |= 1;
+            user.color.color = SharedConfig.localNameColorId;
+            if (SharedConfig.localNameEmojiId != 0) {
+                user.color.flags |= 2;
+                user.color.background_emoji_id = SharedConfig.localNameEmojiId;
+            } else {
+                user.color.flags &= ~2;
+                user.color.background_emoji_id = 0;
+            }
+        }
     }
 
     public static long getProfileCollectibleId(TLRPC.User user) {

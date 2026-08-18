@@ -58,6 +58,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.DocumentObject;
@@ -1831,6 +1832,7 @@ public class PeerColorActivity extends BaseFragment implements NotificationCente
                         me.color.background_emoji_id = 0;
                     }
                 }
+                SharedConfig.setLocalNameColor(namePage.selectedColor, namePage.selectedEmoji);
                 getConnectionsManager().sendRequest(req, null);
             }
             if (
@@ -1870,6 +1872,7 @@ public class PeerColorActivity extends BaseFragment implements NotificationCente
                     me.profile_color.flags &=~ 2;
                     me.profile_color.background_emoji_id = 0;
                 }
+                SharedConfig.setLocalProfileColor(profilePage.selectedColor, profilePage.selectedEmoji);
                 getConnectionsManager().sendRequest(req, null);
             }
             if (!eq(me.emoji_status, profilePage.selectedEmojiCollectible) && (profilePage.selectedEmojiCollectible != null || DialogObject.isEmojiStatusCollectible(me.emoji_status))) {
