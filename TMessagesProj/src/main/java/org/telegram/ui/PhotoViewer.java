@@ -17176,7 +17176,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         }
                     }
                 }
-                boolean cacheOnly = messageObject != null && messageObject.isWebpage() || avatarsDialogId != 0 || isEvent;
+                boolean cacheOnly = messageObject != null && messageObject.isWebpage() || isEvent;
                 Object parentObject;
                 ImageLocation videoThumb = null;
                 if (messageObject != null) {
@@ -17215,7 +17215,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         filter = null;
                     }
                     boolean autoDownload = (DownloadController.getInstance(currentAccount).getAutodownloadMask() & DownloadController.AUTODOWNLOAD_TYPE_PHOTO) != 0;
-                    boolean needFullImage = autoDownload || currentIndex == index || FileLoader.getInstance(currentAccount).getPathToAttach(fileLocation).exists();
+                    boolean needFullImage = autoDownload || currentIndex == index || avatarsDialogId != 0 || FileLoader.getInstance(currentAccount).getPathToAttach(fileLocation).exists();
                     ImageLocation imageThumbLocation = placeHolder == null ? ImageLocation.getForObject(thumbLocation, photoObject) : null;
                     BitmapDrawable thumbPlaceHolder = placeHolder != null ? new BitmapDrawable(placeHolder.bitmap) : null;
                     int cacheType = cacheOnly ? 1 : 0;
@@ -18061,7 +18061,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                             animators.add(ObjectAnimator.ofFloat(photoCropView, View.ALPHA, 0, 1.0f));
                         }
                         animatorSet.playTogether(animators);
-                        animatorSet.setDuration(200);
+                        animatorSet.setDuration(120);
+                        animatorSet.setInterpolator(CubicBezierInterpolator.EASE_OUT_QUINT);
                         animatorSet.addListener(new AnimatorListenerAdapter() {
                             @Override
                             public void onAnimationEnd(Animator animation) {
@@ -18161,13 +18162,13 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     transitionAnimationStartTime = System.currentTimeMillis();
                     containerView.invalidate();
                     AnimatorSet animatorSet = new AnimatorSet();
-                    ObjectAnimator a2 = ObjectAnimator.ofFloat(pickerView, View.TRANSLATION_Y, pickerView.getTranslationY(), 0f).setDuration(220);
-                    a2.setInterpolator(CubicBezierInterpolator.DEFAULT);
-                    ObjectAnimator a3 = ObjectAnimator.ofFloat(pickerView, View.ALPHA, 1f).setDuration(220);
-                    a3.setInterpolator(CubicBezierInterpolator.DEFAULT);
+                    ObjectAnimator a2 = ObjectAnimator.ofFloat(pickerView, View.TRANSLATION_Y, pickerView.getTranslationY(), 0f).setDuration(130);
+                    a2.setInterpolator(CubicBezierInterpolator.EASE_OUT_QUINT);
+                    ObjectAnimator a3 = ObjectAnimator.ofFloat(pickerView, View.ALPHA, 1f).setDuration(130);
+                    a3.setInterpolator(CubicBezierInterpolator.EASE_OUT_QUINT);
                     animatorSet.playTogether(
-                            ObjectAnimator.ofFloat(containerView, View.ALPHA, 0f, 1f).setDuration(220),
-                            ObjectAnimator.ofFloat(navigationBar, View.ALPHA, 0f, 1f).setDuration(220),
+                            ObjectAnimator.ofFloat(containerView, View.ALPHA, 0f, 1f).setDuration(130),
+                            ObjectAnimator.ofFloat(navigationBar, View.ALPHA, 0f, 1f).setDuration(130),
                             a2, a3
                     );
                     animatorSet.addListener(new AnimatorListenerAdapter() {

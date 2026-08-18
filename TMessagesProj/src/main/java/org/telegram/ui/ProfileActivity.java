@@ -11299,7 +11299,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             }
             if (imageLocation != null && (prevLoadedImageLocation == null || imageLocation.photoId != prevLoadedImageLocation.photoId)) {
                 prevLoadedImageLocation = imageLocation;
-                getFileLoader().loadFile(imageLocation, user, null, FileLoader.PRIORITY_LOW, 1);
+                getFileLoader().loadFile(imageLocation, user, null, FileLoader.PRIORITY_HIGH, 1);
+                ImageLocation bigImageLoc = ImageLocation.getForUserOrChat(currentAccount, user, ImageLocation.TYPE_BIG);
+                if (bigImageLoc != null) {
+                    getFileLoader().loadFile(bigImageLoc, user, null, FileLoader.PRIORITY_HIGH, 1);
+                }
             }
 
             CharSequence newString = UserObject.getUserName(user);
@@ -11856,7 +11860,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             }
             if (imageLocation != null && (prevLoadedImageLocation == null || imageLocation.photoId != prevLoadedImageLocation.photoId)) {
                 prevLoadedImageLocation = imageLocation;
-                getFileLoader().loadFile(imageLocation, chat, null, FileLoader.PRIORITY_LOW, 1);
+                getFileLoader().loadFile(imageLocation, chat, null, FileLoader.PRIORITY_HIGH, 1);
+                ImageLocation bigImageLoc = ImageLocation.getForUserOrChat(currentAccount, chat, ImageLocation.TYPE_BIG);
+                if (bigImageLoc != null) {
+                    getFileLoader().loadFile(bigImageLoc, chat, null, FileLoader.PRIORITY_HIGH, 1);
+                }
             }
             avatarImage.getImageReceiver().setVisible(!PhotoViewer.isShowingImage(photoBig) && (getLastStoryViewer() == null || getLastStoryViewer().transitionViewHolder.view != avatarImage), storyView != null);
         }
