@@ -914,12 +914,19 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             this.blurEnabled = true; // actionsSize > 0;
         }
 
+        private final Paint prismBorderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        private final RectF prismBorderRect = new RectF();
+        private long prismLastAnimTime = 0;
+        private float prismRotationAngle = 0;
+
         public AvatarImageView(Context context) {
             super(context);
             setLayerType(View.LAYER_TYPE_HARDWARE, null);
             foregroundImageReceiver = new ImageReceiver(this);
             placeholderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
             placeholderPaint.setColor(Color.BLACK);
+            prismBorderPaint.setStyle(Paint.Style.STROKE);
+            prismBorderPaint.setStrokeWidth(AndroidUtilities.dp(3.5f));
         }
 
         public void setAnimateFromImageReceiver(ImageReceiver imageReceiver) {
@@ -1130,6 +1137,37 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             }
 
             canvas.restore();
+
+            if (r > 0 && alpha > 0 && drawAvatar) {
+                float strokeW = AndroidUtilities.dp(3.5f);
+                prismBorderRect.set(inset + strokeW / 2f, inset + strokeW / 2f, thisWidth - inset - strokeW / 2f, thisHeight - inset - strokeW / 2f);
+
+                long now = System.currentTimeMillis();
+                if (prismLastAnimTime == 0) prismLastAnimTime = now;
+                long dt = Math.min(50, now - prismLastAnimTime);
+                prismLastAnimTime = now;
+                prismRotationAngle = (prismRotationAngle + (dt / 1000f) * 60f) % 360f;
+
+                float cx = prismBorderRect.centerX();
+                float cy = prismBorderRect.centerY();
+
+                org.telegram.messenger.PrismThemeController.IconPalette palette = org.telegram.messenger.PrismThemeController.getCurrentPalette();
+                int c1 = palette != null ? palette.primary : 0xFF00F0FF;
+                int c2 = palette != null ? palette.secondary : 0xFF7000FF;
+                int c3 = palette != null ? palette.accentGlow : 0xFFFF007F;
+
+                int[] colors = new int[]{ c1, c2, c3, 0xFFFFFFFF, c1 };
+                android.graphics.SweepGradient sweep = new android.graphics.SweepGradient(cx, cy, colors, null);
+                android.graphics.Matrix matrix = new android.graphics.Matrix();
+                matrix.setRotate(prismRotationAngle, cx, cy);
+                sweep.setLocalMatrix(matrix);
+
+                prismBorderPaint.setShader(sweep);
+                prismBorderPaint.setAlpha((int) (255 * alpha));
+
+                canvas.drawRoundRect(prismBorderRect, Math.max(0, r - strokeW / 2f), Math.max(0, r - strokeW / 2f), prismBorderPaint);
+                postInvalidateOnAnimation();
+            }
         }
 
         public void setProgressToStoriesInsets(float progressToInsets) {
