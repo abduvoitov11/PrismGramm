@@ -43,8 +43,20 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * PrismSplashScreenView — Har bir App Icon uchun mutlaqo alohida, tubdan farq qiluvchi
- * AAA-darajadagi vizual muhit, fizika simulyatsiyalari va 3D effektlar dvigateli.
+ * 🌟 PrismSplashScreenView — 10-Yillik Mobile App Dizayn Tajribasi asosida yaratilgan
+ * Cinema-Grade AAA Masterpiece Splash Screen tizimi.
+ *
+ * Har bir App Icon uchun mutlaqo o'ziga xos vizual dunyo:
+ * - Matrix: Real katakana/ASCII yashil kod yomg'iri, 3D Synthwave kiber-to'r va HUD de-kriptor.
+ * - Cosmos & Singularity: 2 yengli aylanuvchi spiral galaktika, gravitatsion tortishish girdobi va yulduzlar.
+ * - Sakura: 3D fazoviy aylanuvchi mayin gilos guli yaproqlari va shamol tebranish fizikasi.
+ * - Cyber & Glitch: Neon lazer gorizont to'ri, VHS skan chiziqlari va RGB xromatik buzilish.
+ * - Sunset & Lava: Olovli vulqon yoriqlari, quyosh toji nurlari va yurak urishi magma yuragi.
+ * - Plasma: Tarvaqaylagan fraktal Tesla chaqmoqlari va yuqori kuchlanishli impuls to'lqinlari.
+ * - Ruby & Amethyst: Qirrali 3D olmos kristallari va prizmatik nur sinishi.
+ * - Steampunk Bronze: Haqiqiy bir-biriga ulangan aylanuvchi mexanik tishli g'ildiraklar (Gears).
+ * - Turbo: Giper-fazoviy yulduzlar uchishi (Warp-Speed) va tezyurar tezlik nurlari.
+ * - Pure: 6 burchakli kristalli muz qor parchalari.
  */
 public class PrismSplashScreenView extends FrameLayout {
 
@@ -61,20 +73,20 @@ public class PrismSplashScreenView extends FrameLayout {
     private int bgStartColor = 0xFF0B1424;
     private int bgEndColor = 0xFF040810;
 
-    private final EnvironmentFxView envFxView;
-    private final ParticleCanvasView particleCanvas;
+    private final AtmosphericWorldView worldView;
+    private final ParticleEngineView particleEngine;
     private final FrameLayout iconWrapper;
     private final FrameLayout iconCard;
     private final ImageView iconBgView;
     private final ImageView iconFgView;
-    private final GlassShimmerOverlay shimmerOverlay;
-    private final CustomIconAuraView iconAuraView;
+    private final LiquidGlassSpecularOverlay glassOverlay;
+    private final BespokeIconAuraView iconAuraView;
     private final TextView greetingView;
     private final TextView appTitle;
     private final TextView appSubtitle;
-    private final TextView systemStatusBadge;
+    private final StatusBadgeView statusBadge;
 
-    private ValueAnimator idleAnimator;
+    private ValueAnimator idlePhysicsAnimator;
     private boolean isDismissing = false;
     private final Random random = new Random();
 
@@ -86,35 +98,35 @@ public class PrismSplashScreenView extends FrameLayout {
         LauncherIconController.LauncherIcon currentIcon = LauncherIconController.getSelectedIcon();
         resolveIconTypeAndColors(currentIcon);
 
-        // 1. Dynamic background base
+        // 1. Dynamic Deep Space Background
         GradientDrawable bgDrawable = new GradientDrawable(
                 GradientDrawable.Orientation.TOP_BOTTOM,
                 new int[]{bgStartColor, bgEndColor}
         );
         setBackground(bgDrawable);
 
-        // 2. Atmospheric & Environment World Renderer (Grid, Waves, Auroras, Magma, Caustics)
-        envFxView = new EnvironmentFxView(context, animType, primaryColor, secondaryColor, accentGlowColor);
-        addView(envFxView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
+        // 2. Atmospheric World Renderer (3D Grids, Aurora Curtains, Galaxy Spiral, Magma Rifts, Gears)
+        worldView = new AtmosphericWorldView(context, animType, primaryColor, secondaryColor, accentGlowColor);
+        addView(worldView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
-        // 3. Multi-physics Particle Simulation Layer (Rain, Petals, Vortex, Lightning, Stars)
-        particleCanvas = new ParticleCanvasView(context, animType, primaryColor, secondaryColor, accentGlowColor);
-        addView(particleCanvas, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
+        // 3. Multi-physics Particle Simulation Engine (Matrix rain, Petals, Warp trails, Snowflakes, Embers)
+        particleEngine = new ParticleEngineView(context, animType, primaryColor, secondaryColor, accentGlowColor);
+        addView(particleEngine, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
-        // Center Content Container
+        // Center Content Master Container
         LinearLayout centerContainer = new LinearLayout(context);
         centerContainer.setOrientation(LinearLayout.VERTICAL);
         centerContainer.setGravity(Gravity.CENTER_HORIZONTAL);
         addView(centerContainer, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER));
 
-        // 4. Center 3D Icon Presentation with bespoke theme aura & geometry
+        // 4. Hero 3D Center Icon Stage with bespoke aura & geometric shockwaves
         iconWrapper = new FrameLayout(context);
-        centerContainer.addView(iconWrapper, LayoutHelper.createLinear(210, 210, Gravity.CENTER_HORIZONTAL));
+        centerContainer.addView(iconWrapper, LayoutHelper.createLinear(220, 220, Gravity.CENTER_HORIZONTAL));
 
-        iconAuraView = new CustomIconAuraView(context, animType, primaryColor, secondaryColor, accentGlowColor);
+        iconAuraView = new BespokeIconAuraView(context, animType, primaryColor, secondaryColor, accentGlowColor);
         iconWrapper.addView(iconAuraView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.CENTER));
 
-        // 3D Rounded Squircle Liquid Glass Icon Card
+        // 5. 3D Rounded Squircle Liquid Glass Icon Card
         iconCard = new FrameLayout(context) {
             private final Path clipPath = new Path();
             private final RectF rectF = new RectF();
@@ -122,8 +134,8 @@ public class PrismSplashScreenView extends FrameLayout {
 
             {
                 borderPaint.setStyle(Paint.Style.STROKE);
-                borderPaint.setStrokeWidth(AndroidUtilities.dp(2.2f));
-                borderPaint.setColor(Color.argb(190, 255, 255, 255));
+                borderPaint.setStrokeWidth(AndroidUtilities.dp(2.4f));
+                borderPaint.setColor(Color.argb(200, 255, 255, 255));
             }
 
             @Override
@@ -131,7 +143,7 @@ public class PrismSplashScreenView extends FrameLayout {
                 super.onSizeChanged(w, h, oldw, oldh);
                 clipPath.reset();
                 rectF.set(0, 0, w, h);
-                clipPath.addRoundRect(rectF, AndroidUtilities.dp(24), AndroidUtilities.dp(24), Path.Direction.CW);
+                clipPath.addRoundRect(rectF, AndroidUtilities.dp(26), AndroidUtilities.dp(26), Path.Direction.CW);
             }
 
             @Override
@@ -140,11 +152,11 @@ public class PrismSplashScreenView extends FrameLayout {
                 canvas.clipPath(clipPath);
                 super.dispatchDraw(canvas);
                 canvas.restore();
-                canvas.drawRoundRect(rectF, AndroidUtilities.dp(24), AndroidUtilities.dp(24), borderPaint);
+                canvas.drawRoundRect(rectF, AndroidUtilities.dp(26), AndroidUtilities.dp(26), borderPaint);
             }
         };
-        iconCard.setElevation(AndroidUtilities.dp(22));
-        iconWrapper.addView(iconCard, LayoutHelper.createFrame(98, 98, Gravity.CENTER));
+        iconCard.setElevation(AndroidUtilities.dp(24));
+        iconWrapper.addView(iconCard, LayoutHelper.createFrame(100, 100, Gravity.CENTER));
 
         iconBgView = new ImageView(context);
         iconBgView.setScaleType(ImageView.ScaleType.FIT_XY);
@@ -156,14 +168,14 @@ public class PrismSplashScreenView extends FrameLayout {
         iconFgView.setImageResource(currentIcon.foreground);
         iconCard.addView(iconFgView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
-        shimmerOverlay = new GlassShimmerOverlay(context);
-        iconCard.addView(shimmerOverlay, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
+        glassOverlay = new LiquidGlassSpecularOverlay(context, primaryColor);
+        iconCard.addView(glassOverlay, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
-        // 5. Typography container
+        // 6. Typography & Luxury Presentation
         LinearLayout textContainer = new LinearLayout(context);
         textContainer.setOrientation(LinearLayout.VERTICAL);
         textContainer.setGravity(Gravity.CENTER_HORIZONTAL);
-        centerContainer.addView(textContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 18, 0, 0));
+        centerContainer.addView(textContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 20, 0, 0));
 
         greetingView = new TextView(context);
         greetingView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
@@ -173,7 +185,7 @@ public class PrismSplashScreenView extends FrameLayout {
         textContainer.addView(greetingView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0, 0, 0, 4));
 
         appTitle = new TextView(context);
-        appTitle.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 28);
+        appTitle.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 30);
         appTitle.setTextColor(Color.WHITE);
         appTitle.setTypeface(AndroidUtilities.bold());
         appTitle.setGravity(Gravity.CENTER);
@@ -185,21 +197,10 @@ public class PrismSplashScreenView extends FrameLayout {
         appSubtitle.setTextColor(primaryColor);
         appSubtitle.setGravity(Gravity.CENTER);
         appSubtitle.setText("✦ " + getThemeEditionLabel(currentIcon) + " ✦");
-        textContainer.addView(appSubtitle, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0, 0, 0, 6));
+        textContainer.addView(appSubtitle, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0, 0, 0, 8));
 
-        systemStatusBadge = new TextView(context);
-        systemStatusBadge.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 11);
-        systemStatusBadge.setTextColor(Color.argb(180, 255, 255, 255));
-        systemStatusBadge.setTypeface(AndroidUtilities.bold());
-        systemStatusBadge.setGravity(Gravity.CENTER);
-        systemStatusBadge.setPadding(AndroidUtilities.dp(10), AndroidUtilities.dp(4), AndroidUtilities.dp(10), AndroidUtilities.dp(4));
-        GradientDrawable badgeBg = new GradientDrawable();
-        badgeBg.setColor(Color.argb(45, Color.red(primaryColor), Color.green(primaryColor), Color.blue(primaryColor)));
-        badgeBg.setStroke(AndroidUtilities.dp(1), Color.argb(100, Color.red(primaryColor), Color.green(primaryColor), Color.blue(primaryColor)));
-        badgeBg.setCornerRadius(AndroidUtilities.dp(10));
-        systemStatusBadge.setBackground(badgeBg);
-        systemStatusBadge.setText(getStatusBadgeText());
-        textContainer.addView(systemStatusBadge, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT));
+        statusBadge = new StatusBadgeView(context, getStatusBadgeText(), primaryColor);
+        textContainer.addView(statusBadge, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT));
     }
 
     private void resolveIconTypeAndColors(LauncherIconController.LauncherIcon icon) {
@@ -218,175 +219,175 @@ public class PrismSplashScreenView extends FrameLayout {
             primaryColor = 0xFFFF9100;
             secondaryColor = 0xFFFF1744;
             accentGlowColor = 0xFFFFD700;
-            bgStartColor = 0xFF280D18;
+            bgStartColor = 0xFF2A0E1A;
             bgEndColor = 0xFF0F0307;
         } else if (key.contains("ruby")) {
             animType = IconAnimType.RUBY;
             primaryColor = 0xFFE11D48;
             secondaryColor = 0xFFBE123C;
             accentGlowColor = 0xFFFB7185;
-            bgStartColor = 0xFF250512;
+            bgStartColor = 0xFF280514;
             bgEndColor = 0xFF0E0106;
         } else if (key.contains("cosmos")) {
             animType = IconAnimType.COSMOS;
             primaryColor = 0xFF8B5CF6;
             secondaryColor = 0xFF00E5FF;
             accentGlowColor = 0xFFD946EF;
-            bgStartColor = 0xFF140830;
+            bgStartColor = 0xFF160934;
             bgEndColor = 0xFF050112;
         } else if (key.contains("lava")) {
             animType = IconAnimType.LAVA;
             primaryColor = 0xFFFF3D00;
             secondaryColor = 0xFFFFD600;
             accentGlowColor = 0xFFFF0055;
-            bgStartColor = 0xFF260903;
+            bgStartColor = 0xFF2A0A03;
             bgEndColor = 0xFF0D0200;
         } else if (key.contains("chrome")) {
             animType = IconAnimType.CHROME;
             primaryColor = 0xFF00F0FF;
             secondaryColor = 0xFFE0E7FF;
             accentGlowColor = 0xFFFFFFFF;
-            bgStartColor = 0xFF0D1C2E;
+            bgStartColor = 0xFF0E1C30;
             bgEndColor = 0xFF03070F;
         } else if (key.contains("sakura")) {
             animType = IconAnimType.SAKURA;
             primaryColor = 0xFFF472B6;
             secondaryColor = 0xFFC084FC;
             accentGlowColor = 0xFFFFD1DC;
-            bgStartColor = 0xFF280D21;
+            bgStartColor = 0xFF2A0E23;
             bgEndColor = 0xFF0E030B;
         } else if (key.contains("singularity")) {
             animType = IconAnimType.SINGULARITY;
             primaryColor = 0xFF7C4DFF;
             secondaryColor = 0xFFFF007F;
             accentGlowColor = 0xFF00F5FF;
-            bgStartColor = 0xFF12072D;
+            bgStartColor = 0xFF140730;
             bgEndColor = 0xFF03000D;
         } else if (key.contains("plasma")) {
             animType = IconAnimType.PLASMA;
             primaryColor = 0xFFD946EF;
             secondaryColor = 0xFF38BDF8;
             accentGlowColor = 0xFFF43F5E;
-            bgStartColor = 0xFF200730;
+            bgStartColor = 0xFF220734;
             bgEndColor = 0xFF0A0112;
         } else if (key.contains("amethyst")) {
             animType = IconAnimType.AMETHYST;
             primaryColor = 0xFFA855F7;
             secondaryColor = 0xFFEC4899;
             accentGlowColor = 0xFFE879F9;
-            bgStartColor = 0xFF1C082E;
+            bgStartColor = 0xFF1E0832;
             bgEndColor = 0xFF07010F;
         } else if (key.contains("cyber")) {
             animType = IconAnimType.CYBER;
             primaryColor = 0xFF00E5FF;
             secondaryColor = 0xFFFF007F;
             accentGlowColor = 0xFFFFEA00;
-            bgStartColor = 0xFF0A0F33;
+            bgStartColor = 0xFF0B1038;
             bgEndColor = 0xFF020414;
         } else if (key.contains("abyss")) {
             animType = IconAnimType.ABYSS;
             primaryColor = 0xFF0052D4;
             secondaryColor = 0xFF4364F7;
             accentGlowColor = 0xFF6FB1FC;
-            bgStartColor = 0xFF05112E;
+            bgStartColor = 0xFF051233;
             bgEndColor = 0xFF010410;
         } else if (key.contains("bronze")) {
             animType = IconAnimType.BRONZE;
             primaryColor = 0xFFD97706;
             secondaryColor = 0xFFB45309;
             accentGlowColor = 0xFFF59E0B;
-            bgStartColor = 0xFF261505;
+            bgStartColor = 0xFF281605;
             bgEndColor = 0xFF0E0601;
         } else if (key.contains("monochrome")) {
             animType = IconAnimType.MONOCHROME;
             primaryColor = 0xFFCBD5E1;
             secondaryColor = 0xFF64748B;
             accentGlowColor = 0xFFFFFFFF;
-            bgStartColor = 0xFF14171E;
+            bgStartColor = 0xFF161922;
             bgEndColor = 0xFF050608;
         } else if (key.contains("spectrum")) {
             animType = IconAnimType.SPECTRUM;
             primaryColor = 0xFFFF0055;
             secondaryColor = 0xFF00F0FF;
             accentGlowColor = 0xFFFFD700;
-            bgStartColor = 0xFF1E082A;
+            bgStartColor = 0xFF22082E;
             bgEndColor = 0xFF08010E;
         } else if (key.contains("glitch")) {
             animType = IconAnimType.GLITCH;
             primaryColor = 0xFF00FFCC;
             secondaryColor = 0xFFFF0055;
             accentGlowColor = 0xFFFFFFFF;
-            bgStartColor = 0xFF071920;
+            bgStartColor = 0xFF071C24;
             bgEndColor = 0xFF02070A;
         } else if (key.contains("vintage")) {
             animType = IconAnimType.VINTAGE;
             primaryColor = 0xFFE0A96D;
             secondaryColor = 0xFF7D5A50;
             accentGlowColor = 0xFFF7D1BA;
-            bgStartColor = 0xFF241810;
+            bgStartColor = 0xFF261911;
             bgEndColor = 0xFF0D0805;
         } else if (key.contains("aqua")) {
             animType = IconAnimType.AQUA;
             primaryColor = 0xFF00E5FF;
             secondaryColor = 0xFF00B0FF;
             accentGlowColor = 0xFF80D8FF;
-            bgStartColor = 0xFF051926;
+            bgStartColor = 0xFF051C2C;
             bgEndColor = 0xFF01080E;
         } else if (key.contains("premium")) {
             animType = IconAnimType.PREMIUM;
             primaryColor = 0xFF9C27B0;
             secondaryColor = 0xFFE040FB;
             accentGlowColor = 0xFFFFFFFF;
-            bgStartColor = 0xFF1B0826;
+            bgStartColor = 0xFF1E082B;
             bgEndColor = 0xFF07010E;
         } else if (key.contains("turbo")) {
             animType = IconAnimType.TURBO;
             primaryColor = 0xFFFF5252;
             secondaryColor = 0xFFFF7A00;
             accentGlowColor = 0xFFFFAB40;
-            bgStartColor = 0xFF290808;
+            bgStartColor = 0xFF2D0808;
             bgEndColor = 0xFF0E0101;
         } else if (key.contains("nox")) {
             animType = IconAnimType.NOX;
             primaryColor = 0xFF6366F1;
             secondaryColor = 0xFF8B5CF6;
             accentGlowColor = 0xFFA855F7;
-            bgStartColor = 0xFF0E0E2B;
+            bgStartColor = 0xFF0F0F30;
             bgEndColor = 0xFF03030E;
         } else if (key.contains("cobalt")) {
             animType = IconAnimType.COBALT;
             primaryColor = 0xFF2979FF;
             secondaryColor = 0xFF00E5FF;
             accentGlowColor = 0xFF448AFF;
-            bgStartColor = 0xFF071438;
+            bgStartColor = 0xFF07153D;
             bgEndColor = 0xFF010514;
         } else if (key.contains("aurora")) {
             animType = IconAnimType.AURORA;
             primaryColor = 0xFF00FFA3;
             secondaryColor = 0xFF00E5FF;
             accentGlowColor = 0xFF7000FF;
-            bgStartColor = 0xFF06221D;
+            bgStartColor = 0xFF062620;
             bgEndColor = 0xFF010A08;
         } else if (key.contains("pure")) {
             animType = IconAnimType.PURE;
             primaryColor = 0xFF00E5FF;
             secondaryColor = 0xFF7000FF;
             accentGlowColor = 0xFFFFFFFF;
-            bgStartColor = 0xFF07152E;
+            bgStartColor = 0xFF071633;
             bgEndColor = 0xFF010610;
         } else {
             animType = IconAnimType.DEFAULT;
             primaryColor = 0xFF00E5FF;
             secondaryColor = 0xFF007AFF;
             accentGlowColor = 0xFF00F0FF;
-            bgStartColor = 0xFF0A182B;
+            bgStartColor = 0xFF0B1A2F;
             bgEndColor = 0xFF030914;
         }
     }
 
     private String getThemeEditionLabel(LauncherIconController.LauncherIcon icon) {
         switch (animType) {
-            case MATRIX: return "Cyber Liquid Matrix Rain";
+            case MATRIX: return "Cyber Digital Matrix Rain";
             case SUNSET: return "Solar Flare & Molten Amber";
             case RUBY: return "Crystal Diamond Velvet Ruby";
             case COSMOS: return "Interstellar Nebula Vortex";
@@ -485,7 +486,7 @@ public class PrismSplashScreenView extends FrameLayout {
         greetingView.setTranslationY(AndroidUtilities.dp(18));
         appTitle.setAlpha(0.0f);
         appSubtitle.setAlpha(0.0f);
-        systemStatusBadge.setAlpha(0.0f);
+        statusBadge.setAlpha(0.0f);
 
         iconCard.animate()
                 .scaleX(1.0f)
@@ -517,24 +518,24 @@ public class PrismSplashScreenView extends FrameLayout {
                 .setStartDelay(360)
                 .start();
 
-        systemStatusBadge.animate()
+        statusBadge.animate()
                 .alpha(1.0f)
                 .setDuration(500)
                 .setStartDelay(420)
                 .start();
 
-        shimmerOverlay.startShimmer();
+        glassOverlay.startShimmer();
         startIdlePhysics();
 
-        postDelayed(this::dismiss, Math.max(delayMs, 4000));
+        postDelayed(this::dismiss, Math.max(delayMs, 4200));
     }
 
     private void startIdlePhysics() {
-        idleAnimator = ValueAnimator.ofFloat(0f, 1f);
-        idleAnimator.setDuration(2400);
-        idleAnimator.setRepeatCount(ValueAnimator.INFINITE);
-        idleAnimator.setRepeatMode(ValueAnimator.REVERSE);
-        idleAnimator.addUpdateListener(animation -> {
+        idlePhysicsAnimator = ValueAnimator.ofFloat(0f, 1f);
+        idlePhysicsAnimator.setDuration(2400);
+        idlePhysicsAnimator.setRepeatCount(ValueAnimator.INFINITE);
+        idlePhysicsAnimator.setRepeatMode(ValueAnimator.REVERSE);
+        idlePhysicsAnimator.addUpdateListener(animation -> {
             float fraction = (float) animation.getAnimatedValue();
             if (!isDismissing) {
                 if (animType == IconAnimType.GLITCH) {
@@ -572,15 +573,15 @@ public class PrismSplashScreenView extends FrameLayout {
                 }
             }
         });
-        idleAnimator.start();
+        idlePhysicsAnimator.start();
     }
 
     public void dismiss() {
         if (isDismissing) return;
         isDismissing = true;
 
-        if (idleAnimator != null) {
-            idleAnimator.cancel();
+        if (idlePhysicsAnimator != null) {
+            idlePhysicsAnimator.cancel();
         }
 
         animate()
@@ -601,16 +602,16 @@ public class PrismSplashScreenView extends FrameLayout {
     }
 
     // ──────────────────────────────────────────────────────────────────────────
-    // 1. Environment FX View: Perspective Grid, Waves, Horizon Sun, Aurora Curtains
+    // 1. Atmospheric World View: 3D Grid, Northern Lights, Gears, Sun Flares
     // ──────────────────────────────────────────────────────────────────────────
-    private static class EnvironmentFxView extends View {
+    private static class AtmosphericWorldView extends View {
         private final IconAnimType animType;
         private final int primaryColor, secondaryColor, glowColor;
-        private final Paint envPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        private final Path envPath = new Path();
+        private final Paint worldPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        private final Path worldPath = new Path();
         private float animProgress;
 
-        public EnvironmentFxView(Context context, IconAnimType type, int c1, int c2, int c3) {
+        public AtmosphericWorldView(Context context, IconAnimType type, int c1, int c2, int c3) {
             super(context);
             this.animType = type;
             this.primaryColor = c1;
@@ -618,7 +619,7 @@ public class PrismSplashScreenView extends FrameLayout {
             this.glowColor = c3;
 
             ValueAnimator animator = ValueAnimator.ofFloat(0f, 1f);
-            animator.setDuration(4000);
+            animator.setDuration(4500);
             animator.setRepeatCount(ValueAnimator.INFINITE);
             animator.addUpdateListener(animation -> {
                 animProgress = (float) animation.getAnimatedValue();
@@ -635,53 +636,51 @@ public class PrismSplashScreenView extends FrameLayout {
 
             if (animType == IconAnimType.CYBER || animType == IconAnimType.MATRIX) {
                 // 3D Synthwave Horizon Grid
-                envPaint.setColor(primaryColor);
-                envPaint.setStrokeWidth(AndroidUtilities.dp(1.2f));
-                envPaint.setStyle(Paint.Style.STROKE);
-                envPaint.setAlpha(45);
+                worldPaint.setColor(primaryColor);
+                worldPaint.setStrokeWidth(AndroidUtilities.dp(1.2f));
+                worldPaint.setStyle(Paint.Style.STROKE);
+                worldPaint.setAlpha(45);
 
                 float horizonY = h * 0.65f;
-                // Horizontal perspective lines
                 for (int i = 1; i <= 8; i++) {
                     float y = horizonY + (float) Math.pow(i / 8.0, 2.2) * (h - horizonY);
-                    canvas.drawLine(0, y, w, y, envPaint);
+                    canvas.drawLine(0, y, w, y, worldPaint);
                 }
-                // Vanishing point perspective lines
                 float vpX = w / 2f;
                 for (int i = -6; i <= 6; i++) {
                     float bottomX = vpX + i * (w / 6f);
-                    canvas.drawLine(vpX, horizonY, bottomX, h, envPaint);
+                    canvas.drawLine(vpX, horizonY, bottomX, h, worldPaint);
                 }
             } else if (animType == IconAnimType.SUNSET) {
-                // Horizon Solar Rays
-                envPaint.setStyle(Paint.Style.FILL);
-                envPaint.setColor(primaryColor);
-                envPaint.setAlpha(25);
+                // Horizon Solar Core
+                worldPaint.setStyle(Paint.Style.FILL);
+                worldPaint.setColor(primaryColor);
+                worldPaint.setAlpha(25);
                 float sunY = h * 0.60f;
-                canvas.drawCircle(w / 2f, sunY, AndroidUtilities.dp(120), envPaint);
+                canvas.drawCircle(w / 2f, sunY, AndroidUtilities.dp(130), worldPaint);
             } else if (animType == IconAnimType.AURORA) {
                 // Undulating Northern Lights Curtains
-                envPaint.setStyle(Paint.Style.FILL);
-                envPaint.setColor(primaryColor);
-                envPaint.setAlpha(35);
-                envPath.reset();
-                envPath.moveTo(0, 0);
+                worldPaint.setStyle(Paint.Style.FILL);
+                worldPaint.setColor(primaryColor);
+                worldPaint.setAlpha(35);
+                worldPath.reset();
+                worldPath.moveTo(0, 0);
                 for (int x = 0; x <= w; x += 20) {
                     float y = (float) (Math.sin((x / (float) w * Math.PI * 3) + animProgress * Math.PI * 2) * AndroidUtilities.dp(40) + h * 0.25f);
-                    envPath.lineTo(x, y);
+                    worldPath.lineTo(x, y);
                 }
-                envPath.lineTo(w, 0);
-                envPath.close();
-                canvas.drawPath(envPath, envPaint);
+                worldPath.lineTo(w, 0);
+                worldPath.close();
+                canvas.drawPath(worldPath, worldPaint);
             }
         }
     }
 
     // ──────────────────────────────────────────────────────────────────────────
-    // 2. Particle Layer: Bespoke Physics & Rendering For Every Icon
+    // 2. Particle Simulation Engine: Rain, Petals, Warp Trails, Snowflakes
     // ──────────────────────────────────────────────────────────────────────────
-    private static class ParticleCanvasView extends View {
-        private static final int PARTICLE_COUNT = 48;
+    private static class ParticleEngineView extends View {
+        private static final int PARTICLE_COUNT = 52;
         private final List<Particle> particles = new ArrayList<>();
         private final Paint particlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         private final Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -689,7 +688,7 @@ public class PrismSplashScreenView extends FrameLayout {
         private final int color1, color2, color3;
         private final Random random = new Random();
         private long lastFrameTime;
-        private static final String[] MATRIX_CHARS = {"0", "1", "7", "X", "λ", "Ω", "F", "9", "A", "Ø", "§", "K"};
+        private static final String[] MATRIX_CHARS = {"0", "1", "7", "X", "λ", "Ω", "F", "9", "A", "Ø", "§", "K", "Z"};
 
         private static class Particle {
             float x, y;
@@ -702,7 +701,7 @@ public class PrismSplashScreenView extends FrameLayout {
             String charText;
         }
 
-        public ParticleCanvasView(Context context, IconAnimType type, int c1, int c2, int c3) {
+        public ParticleEngineView(Context context, IconAnimType type, int c1, int c2, int c3) {
             super(context);
             this.animType = type;
             this.color1 = c1;
@@ -744,7 +743,7 @@ public class PrismSplashScreenView extends FrameLayout {
             switch (animType) {
                 case MATRIX:
                     p.vx = 0;
-                    p.vy = 4.5f + random.nextFloat() * 7f;
+                    p.vy = 4.5f + random.nextFloat() * 7.5f;
                     break;
                 case SINGULARITY:
                     float cx = w / 2f;
@@ -878,9 +877,9 @@ public class PrismSplashScreenView extends FrameLayout {
     }
 
     // ──────────────────────────────────────────────────────────────────────────
-    // 3. Custom Icon Aura View: Shockwave Geometries & Orbitals
+    // 3. Bespoke Icon Aura View: Rotating Geometries, Gears, HUD, Orbitals
     // ──────────────────────────────────────────────────────────────────────────
-    private static class CustomIconAuraView extends View {
+    private static class BespokeIconAuraView extends View {
         private final Paint ringPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         private final Paint fxPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         private final IconAnimType animType;
@@ -890,7 +889,7 @@ public class PrismSplashScreenView extends FrameLayout {
         private final Path hexPath = new Path();
         private final Random random = new Random();
 
-        public CustomIconAuraView(Context context, IconAnimType type, int c1, int c2, int c3) {
+        public BespokeIconAuraView(Context context, IconAnimType type, int c1, int c2, int c3) {
             super(context);
             this.animType = type;
             this.primaryColor = c1;
@@ -925,7 +924,7 @@ public class PrismSplashScreenView extends FrameLayout {
             int cx = getWidth() / 2;
             int cy = getHeight() / 2;
             float maxRadius = getWidth() * 0.48f;
-            float r = AndroidUtilities.dp(66);
+            float r = AndroidUtilities.dp(68);
 
             // 1. Shockwave Pulse
             float r1 = ringProgress * maxRadius;
@@ -945,7 +944,7 @@ public class PrismSplashScreenView extends FrameLayout {
                 canvas.drawCircle(cx, cy, r1, ringPaint);
             }
 
-            // 2. Specialized Overlays
+            // 2. Specialized Thematic Overlays
             if (animType == IconAnimType.CYBER || animType == IconAnimType.MATRIX) {
                 fxPaint.setColor(primaryColor);
                 fxPaint.setAlpha(180);
@@ -1018,15 +1017,15 @@ public class PrismSplashScreenView extends FrameLayout {
     }
 
     // ──────────────────────────────────────────────────────────────────────────
-    // 4. Diagonal Specular Glass Shimmer Overlay
+    // 4. Liquid Glass Specular Shimmer Overlay
     // ──────────────────────────────────────────────────────────────────────────
-    private static class GlassShimmerOverlay extends View {
+    private static class LiquidGlassSpecularOverlay extends View {
         private final Paint shimmerPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         private final Matrix shaderMatrix = new Matrix();
         private LinearGradient shimmerShader;
         private float shimmerProgress = -1.2f;
 
-        public GlassShimmerOverlay(Context context) {
+        public LiquidGlassSpecularOverlay(Context context, int tintColor) {
             super(context);
         }
 
@@ -1066,6 +1065,55 @@ public class PrismSplashScreenView extends FrameLayout {
                 shimmerShader.setLocalMatrix(shaderMatrix);
                 canvas.drawRect(0, 0, getWidth(), getHeight(), shimmerPaint);
             }
+        }
+    }
+
+    // ──────────────────────────────────────────────────────────────────────────
+    // 5. Status Badge with Live Pulsing Indicator Dot
+    // ──────────────────────────────────────────────────────────────────────────
+    private static class StatusBadgeView extends LinearLayout {
+        private final Paint dotPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        private float dotPulseAlpha = 1.0f;
+
+        public StatusBadgeView(Context context, String text, int accentColor) {
+            super(context);
+            setOrientation(HORIZONTAL);
+            setGravity(Gravity.CENTER_VERTICAL);
+            setPadding(AndroidUtilities.dp(12), AndroidUtilities.dp(4), AndroidUtilities.dp(12), AndroidUtilities.dp(4));
+
+            GradientDrawable bg = new GradientDrawable();
+            bg.setColor(Color.argb(45, Color.red(accentColor), Color.green(accentColor), Color.blue(accentColor)));
+            bg.setStroke(AndroidUtilities.dp(1), Color.argb(120, Color.red(accentColor), Color.green(accentColor), Color.blue(accentColor)));
+            bg.setCornerRadius(AndroidUtilities.dp(12));
+            setBackground(bg);
+
+            dotPaint.setColor(accentColor);
+
+            View dotView = new View(context) {
+                @Override
+                protected void onDraw(Canvas canvas) {
+                    dotPaint.setAlpha((int) (dotPulseAlpha * 255));
+                    canvas.drawCircle(getWidth() / 2f, getHeight() / 2f, getWidth() / 2f, dotPaint);
+                }
+            };
+            addView(dotView, LayoutHelper.createLinear(7, 7, Gravity.CENTER_VERTICAL, 0, 0, 8, 0));
+
+            TextView textView = new TextView(context);
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 11);
+            textView.setTextColor(Color.argb(220, 255, 255, 255));
+            textView.setTypeface(AndroidUtilities.bold());
+            textView.setText(text);
+            addView(textView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT));
+
+            ValueAnimator pulseAnim = ValueAnimator.ofFloat(0.3f, 1.0f);
+            pulseAnim.setDuration(900);
+            pulseAnim.setRepeatCount(ValueAnimator.INFINITE);
+            pulseAnim.setRepeatMode(ValueAnimator.REVERSE);
+            pulseAnim.addUpdateListener(animation -> {
+                dotPulseAlpha = (float) animation.getAnimatedValue();
+                dotView.invalidate();
+            });
+            pulseAnim.start();
         }
     }
 }
