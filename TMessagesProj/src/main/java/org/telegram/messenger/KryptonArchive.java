@@ -143,6 +143,7 @@ public class KryptonArchive {
     }
 
     public static class Entry {
+        public long id;
         public int mid;
         public long uid;
         public long senderId;
@@ -161,18 +162,19 @@ public class KryptonArchive {
         SQLiteCursor cursor = null;
         try {
             cursor = database.queryFinalized(
-                "SELECT mid, sender_id, kind, message_text, media_label, orig_date, event_date FROM krypton_archive WHERE uid = " + uid + " ORDER BY event_date DESC LIMIT " + limit
+                "SELECT id, mid, sender_id, kind, message_text, media_label, orig_date, event_date FROM krypton_archive WHERE uid = " + uid + " ORDER BY event_date DESC LIMIT " + limit
             );
             while (cursor.next()) {
                 Entry entry = new Entry();
-                entry.mid = cursor.intValue(0);
+                entry.id = cursor.longValue(0);
+                entry.mid = cursor.intValue(1);
                 entry.uid = uid;
-                entry.senderId = cursor.longValue(1);
-                entry.kind = cursor.intValue(2);
-                entry.text = cursor.stringValue(3);
-                entry.mediaLabel = cursor.isNull(4) ? null : cursor.stringValue(4);
-                entry.origDate = cursor.intValue(5);
-                entry.eventDate = cursor.intValue(6);
+                entry.senderId = cursor.longValue(2);
+                entry.kind = cursor.intValue(3);
+                entry.text = cursor.stringValue(4);
+                entry.mediaLabel = cursor.isNull(5) ? null : cursor.stringValue(5);
+                entry.origDate = cursor.intValue(6);
+                entry.eventDate = cursor.intValue(7);
                 result.add(entry);
             }
         } catch (Exception e) {
@@ -193,18 +195,19 @@ public class KryptonArchive {
         SQLiteCursor cursor = null;
         try {
             cursor = database.queryFinalized(
-                "SELECT mid, uid, sender_id, kind, message_text, media_label, orig_date, event_date FROM krypton_archive ORDER BY event_date DESC LIMIT " + limit
+                "SELECT id, mid, uid, sender_id, kind, message_text, media_label, orig_date, event_date FROM krypton_archive ORDER BY event_date DESC LIMIT " + limit
             );
             while (cursor.next()) {
                 Entry entry = new Entry();
-                entry.mid = cursor.intValue(0);
-                entry.uid = cursor.longValue(1);
-                entry.senderId = cursor.longValue(2);
-                entry.kind = cursor.intValue(3);
-                entry.text = cursor.stringValue(4);
-                entry.mediaLabel = cursor.isNull(5) ? null : cursor.stringValue(5);
-                entry.origDate = cursor.intValue(6);
-                entry.eventDate = cursor.intValue(7);
+                entry.id = cursor.longValue(0);
+                entry.mid = cursor.intValue(1);
+                entry.uid = cursor.longValue(2);
+                entry.senderId = cursor.longValue(3);
+                entry.kind = cursor.intValue(4);
+                entry.text = cursor.stringValue(5);
+                entry.mediaLabel = cursor.isNull(6) ? null : cursor.stringValue(6);
+                entry.origDate = cursor.intValue(7);
+                entry.eventDate = cursor.intValue(8);
                 result.add(entry);
             }
         } catch (Exception e) {
@@ -215,6 +218,34 @@ public class KryptonArchive {
             }
         }
         return result;
+    }
+
+    /** Bitta yozuvni arxivdan o'chirish */
+    public static void deleteEntry(SQLiteDatabase database, long id, long uid, int mid) {
+        if (database == null) return;
+        try {
+            if (id > 0) {
+                database.executeFast("DELETE FROM krypton_archive WHERE id = " + id).stepThis().dispose();
+            } else {
+                database.executeFast("DELETE FROM krypton_archive WHERE uid = " + uid + " AND mid = " + mid).stepThis().dispose();
+            }
+            if (uid != 0 && mid != 0) {
+                database.executeFast(String.format(java.util.Locale.US, "DELETE FROM messages_v2 WHERE uid = %d AND mid = %d AND (flags & %d) != 0", uid, mid, (1 << 30))).stepThis().dispose();
+            }
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+    }
+
+    /** Barcha arxivlangan xabarlarni tozalash */
+    public static void clearAll(SQLiteDatabase database) {
+        if (database == null) return;
+        try {
+            database.executeFast("DELETE FROM krypton_archive").stepThis().dispose();
+            database.executeFast(String.format(java.util.Locale.US, "DELETE FROM messages_v2 WHERE (flags & %d) != 0", (1 << 30))).stepThis().dispose();
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
     }
 
     /** Berilgan chat (uid) bo'yicha barcha o'chirilgan xabarlar ID sini qaytaradi. */
@@ -340,15 +371,5 @@ public class KryptonArchive {
             }
         }
         return history;
-    }
-
-    /** Arxivdagi barcha yozuvlarni tozalaydi. */
-    public static void clearAll(SQLiteDatabase database) {
-        if (database == null) return;
-        try {
-            database.executeFast("DELETE FROM krypton_archive").stepThis().dispose();
-        } catch (Exception e) {
-            FileLog.e(e);
-        }
     }
 }
