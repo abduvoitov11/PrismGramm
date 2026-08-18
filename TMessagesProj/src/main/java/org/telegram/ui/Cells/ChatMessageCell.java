@@ -20189,11 +20189,102 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         }
         updateSelectionTextPosition();
 
+        // ─── Prism Liquid Glass & Anti-Delete Neon Glow ───
+        drawPrismLiquidGlassEffect(canvas);
+
         if (restoreToSponosoredAlpha != -1) {
             canvas.restoreToCount(restoreToSponosoredAlpha);
         }
 
         canvas.restoreToCount(restore);
+    }
+
+    private void drawPrismLiquidGlassEffect(Canvas canvas) {
+        if (currentBackgroundDrawable == null || currentMessageObject == null) {
+            return;
+        }
+        if (currentMessageObject.type == MessageObject.TYPE_ROUND_VIDEO || currentMessageObject.isAnimatedEmojiStickers()) {
+            return;
+        }
+        Rect bounds = currentBackgroundDrawable.getBounds();
+        if (bounds == null || bounds.width() <= dp(24) || bounds.height() <= dp(18)) {
+            return;
+        }
+
+        if (prismGlassPaint == null) {
+            prismGlassPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        }
+
+        float left = bounds.left + dp(0.5f);
+        float top = bounds.top + dp(0.5f);
+        float right = bounds.right - dp(0.5f);
+        float bottom = bounds.bottom - dp(0.5f);
+        float rad = dp(SharedConfig.bubbleRadius);
+        boolean isDark = Theme.isCurrentThemeDark();
+        boolean isOut = currentMessageObject.isOutOwner();
+        boolean isDeleted = currentMessageObject.isKryptonDeleted();
+
+        prismGlassRect.set(left, top, right, bottom);
+
+        // 1. Anti-Delete Crimson Neon Border & Glow
+        if (isDeleted) {
+            prismGlassPaint.setStyle(Paint.Style.STROKE);
+            prismGlassPaint.setStrokeWidth(dp(1.8f));
+            prismGlassPaint.setShader(null);
+            prismGlassPaint.setColor(0xCCFF3B30);
+            canvas.drawRoundRect(prismGlassRect, rad, rad, prismGlassPaint);
+
+            // Subtle neon inner tint
+            prismGlassPaint.setStyle(Paint.Style.FILL);
+            prismGlassPaint.setColor(0x18FF3B30);
+            canvas.drawRoundRect(prismGlassRect, rad, rad, prismGlassPaint);
+            return;
+        }
+
+        // 2. Liquid Glass 3D Specular Rim (Luminous Glass Edge)
+        prismGlassPaint.setStyle(Paint.Style.STROKE);
+        prismGlassPaint.setStrokeWidth(dp(1.2f));
+
+        int topShineColor = isDark ? 0x70FFFFFF : 0x90FFFFFF;
+        int bottomShineColor = isDark ? 0x10FFFFFF : 0x20000000;
+
+        if (isOut) {
+            // Outgoing bubble: vibrant cyan/white highlight
+            topShineColor = isDark ? 0x88FFFFFF : 0xA0FFFFFF;
+            bottomShineColor = isDark ? 0x1500E5FF : 0x25007AFF;
+        }
+
+        LinearGradient rimGradient = new LinearGradient(
+                left, top,
+                right, bottom,
+                new int[]{topShineColor, 0x40FFFFFF, bottomShineColor},
+                new float[]{0f, 0.4f, 1f},
+                Shader.TileMode.CLAMP
+        );
+        prismGlassPaint.setShader(rimGradient);
+        canvas.drawRoundRect(prismGlassRect, rad, rad, prismGlassPaint);
+
+        // 3. Top Curved Specular Flare (Yorug'lik akslanishi - Glass Highlight)
+        float flareHeight = Math.min(dp(14), (bottom - top) * 0.35f);
+        if (flareHeight > dp(4)) {
+            canvas.save();
+            Path clipPath = new Path();
+            clipPath.addRoundRect(prismGlassRect, rad, rad, Path.Direction.CW);
+            canvas.clipPath(clipPath);
+
+            RectF flareRect = new RectF(left, top, right, top + flareHeight);
+            Paint flarePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            flarePaint.setStyle(Paint.Style.FILL);
+            flarePaint.setShader(new LinearGradient(
+                    0, top,
+                    0, top + flareHeight,
+                    new int[]{isDark ? 0x40FFFFFF : 0x55FFFFFF, 0x00FFFFFF},
+                    null,
+                    Shader.TileMode.CLAMP
+            ));
+            canvas.drawRect(flareRect, flarePaint);
+            canvas.restore();
+        }
     }
 
     @SuppressLint("WrongCall")
@@ -20502,32 +20593,6 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 if (currentBackgroundShadowDrawable != null && currentPosition == null) {
                     currentBackgroundShadowDrawable.setAlpha((int) (255 * alphaInternal));
                     currentBackgroundShadowDrawable.draw(canvas);
-                }
-
-                // ─── Prism Liquid Glass & Anti-Delete Neon Aura ───
-                if (currentBackgroundDrawable != null && currentPosition == null && !mediaBackground) {
-                    Rect bounds = currentBackgroundDrawable.getBounds();
-                    if (bounds.width() > dp(20) && bounds.height() > dp(16)) {
-                        if (prismGlassPaint == null) {
-                            prismGlassPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-                            prismGlassPaint.setStyle(Paint.Style.STROKE);
-                        }
-                        boolean isDark = Theme.isCurrentThemeDark();
-                        float rad = dp(SharedConfig.bubbleRadius);
-                        prismGlassRect.set(bounds.left + dp(1), bounds.top + dp(1), bounds.right - dp(1), bounds.bottom - dp(1));
-
-                        if (currentMessageObject != null && currentMessageObject.isKryptonDeleted()) {
-                            // Neon crimson border glow for deleted messages
-                            prismGlassPaint.setStrokeWidth(dp(1.5f));
-                            prismGlassPaint.setColor(0x88FF3B30);
-                            canvas.drawRoundRect(prismGlassRect, rad, rad, prismGlassPaint);
-                        } else {
-                            // Subtle liquid glass specular inner reflection
-                            prismGlassPaint.setStrokeWidth(dp(0.8f));
-                            prismGlassPaint.setColor(isDark ? 0x24FFFFFF : 0x40FFFFFF);
-                            canvas.drawRoundRect(prismGlassRect, rad, rad, prismGlassPaint);
-                        }
-                    }
                 }
 
                 if (transitionParams.changePinnedBottomProgress != 1f && currentPosition == null) {
